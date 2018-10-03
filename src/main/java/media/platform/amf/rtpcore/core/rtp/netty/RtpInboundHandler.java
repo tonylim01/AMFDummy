@@ -1,0 +1,237 @@
+/* Copyright 2018 (C) UANGEL CORPORATION <http://www.uangel.com> */
+
+/**
+ * Acs AMF
+ * @file RtpInboundHandler.java
+ * @author Tony Lim
+ *
+ */
+package media.platform.amf.rtpcore.core.rtp.netty;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
+import media.platform.amf.service.AudioFileReader;
+import media.platform.amf.session.SessionManager;
+import media.platform.amf.rtpcore.core.rtp.rtp.RTPInput;
+import media.platform.amf.rtpcore.core.sdp.format.RTPFormats;
+import media.platform.amf.rtpcore.core.spi.ConnectionMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import media.platform.amf.session.SessionInfo;
+import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
+import io.netty.channel.socket.DatagramPacket;
+
+import java.net.InetAddress;
+import java.util.Random;
+
+public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacket> {
+
+    private static final Logger logger = LoggerFactory.getLogger( RtpInboundHandler.class);
+
+    private final RtpInboundHandlerGlobalContext context;
+    private final RtpInboundHandlerFsm fsm;
+
+    public RtpInboundHandler(RtpInboundHandlerGlobalContext context) {
+        this.context = context;
+        this.fsm = RtpInboundHandlerFsmBuilder.INSTANCE.build(context);
+
+        this.isActive();
+        if(!this.isActive()) {
+            this.fsm.start();
+        }
+    }
+
+    public void activate() {
+        if(!this.isActive()) {
+            this.fsm.start();
+        }
+    }
+
+    public void deactivate() {
+        if(this.isActive()) {
+            this.fsm.fire(RtpInboundHandlerEvent.DEACTIVATE);
+        }
+    }
+    
+    public boolean isActive() {
+        return RtpInboundHandlerState.ACTIVATED.equals(this.fsm.getCurrentState());
+    }
+    
+    public void updateMode(ConnectionMode mode) {
+        switch (mode) {
+            case INACTIVE:
+            case SEND_ONLY:
+                this.context.setLoopable(false);
+                this.context.setReceivable(false);
+                break;
+
+            case RECV_ONLY:
+                this.context.setLoopable(false);
+                this.context.setReceivable(true);
+                break;
+
+            case SEND_RECV:
+            case CONFERENCE:
+                this.context.setLoopable(false);
+                this.context.setReceivable(true);
+                break;
+
+            case NETWORK_LOOPBACK:
+                this.context.setLoopable(true);
+                this.context.setReceivable(false);
+                break;
+
+            default:
+                this.context.setLoopable(false);
+                this.context.setReceivable(false);
+                break;
+        }
+    }
+    
+    public void setFormatMap(RTPFormats formats) {
+        this.context.setFormats(formats);
+    }
+
+    public void useJitterBuffer(boolean use) {
+        this.context.getJitterBuffer().setInUse(use);
+    }
+
+    public RTPInput getRtpInput() {
+        return context.getRtpInput();
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
+
+        final InetAddress srcAddr = msg.sender().getAddress();
+        final ByteBuf buf = msg.content();
+
+        final int rcvPktLength = buf.readableBytes();
+        final byte[] rcvPktBuf = new byte[rcvPktLength];
+        buf.readBytes(rcvPktBuf);
+
+        //RtpPacket rtpPacket = new RtpPacket( RtpPacket.RTP_PACKET_MAX_SIZE, true);
+        RtpPacket rtpPacket = new RtpPacket(rcvPktLength, true);
+        rtpPacket.getBuffer().put(rcvPktBuf, 0, rcvPktLength);
+
+        //logger.debug("<- ({}:{}) {}", srcAddr.toString(), msg.sender().getPort(), rtpPacket.toString());
+
+        String adddress = ctx.channel().localAddress().toString();
+        int port = adddress.lastIndexOf(":");
+        String temp = adddress.substring(port + 1, adddress.length());
+
+        SessionManager sessionManager = SessionManager.getInstance();
+        SessionInfo sessionInfo = sessionManager.getFinePort(Integer.parseInt(temp));
+
+        int version = rtpPacket.getVersion();
+        if (version == 0) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("RTP Channel " + this.context.getStatistics().getSsrc() + " dropped RTP v0 packet.");
+            }
+            return;
+        }
+
+        // Check if channel can receive traffic
+        boolean canReceive = (context.isReceivable() || context.isLoopable());
+
+//        logger.debug("RTP canReceive " + canReceive + " packet.");
+
+        if (!canReceive) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("RTP Channel " + this.context.getStatistics().getSsrc() + " dropped packet because channel mode does not allow to receive traffic.");
+            }
+            return;
+        }
+
+//       logger.debug("getRtpInput : " + context.getStatistics());
+
+        // Check if packet is not empty
+        boolean hasData = (rtpPacket.getLength() > 0);
+        if (!hasData) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("RTP Channel " + this.context.getStatistics().getSsrc() + " dropped packet because payload was empty.");
+            }
+            return;
+        }
+
+        /*
+        // Process incoming packet
+        RtpInboundHandlerPacketReceivedContext txContext = new RtpInboundHandlerPacketReceivedContext(rtpPacket);
+        this.fsm.fire(RtpInboundHandlerEvent.PACKET_RECEIVED, txContext);
+        */
+
+        boolean toOtherSession = false;
+
+        if (sessionInfo.getConferenceId() != null) {
+
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null) {
+                String otherSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
+                if (otherSessionId != null) {
+                    SessionInfo otherSession = SessionManager.findSession(otherSessionId);
+                    if (otherSession != null) {
+
+                        byte[] payload = new byte[rtpPacket.getPayloadLength()];
+                        rtpPacket.readRegionToBuff(rcvPktLength - rtpPacket.getPayloadLength(), rtpPacket.getPayloadLength(), payload);
+
+                        otherSession.getJitterSender().put(payload);
+                        toOtherSession = true;
+                    }
+                }
+            }
+        }
+
+        if (!toOtherSession) {
+            if (sessionInfo.getRtpPacket() == null) {
+
+            /*
+            RtpPacket sentPacket = new RtpPacket(rcvPktLength, true);
+
+            byte[] payload = new byte[rtpPacket.getPayloadLength()];
+            rtpPacket.getPayload(payload, 0);
+
+            sentPacket.wrap(false, rtpPacket.getPayloadType(), 0, new Random().nextLong(), new Random().nextLong(), payload, 0, rtpPacket.getPayloadLength());
+
+            sessionInfo.setRtpPacket(sentPacket);
+            */
+                RtpPacket sentPacket = new RtpPacket(rcvPktLength, true);
+                sessionInfo.setRtpPacket(sentPacket);
+
+                AudioFileReader fileReader = new AudioFileReader("/Users/Lua/tmp/1.alaw");
+                fileReader.load();
+
+                sessionInfo.setFileReader(fileReader);
+            }
+            else {
+            /*
+            RtpPacket sentPacket = sessionInfo.getRtpPacket();
+            int seq = sentPacket.getSeqNumber() + 1;
+            long timestamp = sentPacket.getTimestamp() + 160;
+            long ssrc = sentPacket.getSyncSource();
+
+            byte[] payload = new byte[rtpPacket.getPayloadLength()];
+            //rtpPacket.getPayload(payload, 0);
+            sessionInfo.getFileReader().get(payload, rtpPacket.getPayloadLength());
+
+            sessionInfo.getRtpPacket().wrap(false, rtpPacket.getPayloadType(), seq, timestamp, ssrc, payload, 0, rtpPacket.getPayloadLength());
+            */
+
+                byte[] payload = new byte[rtpPacket.getPayloadLength()];
+                sessionInfo.getFileReader().get(payload, rtpPacket.getPayloadLength());
+
+                sessionInfo.getJitterSender().put(payload);
+            }
+
+        }
+
+
+        // Relay RTP Packet
+        //sessionInfo.udpClient.send( rcvPktBuf );
+        //sessionInfo.udpClient.send(sessionInfo.getRtpPacket().getRawData());
+
+        //logger.debug( "-> UDP ({}:{}) size={}", sessionInfo.getSdpDeviceInfo().getRemoteIp(), sessionInfo.getSdpDeviceInfo().getRemotePort(), rcvPktBuf.length);
+    }
+}
