@@ -1,5 +1,7 @@
 package media.platform.amf.core.socket;
 
+import media.platform.amf.core.socket.packets.SilencePacket;
+import media.platform.amf.core.socket.packets.Vocoder;
 import media.platform.amf.rtpcore.Process.UdpClient;
 import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import org.slf4j.Logger;
@@ -7,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class JitterSender {
@@ -31,9 +31,17 @@ public class JitterSender {
     private long timestamp;
     private Thread thread;
 
+    private int vocoder;
+    private int vocoderMode;
+    private int payloadType;
+
     private Queue<UdpPacket> buffer;
 
-    public JitterSender(int duration, int jitterCount, int payloadSize) {
+    public JitterSender(int vocoder, int vocoderMode, int payloadType, int duration, int jitterCount, int payloadSize) {
+
+        this.vocoder = vocoder;
+        this.vocoderMode = vocoderMode;
+        this.payloadType = payloadType;
 
         this.duration = (duration > 0) ? duration : DEFAULT_DURATION;
         this.payloadSize = (payloadSize > 0) ? payloadSize : DEFAULT_PAYLOAD_SIZE;
@@ -107,14 +115,14 @@ public class JitterSender {
                     if (udpPacket != null && udpPacket.getData() != null) {
 
                         rtpPacket = new RtpPacket(udpPacket.getData().length + RtpPacket.FIXED_HEADER_SIZE, true);
-                        rtpPacket.wrap(false, 8, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
+                        rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
 
                     }
                     else {
-                        byte[] silenceBuf = SilencePacket.get(SilencePacket.VOCODER_ALAW);
+                        byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
                         if (silenceBuf != null) {
                             rtpPacket = new RtpPacket(silenceBuf.length + RtpPacket.FIXED_HEADER_SIZE, true);
-                            rtpPacket.wrap(false, 8, seq, timestamp, ssrc, silenceBuf, 0, silenceBuf.length);
+                            rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, silenceBuf, 0, silenceBuf.length);
                         }
                         else {
                             // TODO
@@ -127,7 +135,14 @@ public class JitterSender {
                     }
 
                     seq++;
-                    timestamp += payloadSize;
+                    switch (vocoder) {
+                        case Vocoder.VOCODER_AMR_WB:
+                            timestamp += 320;
+                            break;
+                        default:
+                            timestamp += 160;
+                            break;
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -158,5 +173,17 @@ public class JitterSender {
             logger.info("LoopProc end");
         }
 
+    }
+
+    public int getVocoder() {
+        return vocoder;
+    }
+
+    public int getVocoderMode() {
+        return vocoderMode;
+    }
+
+    public int getPayloadType() {
+        return payloadType;
     }
 }

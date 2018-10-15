@@ -77,13 +77,22 @@ public class SdpParser {
                             String desc = attr.getDescription();
                             if (desc != null && desc.contains("/")) {
                                 String codec = desc.substring(0, desc.indexOf('/')).trim();
-                                String sampleRate = desc.substring(desc.indexOf('/' + 1)).trim();
+                                String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
 
+                                logger.debug("priority [{}] codec [{}] samplerate [{}]", priority, codec, sampleRate);
+                                sdpInfo.setCodecStr(codec);
+                                if (sampleRate != null) {
+                                    sdpInfo.setSampleRate(Integer.valueOf(sampleRate));
+                                }
                             }
+
                             sdpInfo.setPayloadId(priority);
                             break;
                         }
                     }
+                }
+                else {
+                    logger.warn("No media priority defined");
                 }
 
                 // Gets telephone-event

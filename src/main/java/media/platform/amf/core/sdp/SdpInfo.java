@@ -19,6 +19,7 @@ public class SdpInfo {
 
     private int payloadId;
     private String codecStr;
+    private int sampleRate;
 
     private int payload2833;
 
@@ -62,6 +63,14 @@ public class SdpInfo {
 
     public void setPayload2833(int payload2833) {
         this.payload2833 = payload2833;
+    }
+
+    public int getSampleRate() {
+        return sampleRate;
+    }
+
+    public void setSampleRate(int sampleRate) {
+        this.sampleRate = sampleRate;
     }
 
     public List<SdpAttribute> getAttributes() {

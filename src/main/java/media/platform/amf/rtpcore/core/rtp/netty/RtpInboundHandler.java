@@ -11,6 +11,7 @@ package media.platform.amf.rtpcore.core.rtp.netty;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import media.platform.amf.core.socket.packets.Vocoder;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import media.platform.amf.service.AudioFileReader;
@@ -187,42 +188,47 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
         if (!toOtherSession) {
             if (sessionInfo.getRtpPacket() == null) {
 
-            /*
-            RtpPacket sentPacket = new RtpPacket(rcvPktLength, true);
-
-            byte[] payload = new byte[rtpPacket.getPayloadLength()];
-            rtpPacket.getPayload(payload, 0);
-
-            sentPacket.wrap(false, rtpPacket.getPayloadType(), 0, new Random().nextLong(), new Random().nextLong(), payload, 0, rtpPacket.getPayloadLength());
-
-            sessionInfo.setRtpPacket(sentPacket);
-            */
                 RtpPacket sentPacket = new RtpPacket(rcvPktLength, true);
                 sessionInfo.setRtpPacket(sentPacket);
 
-                AudioFileReader fileReader = new AudioFileReader("/Users/Lua/tmp/1.alaw");
+                logger.info("Jitter vocoder {}", sessionInfo.getJitterSender().getVocoder());
+
+                String audioFilename;
+                if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_ALAW) {
+                    audioFilename = "/Users/Lua/tmp/test.alaw";
+                }
+                else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
+                    audioFilename = "/Users/Lua/tmp/test_wb.amr";
+                }
+                else {
+                    audioFilename = "/Users/Lua/tmp/test.alaw";
+                }
+
+                AudioFileReader fileReader = new AudioFileReader(audioFilename);
                 fileReader.load();
 
+                if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
+                    byte[] header = new byte[9];    // #!AMR-WB\a
+                    fileReader.get(header, header.length);
+                }
                 sessionInfo.setFileReader(fileReader);
             }
             else {
-            /*
-            RtpPacket sentPacket = sessionInfo.getRtpPacket();
-            int seq = sentPacket.getSeqNumber() + 1;
-            long timestamp = sentPacket.getTimestamp() + 160;
-            long ssrc = sentPacket.getSyncSource();
 
-            byte[] payload = new byte[rtpPacket.getPayloadLength()];
-            //rtpPacket.getPayload(payload, 0);
-            sessionInfo.getFileReader().get(payload, rtpPacket.getPayloadLength());
+                byte[] payload = null;
 
-            sessionInfo.getRtpPacket().wrap(false, rtpPacket.getPayloadType(), seq, timestamp, ssrc, payload, 0, rtpPacket.getPayloadLength());
-            */
+                if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
+                    payload = sessionInfo.getFileReader().getAMRWBPayload();
+                }
+                else {
+                    payload = new byte[rtpPacket.getPayloadLength()];
+                    sessionInfo.getFileReader().get(payload, rtpPacket.getPayloadLength());
+                }
 
-                byte[] payload = new byte[rtpPacket.getPayloadLength()];
-                sessionInfo.getFileReader().get(payload, rtpPacket.getPayloadLength());
 
-                sessionInfo.getJitterSender().put(payload);
+                if (payload != null) {
+                    sessionInfo.getJitterSender().put(payload);
+                }
             }
 
         }

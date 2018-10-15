@@ -1,6 +1,6 @@
-package media.platform.amf.core.socket;
+package media.platform.amf.core.socket.packets;
 
-public class SilencePacket {
+public class G711SilencePacket {
 
     private static final byte[] BUF_SILENCE_ALAW = {
             (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5, (byte)0xd5,
@@ -40,18 +40,14 @@ public class SilencePacket {
             (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff
     };
 
-    public static final int VOCODER_ALAW = 0;
-    public static final int VOCODER_ULAW = 1;
-
-
     public static byte[] get(int vocoder) {
         byte[] buf = null;
 
         switch (vocoder) {
-            case VOCODER_ALAW:
+            case Vocoder.VOCODER_ALAW:
                 buf = BUF_SILENCE_ALAW;
                 break;
-            case VOCODER_ULAW:
+            case Vocoder.VOCODER_ULAW:
                 buf = BUF_SILENCE_ULAW;
                 break;
         }

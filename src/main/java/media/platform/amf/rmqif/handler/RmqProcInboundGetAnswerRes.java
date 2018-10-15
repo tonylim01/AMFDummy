@@ -76,11 +76,13 @@ public class RmqProcInboundGetAnswerRes extends RmqOutgoingMessage {
     private String makeSdp(SessionInfo sessionInfo) {
 
         if (sessionInfo == null) {
+            logger.error("No session found");
             return null;
         }
 
         RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
         if (roomInfo == null) {
+            logger.error("[{}] Room not found for cnfid=[{}]", sessionInfo.getSessionId(), sessionInfo.getConferenceId());
             return null;
         }
 

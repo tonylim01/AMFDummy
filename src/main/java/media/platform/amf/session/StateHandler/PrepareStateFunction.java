@@ -6,6 +6,7 @@ import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.socket.JitterSender;
+import media.platform.amf.core.socket.packets.Vocoder;
 import media.platform.amf.rmqif.messages.FileData;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -31,6 +32,9 @@ public class PrepareStateFunction implements StateFunction {
             sessionInfo.setServiceState(SessionState.PREPARE);
         }
 
+
+        logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpInfo().getPayloadId());
+        logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpDeviceInfo().getPayloadId());
 
         if (sessionInfo.isCaller()) {
             openCallerRelayResource(sessionInfo);
@@ -71,11 +75,7 @@ public class PrepareStateFunction implements StateFunction {
 
         sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort( sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
-        JitterSender jitterSender = new JitterSender(20, 3, 160);
-        jitterSender.setUdpClient(sessionInfo.udpClient);
-        jitterSender.start();
-
-        sessionInfo.setJitterSender(jitterSender);
+        openJitterSender(sessionInfo);
 
         return true;
     }
@@ -111,13 +111,48 @@ public class PrepareStateFunction implements StateFunction {
         sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
         sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort( sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
-        JitterSender jitterSender = new JitterSender(20, 3, 160);
+        //JitterSender jitterSender = new JitterSender(Vocoder.VOCODER_ALAW, Vocoder.MODE_NA, 8, 20, 3, 160);
+        openJitterSender(sessionInfo);
+
+
+        return true;
+    }
+
+    private void openJitterSender(SessionInfo sessionInfo) {
+        if (sessionInfo == null) {
+            return;
+        }
+
+        int vocoder = 0;
+        if (sessionInfo.getSdpDeviceInfo().getCodecStr() != null) {
+            if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-WB")) {
+                vocoder = Vocoder.VOCODER_AMR_WB;
+            }
+            else if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-NB")) {
+                vocoder = Vocoder.VOCODER_AMR_NB;
+            }
+        }
+
+        if (vocoder == 0) {
+            switch (sessionInfo.getSdpDeviceInfo().getPayloadId()) {
+                case 0: vocoder = Vocoder.VOCODER_ULAW; break;
+                case 8: vocoder = Vocoder.VOCODER_ALAW; break;
+            }
+        }
+
+        if (vocoder == 0) {
+            vocoder = Vocoder.VOCODER_ALAW;
+        }
+
+        int payloadId = sessionInfo.getSdpDeviceInfo().getPayloadId();
+
+
+        JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, 160);
         jitterSender.setUdpClient(sessionInfo.udpClient);
         jitterSender.start();
 
         sessionInfo.setJitterSender(jitterSender);
 
-        return true;
     }
 
     private boolean openMixerResource(RoomInfo roomInfo, String sessionId) {

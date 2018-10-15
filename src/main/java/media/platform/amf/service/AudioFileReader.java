@@ -54,16 +54,53 @@ public class AudioFileReader {
         return true;
     }
 
-    public void get(byte[] dst, int length) {
+    public void get(byte[] dst, int start, int length) {
 
         if (pos + length < buffer.length) {
-            System.arraycopy(buffer, pos, dst, 0, length);
+            System.arraycopy(buffer, pos, dst, start, length);
             pos += length;
         }
         else {
-            System.arraycopy(buffer, pos, dst, 0, buffer.length - pos);
+            System.arraycopy(buffer, pos, dst, start, buffer.length - pos);
             pos = 0;
         }
 
+    }
+
+    public void get(byte[] dst, int length) {
+
+        get(dst, 0, length);
+    }
+
+    public byte[] getAMRWBPayload() {
+
+        byte[] dst = null;
+        int payloadSize = AMRPayload.getPayloadSize16k(buffer[pos]);
+        if (payloadSize > 0) {
+            dst = new byte[payloadSize + 1];
+            dst[0] = (byte)0xf0;
+            get(dst, 1, payloadSize);
+        }
+        else {
+            // TODO: Error
+        }
+
+        return dst;
+    }
+
+    public byte[] getAMRWNPayload() {
+
+        byte[] dst = null;
+        int payloadSize = AMRPayload.getPayloadSize8k(buffer[pos]);
+        if (payloadSize > 0) {
+            dst = new byte[payloadSize + 1];
+            dst[0] = (byte)0xf0;
+            get(dst, 1, payloadSize);
+        }
+        else {
+            // TODO: Error
+        }
+
+        return dst;
     }
 }

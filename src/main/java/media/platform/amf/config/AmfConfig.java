@@ -238,7 +238,7 @@ public class AmfConfig extends DefaultConfig {
             return;
         }
 
-        String[] priorities = priorityStr.split(",");
+        String[] priorities = priorityStr.split("\\s");
         if (priorities != null) {
             for (String priority: priorities) {
                 try {
