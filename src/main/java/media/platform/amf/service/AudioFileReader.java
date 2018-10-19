@@ -88,6 +88,23 @@ public class AudioFileReader {
         return dst;
     }
 
+    public byte[] getAMRNBPayload() {
+
+        byte[] dst = null;
+        int payloadSize = AMRPayload.getPayloadSize8k(buffer[pos]);
+        if (payloadSize > 0) {
+            dst = new byte[payloadSize + 1];
+            dst[0] = (byte)0xf0;
+            get(dst, 1, payloadSize);
+        }
+        else {
+            // TODO: Error
+        }
+
+        return dst;
+    }
+
+
     public byte[] getAMRWNPayload() {
 
         byte[] dst = null;

@@ -11,6 +11,7 @@ package media.platform.amf.rtpcore.core.rtp.netty;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import media.platform.amf.AppInstance;
 import media.platform.amf.core.socket.packets.Vocoder;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -193,15 +194,9 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
                 logger.info("Jitter vocoder {}", sessionInfo.getJitterSender().getVocoder());
 
-                String audioFilename;
-                if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_ALAW) {
-                    audioFilename = "/Users/Lua/tmp/test.alaw";
-                }
-                else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
-                    audioFilename = "/Users/Lua/tmp/test_wb.amr";
-                }
-                else {
-                    audioFilename = "/Users/Lua/tmp/test.alaw";
+                String audioFilename = AppInstance.getInstance().getPromptConfig().getWaitingPrompt(sessionInfo.getJitterSender().getVocoder());
+                if (audioFilename == null) {
+                    audioFilename = "test.alaw";
                 }
 
                 AudioFileReader fileReader = new AudioFileReader(audioFilename);
@@ -211,6 +206,11 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                     byte[] header = new byte[9];    // #!AMR-WB\a
                     fileReader.get(header, header.length);
                 }
+                else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
+                    byte[] header = new byte[6];    // #!AMR\a
+                    fileReader.get(header, header.length);
+                }
+
                 sessionInfo.setFileReader(fileReader);
             }
             else {
@@ -219,6 +219,9 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
                 if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
                     payload = sessionInfo.getFileReader().getAMRWBPayload();
+                }
+                else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
+                    payload = sessionInfo.getFileReader().getAMRNBPayload();
                 }
                 else {
                     payload = new byte[rtpPacket.getPayloadLength()];

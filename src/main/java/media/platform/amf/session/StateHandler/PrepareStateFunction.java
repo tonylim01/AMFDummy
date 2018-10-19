@@ -145,9 +145,10 @@ public class PrepareStateFunction implements StateFunction {
         }
 
         int payloadId = sessionInfo.getSdpDeviceInfo().getPayloadId();
+        int payloadSize = (vocoder == Vocoder.VOCODER_AMR_WB) ? 320 : 160;
 
 
-        JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, 160);
+        JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
         jitterSender.setUdpClient(sessionInfo.udpClient);
         jitterSender.start();
 

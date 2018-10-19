@@ -45,6 +45,7 @@ public class ServiceManager {
     public ServiceManager() {
         AppInstance instance = AppInstance.getInstance();
         instance.setConfig(new AmfConfig( instance.getInstanceId(), instance.getConfigFile()));
+        instance.loadPromptConfig();
     }
 
     /**

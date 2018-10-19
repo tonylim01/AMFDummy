@@ -20,7 +20,7 @@ public class AppInstance {
     private int instanceId = 0;
     private String configFile = null;
     private AmfConfig amfConfig = null;
-    //private PromptConfig promptConfig = null;
+    private PromptConfig promptConfig = null;
 
     public int getInstanceId() {
         return instanceId;
@@ -56,10 +56,15 @@ public class AppInstance {
         this.configFile = configFile;
     }
 
-    public PromptConfig getPromptConfig() {
+    public void loadPromptConfig() {
         PromptConfig promptConfig = null;
         if (amfConfig != null && amfConfig.getPromptConfPath() != null) {
             promptConfig = new PromptConfig(amfConfig.getPromptConfPath());
+        }
+    }
+    public PromptConfig getPromptConfig() {
+        if (promptConfig == null) {
+            loadPromptConfig();
         }
         return promptConfig;
     }
