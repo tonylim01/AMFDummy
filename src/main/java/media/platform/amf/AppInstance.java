@@ -57,7 +57,6 @@ public class AppInstance {
     }
 
     public void loadPromptConfig() {
-        PromptConfig promptConfig = null;
         if (amfConfig != null && amfConfig.getPromptConfPath() != null) {
             promptConfig = new PromptConfig(amfConfig.getPromptConfPath());
         }
