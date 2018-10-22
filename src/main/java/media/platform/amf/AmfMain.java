@@ -18,6 +18,11 @@ public class AmfMain
             if (StringUtil.isNumeric( args[0])) {
                 instanceId = Integer.valueOf(args[0]);
             }
+
+            if (args.length > 1) {
+                configPath = args[1];
+                AppInstance.getInstance().setConfigFile(configPath);
+            }
         }
 
         logger.info("MRUD [{}] start", instanceId);

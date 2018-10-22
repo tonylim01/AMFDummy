@@ -14,6 +14,8 @@ import com.typesafe.config.ConfigFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 public class DefaultConfig {
 
     private static final Logger logger = LoggerFactory.getLogger( DefaultConfig.class);
@@ -32,7 +34,13 @@ public class DefaultConfig {
         }
 
         //conf = ConfigFactory.load();
-        conf = ConfigFactory.parseResources(fileName);
+        if (!fileName.startsWith("/")) {
+            conf = ConfigFactory.parseResources(fileName);
+        }
+        else {
+            conf = ConfigFactory.parseFile(new File(fileName));
+        }
+
         logger.debug( "Loading Config :" + conf.toString());
 
         return true;
