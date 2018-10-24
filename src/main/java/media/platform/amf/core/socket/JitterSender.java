@@ -36,6 +36,7 @@ public class JitterSender {
     private int payloadType;
 
     private Queue<UdpPacket> buffer;
+    private UdpPacket lastPacket;
 
     public JitterSender(int vocoder, int vocoderMode, int payloadType, int duration, int jitterCount, int payloadSize) {
 
@@ -70,12 +71,26 @@ public class JitterSender {
         isQuit = true;
     }
 
-    public void put(byte[] buf) {
+    public void put(int seqNo, byte[] buf) {
         if (buf == null) {
             return;
         }
 
-        UdpPacket udpPacket = new UdpPacket(buf, buf.length);
+        if (seqNo >= 0) {
+            if (lastPacket != null) {
+                int seqDiff = seqNo - lastPacket.getSeqNo();
+                if (seqDiff < 0) {
+
+                    // how to insert
+
+                }
+            }
+            else {
+                seqNo = 0;
+            }
+        }
+
+        UdpPacket udpPacket = new UdpPacket(seqNo, buf, buf.length);
 
         try {
             buffer.offer(udpPacket);
@@ -117,6 +132,8 @@ public class JitterSender {
                         rtpPacket = new RtpPacket(udpPacket.getData().length + RtpPacket.FIXED_HEADER_SIZE, true);
                         rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
 
+                        udpPacket.clear();
+                        udpPacket = null;
                     }
                     else {
                         byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
@@ -133,6 +150,9 @@ public class JitterSender {
                     if (udpClient != null) {
                         udpClient.send(rtpPacket.getRawData());
                     }
+
+                    rtpPacket.getBuffer().clear();
+                    rtpPacket = null;
 
                     seq++;
                     switch (vocoder) {

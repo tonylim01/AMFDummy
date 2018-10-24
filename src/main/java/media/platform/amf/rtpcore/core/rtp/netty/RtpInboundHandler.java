@@ -108,11 +108,11 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
 
-        final InetAddress srcAddr = msg.sender().getAddress();
-        final ByteBuf buf = msg.content();
+        InetAddress srcAddr = msg.sender().getAddress();
+        ByteBuf buf = msg.content();
 
-        final int rcvPktLength = buf.readableBytes();
-        final byte[] rcvPktBuf = new byte[rcvPktLength];
+        int rcvPktLength = buf.readableBytes();
+        byte[] rcvPktBuf = new byte[rcvPktLength];
         buf.readBytes(rcvPktBuf);
 
         //RtpPacket rtpPacket = new RtpPacket( RtpPacket.RTP_PACKET_MAX_SIZE, true);
@@ -179,8 +179,10 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                         byte[] payload = new byte[rtpPacket.getPayloadLength()];
                         rtpPacket.readRegionToBuff(rcvPktLength - rtpPacket.getPayloadLength(), rtpPacket.getPayloadLength(), payload);
 
-                        otherSession.getJitterSender().put(payload);
+                        otherSession.getJitterSender().put(rtpPacket.getSeqNumber(), payload);
                         toOtherSession = true;
+
+                        payload = null;
                     }
                 }
             }
@@ -205,10 +207,12 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                 if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
                     byte[] header = new byte[9];    // #!AMR-WB\a
                     fileReader.get(header, header.length);
+                    header = null;
                 }
                 else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
                     byte[] header = new byte[6];    // #!AMR\a
                     fileReader.get(header, header.length);
+                    header = null;
                 }
 
                 sessionInfo.setFileReader(fileReader);
@@ -230,7 +234,8 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
 
                 if (payload != null) {
-                    sessionInfo.getJitterSender().put(payload);
+                    sessionInfo.getJitterSender().put(-1, payload);
+                    payload = null;
                 }
             }
 
@@ -242,5 +247,8 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
         //sessionInfo.udpClient.send(sessionInfo.getRtpPacket().getRawData());
 
         //logger.debug( "-> UDP ({}:{}) size={}", sessionInfo.getSdpDeviceInfo().getRemoteIp(), sessionInfo.getSdpDeviceInfo().getRemotePort(), rcvPktBuf.length);
+
+        rtpPacket.getBuffer().clear();
+        rtpPacket = null;
     }
 }

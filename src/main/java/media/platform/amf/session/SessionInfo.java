@@ -51,6 +51,9 @@ public class SessionInfo {
     private int volumeMax;
 
     private RtpPacket rtpPacket;
+    private byte[] lastPacket;
+    private int lastSeqNo;
+
     private AudioFileReader fileReader;
     private JitterSender jitterSender;
 
@@ -332,4 +335,30 @@ public class SessionInfo {
     public void setJitterSender(JitterSender jitterSender) {
         this.jitterSender = jitterSender;
     }
+
+    public byte[] getLastPacket() {
+        return lastPacket;
+    }
+
+    public void setLastPacket(byte[] srcPacket) {
+        if (srcPacket == null) {
+            return;
+        }
+
+        if (lastPacket == null ||
+                ((lastPacket != null) && (lastPacket.length != srcPacket.length))) {
+            lastPacket = new byte[srcPacket.length];
+        }
+
+        System.arraycopy(srcPacket, 0, lastPacket, 0, srcPacket.length);
+    }
+
+    public int getLastSeqNo() {
+        return lastSeqNo;
+    }
+
+    public void setLastSeqNo(int lastSeqNo) {
+        this.lastSeqNo = lastSeqNo;
+    }
+
 }
