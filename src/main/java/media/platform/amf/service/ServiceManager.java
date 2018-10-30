@@ -178,10 +178,7 @@ public class ServiceManager {
         logger.warn("Netty UDP session Close : [{}]", sessionId);
 
         if (sessionInfo.getConferenceId() != null) {
-            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
-            if (roomInfo != null && roomInfo.hasSession(sessionInfo.getSessionId())) {
-                roomInfo.removeSession(sessionInfo.getSessionId());
-            }
+            RoomManager.getInstance().removeSession(sessionInfo.getConferenceId(), sessionInfo.getSessionId());
         }
 
         sessionManager.deleteSession(sessionId);

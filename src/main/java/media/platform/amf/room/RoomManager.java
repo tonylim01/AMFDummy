@@ -68,6 +68,8 @@ public class RoomManager {
                 roomInfo = new RoomInfo();
                 roomInfo.setRoomId(roomId);
                 roomInfos.put(roomId, roomInfo);
+
+                logger.debug("[{}] New Room. Count [{}]", roomId, roomInfos.size());
             }
 
             if (!roomInfo.hasSession(sessionId)) {
@@ -101,7 +103,7 @@ public class RoomManager {
                 logger.debug("[{}] Room session count [{}]", roomId, roomInfo.getSessionSize());
                 if (roomInfo.getSessionSize() == 0) {
                     roomInfos.remove(roomId);
-                    logger.debug("[{}] Room deleted", roomId);
+                    logger.debug("[{}] Room deleted. Room count [{}]", roomId, roomInfos.size());
                 }
             }
             else {
