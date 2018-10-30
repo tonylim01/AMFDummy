@@ -7,6 +7,8 @@ import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -35,7 +37,8 @@ public class JitterSender {
     private int vocoderMode;
     private int payloadType;
 
-    private Queue<UdpPacket> buffer;
+    //private Queue<UdpPacket> buffer;
+    private List<UdpPacket> buffer;
     private UdpPacket lastPacket;
 
     public JitterSender(int vocoder, int vocoderMode, int payloadType, int duration, int jitterCount, int payloadSize) {
@@ -52,7 +55,8 @@ public class JitterSender {
         ssrc = new Random().nextLong();
         timestamp = System.currentTimeMillis();
 
-        buffer = new ConcurrentLinkedQueue<>();
+        //buffer = new ConcurrentLinkedQueue<>();
+        buffer = new ArrayList<>();
     }
 
     public void setUdpClient(UdpClient udpClient) {
@@ -77,25 +81,42 @@ public class JitterSender {
         }
 
         if (seqNo >= 0) {
+            boolean buffered = false;
+
+            UdpPacket udpPacket = new UdpPacket(seqNo, buf, buf.length);
             if (lastPacket != null) {
                 int seqDiff = seqNo - lastPacket.getSeqNo();
                 if (seqDiff < 0) {
 
                     // how to insert
+                    synchronized (buffer) {
+                        if (buffer.size() > 0) {
+                            int i;
+                            for (i = buffer.size() - 1; i <= 0; --i) {
+                                if (buffer.get(i).getSeqNo() < seqNo) {
+                                    break;
+                                }
+                            }
 
+                            buffer.add(i + 1, udpPacket);
+                            buffered = true;
+                        }
+                    }
                 }
             }
-            else {
-                seqNo = 0;
+
+            if (!buffered) {
+                synchronized (buffer) {
+                    buffer.add(udpPacket);
+                }
             }
         }
+        else {
+            UdpPacket udpPacket = new UdpPacket(0, buf, buf.length);
 
-        UdpPacket udpPacket = new UdpPacket(seqNo, buf, buf.length);
-
-        try {
-            buffer.offer(udpPacket);
-        } catch (Exception e) {
-            e.printStackTrace();
+            synchronized (buffer) {
+                buffer.add(udpPacket);
+            }
         }
     }
 
@@ -122,7 +143,12 @@ public class JitterSender {
             while (!isQuit) {
 
                 try {
-                    UdpPacket udpPacket = buffer.poll();
+                    UdpPacket udpPacket = null;
+                    synchronized (buffer) {
+                        if (buffer.size() > 0) {
+                            udpPacket = buffer.get(0);
+                        }
+                    }
 
 //                    logger.debug("packet found. client ({}) data ({})", udpPacket != null, udpPacket.getData() != null);
 
@@ -134,6 +160,12 @@ public class JitterSender {
 
                         udpPacket.clear();
                         udpPacket = null;
+
+                        synchronized (buffer) {
+                            if (buffer.size() > 0) {
+                                buffer.remove(0);
+                            }
+                        }
                     }
                     else {
                         byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
