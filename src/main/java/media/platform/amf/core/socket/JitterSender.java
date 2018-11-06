@@ -139,6 +139,7 @@ public class JitterSender {
             } while (!isQuit && buffer.size() < jitterCount);
 
             long startTime = System.currentTimeMillis();
+            RtpPacket rtpPacket = null;
 
             while (!isQuit) {
 
@@ -152,10 +153,16 @@ public class JitterSender {
 
 //                    logger.debug("packet found. client ({}) data ({})", udpPacket != null, udpPacket.getData() != null);
 
-                    RtpPacket rtpPacket = null;
                     if (udpPacket != null && udpPacket.getData() != null) {
 
-                        rtpPacket = new RtpPacket(udpPacket.getData().length + RtpPacket.FIXED_HEADER_SIZE, true);
+                        if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
+                            if (rtpPacket != null) {
+                                rtpPacket.getBuffer().clear();
+                                rtpPacket = null;
+                            }
+                            rtpPacket = new RtpPacket(udpPacket.getData().length + RtpPacket.FIXED_HEADER_SIZE, true);
+                        }
+
                         rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
 
                         udpPacket.clear();
@@ -170,21 +177,28 @@ public class JitterSender {
                     else {
                         byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
                         if (silenceBuf != null) {
-                            rtpPacket = new RtpPacket(silenceBuf.length + RtpPacket.FIXED_HEADER_SIZE, true);
+                            if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != silenceBuf.length)) {
+                                if (rtpPacket != null) {
+                                    rtpPacket.getBuffer().clear();
+                                    rtpPacket = null;
+                                }
+                                rtpPacket = new RtpPacket(silenceBuf.length + RtpPacket.FIXED_HEADER_SIZE, true);
+                            }
+
                             rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, silenceBuf, 0, silenceBuf.length);
                         }
                         else {
                             // TODO
+                            logger.error("No rtp packet");
+                            rtpPacket.getBuffer().clear();
+                            rtpPacket = null;
                         }
                     }
 
 
-                    if (udpClient != null) {
+                    if (udpClient != null && rtpPacket != null) {
                         udpClient.send(rtpPacket.getRawData());
                     }
-
-                    rtpPacket.getBuffer().clear();
-                    rtpPacket = null;
 
                     seq++;
                     switch (vocoder) {
@@ -204,22 +218,36 @@ public class JitterSender {
                 long endTime = System.currentTimeMillis();
                 long delay = (tick * duration) - (endTime - startTime);
 
+                // For debugging. What makes the delay?
                 if ((buffer.size() - beforeRemaining > 5) || (delay <= 0) || (delay >= 50)) {
                     logger.debug("-> tick {} remaining {} delay {}", tick, buffer.size(), delay);
+                    --delay;
+                }
+
+                if (delay > 0) {
+                   try {
+                      Thread.sleep(delay);
+                   } catch (Exception e) {
+                      e.printStackTrace();
+                   }
+                }
+                else {
+                   tick++;
+                }
+
+                if (buffer.size() > 10) {
+                    int n = buffer.size() - 10;
+                    logger.warn("Trash [{}] packets", n);
+                    for (int i = 0; i < n; i++) {
+                        synchronized (buffer) {
+                            UdpPacket trash = buffer.get(0);
+                            trash.clear();
+                            buffer.remove(0);
+                        }
+                    }
                 }
 
                 beforeRemaining = buffer.size();
-
-                if (delay > 0) {
-                    try {
-                        Thread.sleep(delay);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    tick++;
-                }
             }
 
             logger.info("LoopProc end");

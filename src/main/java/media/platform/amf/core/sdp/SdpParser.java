@@ -82,6 +82,9 @@ public class SdpParser {
                                 logger.debug("priority [{}] codec [{}] samplerate [{}]", priority, codec, sampleRate);
                                 sdpInfo.setCodecStr(codec);
                                 if (sampleRate != null) {
+                                    if (sampleRate.contains("/")) {
+                                        sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
+                                    }
                                     sdpInfo.setSampleRate(Integer.valueOf(sampleRate));
                                 }
                             }
