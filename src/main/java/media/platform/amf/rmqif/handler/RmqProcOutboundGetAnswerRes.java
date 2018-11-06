@@ -9,16 +9,13 @@
 
 package media.platform.amf.rmqif.handler;
 
-import media.platform.amf.core.sdp.SdpInfo;
+import media.platform.amf.core.sdp.*;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.rmqif.handler.base.RmqOutgoingMessage;
 import media.platform.amf.rmqif.messages.InboundGetAnswerRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import media.platform.amf.core.sdp.SdpAttribute;
-import media.platform.amf.core.sdp.SdpBuilder;
-import media.platform.amf.core.sdp.SdpUtil;
 import media.platform.amf.AppInstance;
 import media.platform.amf.rmqif.types.RmqMessageType;
 import media.platform.amf.room.RoomInfo;
@@ -205,24 +202,46 @@ public class RmqProcOutboundGetAnswerRes extends RmqOutgoingMessage {
 //        SdpParser.selectAttribute(sdpInfo);
 
         if (sdpInfo.getAttributes() != null) {
-            List<Integer> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+            List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
-                for (Integer priority : mediaPriorities) {
-                    attr = sdpInfo.getAttribute(priority);
+                for (String priorityCodec : mediaPriorities) {
+
+                    int codecId = SdpCodec.getCodecId(priorityCodec);
+                    if (codecId == SdpCodec.CODEC_UNKNOWN) {
+                        continue;
+                    }
+
+                    attr = sdpInfo.getAttributeByCodec(codecId);
+                    if (attr == null) {
+                        attr = sdpInfo.getAttribute(SdpCodec.getPayloadId(codecId));
+                    }
 
                     if (attr != null) {
                         String desc = attr.getDescription();
                         if (desc != null && desc.contains("/")) {
                             String codec = desc.substring(0, desc.indexOf('/')).trim();
-                            String sampleRate = desc.substring(desc.indexOf('/' + 1)).trim();
+                            String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
 
+                            logger.debug("priority [{}] codec [{}] samplerate [{}]", priorityCodec, codec, sampleRate);
+                            sdpInfo.setCodecStr(codec);
+                            if (sampleRate != null) {
+                                if (sampleRate.contains("/")) {
+                                    sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
+                                }
+                                sdpInfo.setSampleRate(Integer.valueOf(sampleRate));
+                            }
                         }
-                        sdpInfo.setPayloadId(priority);
+
+                        sdpInfo.setPayloadId(attr.getPayloadId());
                         break;
                     }
                 }
             }
+            else {
+                logger.warn("No media priority defined");
+            }
+
         }
 
         return attr;

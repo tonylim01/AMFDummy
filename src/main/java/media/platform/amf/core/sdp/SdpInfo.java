@@ -122,4 +122,27 @@ public class SdpInfo {
         return result;
     }
 
+    public SdpAttribute getAttributeByCodec(int codecId) {
+        if (attributes == null) {
+            return null;
+        }
+
+        SdpAttribute result = null;
+
+        for (SdpAttribute attr: attributes) {
+            String desc = attr.getDescription();
+            if (desc != null && desc.contains("/")) {
+                String codec = desc.substring(0, desc.indexOf('/')).trim();
+                String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
+
+                if (codec != null && SdpCodec.getCodecId(codec) == codecId) {
+                    result = attr;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

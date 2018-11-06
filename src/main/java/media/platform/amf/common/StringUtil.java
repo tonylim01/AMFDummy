@@ -21,4 +21,31 @@ public class StringUtil {
     public static boolean isNumeric(String str) {
         return (str != null && str.matches("-?\\d+")) ? true : false;
     }
+
+    public static int strcasecmp(String a, String b) {
+        if (a == null || b == null) {
+            return 0;
+        }
+
+        int alen = a.length();
+        int blen = b.length();
+
+        if (alen < blen) {
+            return 1;
+        }
+        else if (alen > blen) {
+            return -1;
+        }
+
+        for (int i = 0; i < alen; i++) {
+            if (a.charAt(i) < b.charAt(i)) {
+                return 1;
+            }
+            else if (a.charAt(i) > b.charAt(i)) {
+                return -1;
+            }
+        }
+
+        return 0;
+    }
 }

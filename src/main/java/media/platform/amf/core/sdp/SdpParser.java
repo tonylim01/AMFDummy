@@ -30,20 +30,38 @@ public class SdpParser {
             return null;
         }
 
-        List<Integer> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+        List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
 
         if (mediaPriorities != null && mediaPriorities.size() > 0) {
-            for (Integer priority : mediaPriorities) {
-                SdpAttribute attr = sdpInfo.getAttribute(priority);
+            for (String priorityCodec : mediaPriorities) {
+
+                int codecId = SdpCodec.getCodecId(priorityCodec);
+                if (codecId == SdpCodec.CODEC_UNKNOWN) {
+                    continue;
+                }
+
+                SdpAttribute attr = sdpInfo.getAttributeByCodec(codecId);
+                if (attr == null) {
+                    attr = sdpInfo.getAttribute(SdpCodec.getPayloadId(codecId));
+                }
 
                 if (attr != null) {
                     String desc = attr.getDescription();
                     if (desc != null && desc.contains("/")) {
                         String codec = desc.substring(0, desc.indexOf('/')).trim();
-                        String sampleRate = desc.substring(desc.indexOf('/' + 1)).trim();
+                        String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
 
+                        logger.debug("priority [{}] codec [{}] samplerate [{}]", priorityCodec, codec, sampleRate);
+                        sdpInfo.setCodecStr(codec);
+                        if (sampleRate != null) {
+                            if (sampleRate.contains("/")) {
+                                sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
+                            }
+                            sdpInfo.setSampleRate(Integer.valueOf(sampleRate));
+                        }
                     }
-                    sdpInfo.setPayloadId(priority);
+
+                    sdpInfo.setPayloadId(attr.getPayloadId());
                     break;
                 }
             }
@@ -51,6 +69,7 @@ public class SdpParser {
 
         return sdpInfo;
     }
+
     /**
      * Simple static parser to call the parse() of SdpParser
      * @param sdp
@@ -67,11 +86,20 @@ public class SdpParser {
             sdpInfo = sdpParser.parse(sdp);
 
             if (sdpInfo.getAttributes() != null) {
-                List<Integer> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+                List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
 
                 if (mediaPriorities != null && mediaPriorities.size() > 0) {
-                    for (Integer priority : mediaPriorities) {
-                        SdpAttribute attr = sdpInfo.getAttribute(priority);
+                    for (String priorityCodec : mediaPriorities) {
+
+                        int codecId = SdpCodec.getCodecId(priorityCodec);
+                        if (codecId == SdpCodec.CODEC_UNKNOWN) {
+                            continue;
+                        }
+
+                        SdpAttribute attr = sdpInfo.getAttributeByCodec(codecId);
+                        if (attr == null) {
+                            attr = sdpInfo.getAttribute(SdpCodec.getPayloadId(codecId));
+                        }
 
                         if (attr != null) {
                             String desc = attr.getDescription();
@@ -79,7 +107,7 @@ public class SdpParser {
                                 String codec = desc.substring(0, desc.indexOf('/')).trim();
                                 String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
 
-                                logger.debug("priority [{}] codec [{}] samplerate [{}]", priority, codec, sampleRate);
+                                logger.debug("priority [{}] codec [{}] samplerate [{}]", priorityCodec, codec, sampleRate);
                                 sdpInfo.setCodecStr(codec);
                                 if (sampleRate != null) {
                                     if (sampleRate.contains("/")) {
@@ -89,7 +117,7 @@ public class SdpParser {
                                 }
                             }
 
-                            sdpInfo.setPayloadId(priority);
+                            sdpInfo.setPayloadId(attr.getPayloadId());
                             break;
                         }
                     }

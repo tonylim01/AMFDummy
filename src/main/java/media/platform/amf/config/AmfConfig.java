@@ -37,7 +37,7 @@ public class AmfConfig extends DefaultConfig {
 
     private String heartbeat;
 
-    private List<Integer> mediaPriorities;
+    private List<String> mediaPriorities;
 
     private SdpConfig sdpConfig;
 
@@ -242,7 +242,7 @@ public class AmfConfig extends DefaultConfig {
         if (priorities != null) {
             for (String priority: priorities) {
                 try {
-                    mediaPriorities.add(Integer.valueOf(priority.trim()));
+                    mediaPriorities.add(priority.trim());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -250,13 +250,13 @@ public class AmfConfig extends DefaultConfig {
         }
     }
 
-    public List<Integer> getMediaPriorities() {
+    public List<String> getMediaPriorities() {
         return mediaPriorities;
     }
 
-    public int getMediaPriority(int index) {
+    public String getMediaPriority(int index) {
         if (index < 0 || index >= mediaPriorities.size()) {
-            return -1;
+            return null;
         }
 
         return mediaPriorities.get(index);
