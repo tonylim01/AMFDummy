@@ -82,25 +82,17 @@ public class RmqConsumer implements Runnable {
                 RmqProcInboundSetOfferReq inboudSetOfferReq = new RmqProcInboundSetOfferReq();
                 inboudSetOfferReq.handle(msg);
                 break;
-            case RmqMessageType.RMQ_MSG_TYPE_INBOUND_SET_OFFER_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_INBOUND_GET_ANSWER_REQ:
                 RmqProcInboundGetAnswerReq inboundGetAnswerReq= new RmqProcInboundGetAnswerReq();
                 inboundGetAnswerReq.handle(msg);
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_INBOUND_GET_ANSWER_RES:
                 break;
             case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_SET_OFFER_REQ:
                 RmqProcOutboundSetOfferReq outboudSetOfferReq = new RmqProcOutboundSetOfferReq();
                 outboudSetOfferReq.handle(msg);
                 break;
-            case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_SET_OFFER_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_GET_ANSWER_REQ:
                 RmqProcOutboundGetAnswerReq outboundGetAnswerReq= new RmqProcOutboundGetAnswerReq();
                 outboundGetAnswerReq.handle(msg);
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_GET_ANSWER_RES:
                 break;
             case RmqMessageType.RMQ_MSG_TYPE_HANGUP_REQ:
                 RmqProcIncomingHangupReq hangupReq= new RmqProcIncomingHangupReq();
@@ -114,117 +106,72 @@ public class RmqConsumer implements Runnable {
                 RmqProcNegoDoneReq negoDoneReq= new RmqProcNegoDoneReq();
                 negoDoneReq.handle(msg);
                 break;
-            case RmqMessageType.RMQ_MSG_TYPE_NEGO_DONE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_REQ:
                 RmqProcIncomingCommandReq commandStartReq = new RmqProcIncomingCommandReq();
                 commandStartReq.handle(msg);
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_COMMAND_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_LONGCALL_CHECK_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_LONGCALL_CHECK_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_PROMPT_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_PROMPT_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_PROMPT_ACK:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_COLLECT_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_COLLECT_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_COLLECT_ACK:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_RECORD_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_RECORD_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_RECORD_ACK:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_STOP_PLAY_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_STOP_PLAY_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_STOP_RECORD_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_STOP_RECORD_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_CONTROL_FILE_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_CONTROL_FILE_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_ASR_REQ:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_ASR_RES:
-                break;
-            case RmqMessageType.RMQ_MSG_TYPE_PLAY_ASR_ACK:
                 break;
             case RmqMessageType.RMQ_MSG_TYPE_SERVICE_START_REQ:
                 RmqProcServiceStartReq startServiceReq = new RmqProcServiceStartReq();
                 startServiceReq.handle(msg);
                 break;
+            case RmqMessageType.RMQ_MSG_TYPE_INBOUND_GET_ANSWER_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_INBOUND_SET_OFFER_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_GET_ANSWER_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_SET_OFFER_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_NEGO_DONE_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_COMMAND_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_LONGCALL_CHECK_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_LONGCALL_CHECK_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_PROMPT_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_PROMPT_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_PROMPT_ACK:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_COLLECT_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_COLLECT_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_COLLECT_ACK:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_RECORD_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_RECORD_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_RECORD_ACK:
+            case RmqMessageType.RMQ_MSG_TYPE_STOP_PLAY_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_STOP_PLAY_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_STOP_RECORD_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_STOP_RECORD_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_CONTROL_FILE_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_CONTROL_FILE_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_ASR_REQ:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_ASR_RES:
+            case RmqMessageType.RMQ_MSG_TYPE_PLAY_ASR_ACK:
             case RmqMessageType.RMQ_MSG_TYPE_SERVICE_START_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_STOP_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_STOP_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_DONE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_DONE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_END_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_COMMAND_END_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_CREATE_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_CREATE_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_DELETE_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_DELETE_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_JOIN_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_JOIN_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_WITHDRAW_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_WITHDRAW_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_UPDATE_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_UPDATE_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_STARTRECORD_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_STARTRECORD_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_STOPRECORD_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_STOPRECORD_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_RECORD_CONFERENCE_RPT:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_RECORD_CONFERENCE_ACK:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_CHANGE_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_CHANGE_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_DTMF_CONFERENCE_RPT:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_DTMF_CONFERENCE_ACK:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_PLAY_CONFERENCE_REQ:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_PLAY_CONFERENCE_RES:
-                break;
             case RmqMessageType.RMQ_MSG_TYPE_PLAY_CONFERENCE_ACK:
+            default:
+                logger.error("Unsupported message: jon=[{}]", json);
                 break;
         }
     }
