@@ -179,7 +179,9 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                         byte[] payload = new byte[rtpPacket.getPayloadLength()];
                         rtpPacket.readRegionToBuff(rcvPktLength - rtpPacket.getPayloadLength(), rtpPacket.getPayloadLength(), payload);
 
-                        otherSession.getJitterSender().put(rtpPacket.getSeqNumber(), payload);
+                        if (otherSession.getJitterSender() != null) {
+                            otherSession.getJitterSender().put(rtpPacket.getSeqNumber(), payload);
+                        }
                         toOtherSession = true;
 
                         payload = null;

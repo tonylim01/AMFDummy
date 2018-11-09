@@ -10,6 +10,8 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.AppInstance;
+import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.core.sdp.SdpParser;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
@@ -98,7 +100,20 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
         sessionInfo.setCaller((parCount == 1) ? true : false);
 
         BiUdpRelayManager udpRelayManager = BiUdpRelayManager.getInstance();
-        sessionInfo.setSrcLocalPort(udpRelayManager.getNextLocalPort());
+        SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
+
+        boolean isError = false;
+        do {
+            try {
+                int localPort = udpRelayManager.getNextLocalPort();
+                sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
+                sessionInfo.setSrcLocalPort(localPort);
+            } catch (Exception e) {
+                e.printStackTrace();
+                isError = true;
+            }
+
+        } while (isError == true);
 
         logger.debug("[{}] Local port: src [{}] dst [{}]", msg.getSessionId(),
                 sessionInfo.getSrcLocalPort(), sessionInfo.getDstLocalPort());

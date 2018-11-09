@@ -36,6 +36,8 @@ public class AmfConfig extends DefaultConfig {
     private int sessionTimeout;
 
     private String heartbeat;
+    private String logPath;
+    private int logTime;
 
     private List<String> mediaPriorities;
 
@@ -92,6 +94,8 @@ public class AmfConfig extends DefaultConfig {
             promptConfPath = getStrValue("COMMON", "PROMPT_CONF_PATH", null);
             amfId = getIntValue("COMMON", "AMF_ID", 0);
             heartbeat = getStrValue("COMMON", "HEARTBEAT", "false");
+            logPath = getStrValue("COMMON", "LOG_PATH", null);
+            logTime = getIntValue("COMMON", "LOG_TIME", 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -304,5 +308,13 @@ public class AmfConfig extends DefaultConfig {
 
     public String getPromptConfPath() {
         return promptConfPath;
+    }
+
+    public String getLogPath() {
+        return logPath;
+    }
+
+    public int getLogTime() {
+        return logTime;
     }
 }

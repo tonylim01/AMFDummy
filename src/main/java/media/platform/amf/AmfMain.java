@@ -1,6 +1,7 @@
 package media.platform.amf;
 
 import media.platform.amf.common.StringUtil;
+import media.platform.amf.config.AmfConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import media.platform.amf.service.ServiceManager;

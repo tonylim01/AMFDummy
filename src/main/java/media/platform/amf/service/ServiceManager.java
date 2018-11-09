@@ -46,6 +46,12 @@ public class ServiceManager {
         AppInstance instance = AppInstance.getInstance();
         instance.setConfig(new AmfConfig( instance.getInstanceId(), instance.getConfigFile()));
         instance.loadPromptConfig();
+
+        AmfConfig config = instance.getConfig();
+
+        if (config.getLogPath() != null && config.getLogTime() > 0) {
+            org.apache.log4j.xml.DOMConfigurator.configureAndWatch(config.getLogPath(), config.getLogTime());
+        }
     }
 
     /**

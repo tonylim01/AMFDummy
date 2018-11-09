@@ -69,7 +69,8 @@ public class PrepareStateFunction implements StateFunction {
         logger.debug("[{}] Caller Relay: remote ({}:{}) <- local ({})", sessionInfo.getSessionId(),
                      sdpInfo.getRemoteIp(), sdpInfo.getRemotePort(), sessionInfo.getSrcLocalPort());
 
-        sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
+
+        //sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
 
         DatagramChannel datagramChannel = null;
 
@@ -108,7 +109,7 @@ public class PrepareStateFunction implements StateFunction {
 
         BiUdpRelayManager udpRelayManager = BiUdpRelayManager.getInstance();
 
-        sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
+        //sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
         sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort( sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
         //JitterSender jitterSender = new JitterSender(Vocoder.VOCODER_ALAW, Vocoder.MODE_NA, 8, 20, 3, 160);
