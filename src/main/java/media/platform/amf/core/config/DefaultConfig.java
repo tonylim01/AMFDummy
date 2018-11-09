@@ -111,4 +111,25 @@ public class DefaultConfig {
 
         return result;
     }
+
+    public boolean getBooleanValue(String section, String key, boolean defaultValue) {
+
+        boolean result;
+        String mkey = section+"."+key;
+        String value = null;
+
+        if (section == null) {
+            return defaultValue;
+        }
+        try
+        {
+            value = conf.getString( mkey);
+            result = Boolean.valueOf(value);
+        }
+        catch (Exception e) {
+            result = defaultValue;
+        }
+
+        return result;
+    }
 }

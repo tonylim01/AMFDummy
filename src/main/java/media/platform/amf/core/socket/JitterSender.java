@@ -1,5 +1,6 @@
 package media.platform.amf.core.socket;
 
+import media.platform.amf.AppInstance;
 import media.platform.amf.core.socket.packets.SilencePacket;
 import media.platform.amf.core.socket.packets.Vocoder;
 import media.platform.amf.rtpcore.Process.UdpClient;
@@ -196,7 +197,7 @@ public class JitterSender {
                     }
 
 
-                    if (udpClient != null && rtpPacket != null) {
+                    if (udpClient != null && rtpPacket != null && AppInstance.getInstance().getConfig().isTest() == false) {
                         udpClient.send(rtpPacket.getRawData());
                     }
 

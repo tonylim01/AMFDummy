@@ -190,7 +190,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             }
         }
 
-        if (!toOtherSession) {
+        if (!toOtherSession && AppInstance.getInstance().getConfig().isTest() == false) {
             if (sessionInfo.getRtpPacket() == null) {
 
                 RtpPacket sentPacket = new RtpPacket(rcvPktLength, true);

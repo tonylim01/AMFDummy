@@ -36,6 +36,7 @@ public class AmfConfig extends DefaultConfig {
     private int sessionTimeout;
 
     private String heartbeat;
+    private boolean isTest;
     private String logPath;
     private int logTime;
 
@@ -93,7 +94,8 @@ public class AmfConfig extends DefaultConfig {
         try {
             promptConfPath = getStrValue("COMMON", "PROMPT_CONF_PATH", null);
             amfId = getIntValue("COMMON", "AMF_ID", 0);
-            heartbeat = getStrValue("COMMON", "HEARTBEAT", "false");
+            heartbeat = getStrValue("COMMON", "HEARTBEAT", "felse");
+            isTest = getBooleanValue("COMMON", "TEST", true);
             logPath = getStrValue("COMMON", "LOG_PATH", null);
             logTime = getIntValue("COMMON", "LOG_TIME", 0);
         } catch (Exception e) {
@@ -316,5 +318,9 @@ public class AmfConfig extends DefaultConfig {
 
     public int getLogTime() {
         return logTime;
+    }
+
+    public boolean isTest() {
+        return isTest;
     }
 }
