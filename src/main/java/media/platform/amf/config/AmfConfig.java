@@ -24,6 +24,7 @@ public class AmfConfig extends DefaultConfig {
     private static final Logger logger = LoggerFactory.getLogger(AmfConfig.class);
 
     private int amfId;
+    private int rmqBufferCount;
     private String rmqHost;
     private String rmqLocal;
     private String rmqMcud;
@@ -114,6 +115,7 @@ public class AmfConfig extends DefaultConfig {
 
     private void loadRmqConfig(String instanceSection) {
         try {
+            rmqBufferCount = getIntValue("RMQ", "RMQ_BUFFER_COUNT", 0);
             rmqHost = getStrValue("RMQ", "RMQ_HOST", "localhost");
             rmqMcud = getStrValue("RMQ", "RMQ_MCUD", null);
             rmqAcswf = getStrValue("RMQ", "RMQ_ACSWF", null);
@@ -322,5 +324,9 @@ public class AmfConfig extends DefaultConfig {
 
     public boolean isTest() {
         return isTest;
+    }
+
+    public int getRmqBufferCount() {
+        return rmqBufferCount;
     }
 }

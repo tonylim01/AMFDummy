@@ -23,15 +23,13 @@ import java.util.concurrent.BlockingQueue;
 public class RmqServer {
     private static final Logger logger = LoggerFactory.getLogger(RmqServer.class);
 
-    private static final int QUEUE_SIZE = 8;
+    private static final int QUEUE_SIZE = 16;
 
     private RmqReceiver receiver = null;
     private BlockingQueue<String> queue;
     private Thread rmqConsumerThread;
 
     public RmqServer() {
-        queue = new ArrayBlockingQueue<>(QUEUE_SIZE);
-        rmqConsumerThread = new Thread(new RmqConsumer(queue));
     }
 
     public void start() {
@@ -39,6 +37,14 @@ public class RmqServer {
 
         logger.info("{} start", getClass().getSimpleName());
 
+        int queueSize = config.getRmqBufferCount();
+        if (queueSize == 0) {
+            queueSize = QUEUE_SIZE;
+        }
+
+        queue = new ArrayBlockingQueue<>(queueSize);
+
+        rmqConsumerThread = new Thread(new RmqConsumer(queue));
         rmqConsumerThread.start();
 
         receiver = new RmqReceiver(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
