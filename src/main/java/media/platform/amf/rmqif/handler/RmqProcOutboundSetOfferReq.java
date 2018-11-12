@@ -108,6 +108,7 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
                 int localPort = udpRelayManager.getNextLocalPort();
                 sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
                 sessionInfo.setSrcLocalPort(localPort);
+                isError = false;
             } catch (Exception e) {
                 e.printStackTrace();
                 isError = true;
