@@ -56,11 +56,16 @@ public class BiUdpRelayManager {
      * @return
      */
     public int getNextLocalPort() {
-        int result = currentUdpPort;
-        currentUdpPort += 2;
+        int result;
 
-        if (currentUdpPort > localUdpPortMax) {
-            currentUdpPort = localUdpPortMin;
+        synchronized (this) {
+            result = currentUdpPort;
+
+            currentUdpPort += 2;
+
+            if (currentUdpPort > localUdpPortMax) {
+                currentUdpPort = localUdpPortMin;
+            }
         }
 
         return result;
