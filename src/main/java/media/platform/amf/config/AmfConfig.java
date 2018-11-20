@@ -13,6 +13,7 @@ package media.platform.amf.config;
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.common.StringUtil;
 import media.platform.amf.core.config.DefaultConfig;
+import media.platform.amf.redundant.RedundantClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,8 @@ public class AmfConfig extends DefaultConfig {
     private String logPath;
     private int logTime;
 
+    private RedundantConfig redundantConfig;
+
     private List<String> mediaPriorities;
 
     private SdpConfig sdpConfig;
@@ -67,6 +70,7 @@ public class AmfConfig extends DefaultConfig {
 
         mediaPriorities = new ArrayList<>();
         sdpConfig = new SdpConfig();
+        redundantConfig = new RedundantConfig(configPath);
 
         if (result == true) {
             loadConfig(instanceId);
@@ -328,5 +332,9 @@ public class AmfConfig extends DefaultConfig {
 
     public int getRmqBufferCount() {
         return rmqBufferCount;
+    }
+
+    public RedundantConfig getRedundantConfig() {
+        return redundantConfig;
     }
 }

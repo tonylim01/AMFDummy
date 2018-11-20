@@ -3,6 +3,7 @@ package media.platform.amf.service;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.redundant.RedundantServer;
 import media.platform.amf.rmqif.handler.RmqProcLogInReq;
 import media.platform.amf.rmqif.module.RmqClient;
 import media.platform.amf.rmqif.module.RmqServer;
@@ -35,6 +36,7 @@ public class ServiceManager {
     private RmqServer rmqServer;
     private SessionManager sessionManager;
     private HeartbeatManager heartbeatManager;
+    private RedundantServer redundantServer;
 
     private boolean isQuit = false;
 
@@ -113,6 +115,11 @@ public class ServiceManager {
         sessionManager = SessionManager.getInstance();
         sessionManager.start();
 
+        if (config.getRedundantConfig().getLocalPort() > 0) {
+            redundantServer = new RedundantServer(config.getRedundantConfig().getLocalPort());
+            redundantServer.start();
+        }
+
         if(config.getHeartbeat().equals( "true" ))
         {
             heartbeatManager = heartbeatManager.getInstance();
@@ -141,6 +148,10 @@ public class ServiceManager {
 
         if (rmqServer != null) {
             rmqServer.stop();
+        }
+
+        if (redundantServer != null) {
+            redundantServer.stop();
         }
 
 //        heartbeatManager.stop();

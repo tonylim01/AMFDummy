@@ -9,8 +9,11 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.common.JsonMessage;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.core.sdp.SdpParser;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.NegoDoneReq;
 import media.platform.amf.rmqif.types.RmqMessage;
@@ -52,7 +55,7 @@ public class RmqProcNegoDoneReq extends RmqIncomingMessageHandler {
 
         logger.info("[{}] NegoDoneReq: sdp [{}]", msg.getSessionId(), req.getSdp());
 
-        sessionInfo.getSdpInfo();
+        //sessionInfo.getSdpInfo();
 
         if (req.getSdp() != null) {
             SdpInfo sdpInfo = SdpParser.parseSdp( req.getSdp());
@@ -68,6 +71,9 @@ public class RmqProcNegoDoneReq extends RmqIncomingMessageHandler {
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.PREPARE);
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
+
+        String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
+        RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_NEGO_DONE_REQ, json);
 
         return false;
     }

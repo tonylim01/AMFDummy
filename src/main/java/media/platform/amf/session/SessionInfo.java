@@ -14,8 +14,6 @@ import java.util.List;
 
 public class SessionInfo {
 
-    public Channel channel;
-    public UdpClient udpClient;
     private String sessionId;
     private long createdTime;
 
@@ -39,25 +37,28 @@ public class SessionInfo {
     private String toNo;
     private String aiifName;
 
-    private boolean isBgmPlaying;
-    private boolean isMentPlaying;
-    private String bgmFilename;
-    private String mentFilename;
-
-    private FileData fileData;
     private String fromQueue;
+    private transient FileData fileData;
 
-    private int volumeMin;
-    private int volumeMax;
+    private transient boolean isBgmPlaying;
+    private transient boolean isMentPlaying;
+    private transient String bgmFilename;
+    private transient String mentFilename;
 
-    private RtpPacket rtpPacket;
-    private byte[] lastPacket;
-    private int lastSeqNo;
+    private transient int volumeMin;
+    private transient int volumeMax;
 
-    private AudioFileReader fileReader;
-    private JitterSender jitterSender;
+    public transient Channel channel;
+    public transient UdpClient udpClient;
 
-    private List<String> playIds;
+    private transient RtpPacket rtpPacket;
+    private transient byte[] lastPacket;
+    private transient int lastSeqNo;
+
+    private transient AudioFileReader fileReader;
+    private transient JitterSender jitterSender;
+
+    private transient List<String> playIds;
 
     public String getSessionId() {
         return sessionId;

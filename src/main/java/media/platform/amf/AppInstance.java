@@ -2,6 +2,8 @@ package media.platform.amf;
 
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.PromptConfig;
+import media.platform.amf.config.RedundantConfig;
+import media.platform.amf.redundant.RedundantClient;
 import media.platform.amf.rtpcore.Process.NettyUDPServer;
 
 public class AppInstance {
@@ -21,6 +23,7 @@ public class AppInstance {
     private String configFile = null;
     private AmfConfig amfConfig = null;
     private PromptConfig promptConfig = null;
+    private RedundantConfig redundantConfig = null;
 
     public int getInstanceId() {
         return instanceId;
@@ -61,6 +64,7 @@ public class AppInstance {
             promptConfig = new PromptConfig(amfConfig.getPromptConfPath());
         }
     }
+
     public PromptConfig getPromptConfig() {
         if (promptConfig == null) {
             loadPromptConfig();

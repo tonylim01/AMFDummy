@@ -11,9 +11,12 @@
 package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.AppInstance;
+import media.platform.amf.common.JsonMessage;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.core.sdp.SdpParser;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.module.RmqData;
 import media.platform.amf.rmqif.types.RmqMessage;
@@ -103,14 +106,15 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
         SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
 
         boolean isError = false;
+        int localPort = 0;
         do {
             try {
-                int localPort = udpRelayManager.getNextLocalPort();
+                localPort = udpRelayManager.getNextLocalPort();
                 sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
                 sessionInfo.setSrcLocalPort(localPort);
                 isError = false;
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Exception [{}] [{}] port [{}]", e.getClass(), e.getMessage(), localPort);
                 isError = true;
             }
 
@@ -127,6 +131,11 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.OFFER);
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
+
+        String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
+        logger.debug("[{}] JSON: {}", msg.getSessionId(), json);
+
+        RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_OUTBOUND_SET_OFFER_REQ, json);
 
         return true;
     }

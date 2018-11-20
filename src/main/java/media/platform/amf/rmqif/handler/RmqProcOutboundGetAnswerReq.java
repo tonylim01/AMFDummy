@@ -9,6 +9,8 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,8 @@ public class RmqProcOutboundGetAnswerReq extends RmqIncomingMessageHandler {
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.ANSWER);
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
+
+        RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_INBOUND_GET_ANSER_REQ, msg.getSessionId());
 
         return false;
     }
