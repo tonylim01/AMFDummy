@@ -151,6 +151,7 @@ public class PrepareStateFunction implements StateFunction {
 
         JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
         jitterSender.setUdpClient(sessionInfo.udpClient);
+        jitterSender.setSessionId(sessionInfo.getSessionId());
         jitterSender.start();
 
         sessionInfo.setJitterSender(jitterSender);

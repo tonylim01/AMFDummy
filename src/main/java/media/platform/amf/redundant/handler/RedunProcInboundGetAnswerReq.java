@@ -1,7 +1,7 @@
 package media.platform.amf.redundant.handler;
 
 import media.platform.amf.common.JsonMessage;
-import media.platform.amf.redundant.RedundantInfoSimple;
+import media.platform.amf.redundant.messages.RedundantInfoSimple;
 import media.platform.amf.session.SessionState;
 import media.platform.amf.session.SessionStateManager;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package media.platform.amf.redundant;
+package media.platform.amf.redundant.messages;
 
 public class RedundantInfoSimple {
 

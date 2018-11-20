@@ -9,4 +9,5 @@ public class RedundantMessage {
     public static final int RMT_SN_NEGO_DONE_REQ = 6;
     public static final int RMT_SN_HANGUP_REQ = 7;
 
+    public static final int RMT_SN_UPDATE_JITTER_SENDER_REQ = 8;
 }

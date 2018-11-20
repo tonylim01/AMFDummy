@@ -3,6 +3,7 @@ package media.platform.amf.redundant;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.JsonMessage;
 import media.platform.amf.config.RedundantConfig;
+import media.platform.amf.redundant.messages.RedundantInfoSimple;
 import media.platform.amf.rtpcore.Process.UdpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +103,9 @@ public class RedundantClient {
         buf.get(msg);
 
         boolean result = sendMessage(msg);
-        logger.debug("-> Redundant: type [{}] size [{}] result [{}]", msgType, body.length(), result);
+        if (msgType != RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ) {
+            logger.debug("-> Redundant: type [{}] size [{}] result [{}]", msgType, body.length(), result);
+        }
 
         buf.clear();
         buf = null;

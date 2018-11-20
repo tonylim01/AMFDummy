@@ -1,8 +1,12 @@
 package media.platform.amf.core.socket;
 
 import media.platform.amf.AppInstance;
+import media.platform.amf.common.JsonMessage;
 import media.platform.amf.core.socket.packets.SilencePacket;
 import media.platform.amf.core.socket.packets.Vocoder;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
+import media.platform.amf.redundant.messages.JitterSenderInfo;
 import media.platform.amf.rtpcore.Process.UdpClient;
 import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import org.slf4j.Logger;
@@ -10,9 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class JitterSender {
 
@@ -33,6 +35,7 @@ public class JitterSender {
     private long ssrc;
     private long timestamp;
     private Thread thread;
+    private String sessionId;
 
     private int vocoder;
     private int vocoderMode;
@@ -62,6 +65,16 @@ public class JitterSender {
 
     public void setUdpClient(UdpClient udpClient) {
         this.udpClient = udpClient;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public void updateRtpInfo(int seq, long ssrc, long timestamp) {
+        this.seq = seq;
+        this.ssrc = ssrc;
+        this.timestamp = timestamp;
     }
 
     public void start() {
@@ -199,6 +212,9 @@ public class JitterSender {
 
                     if (udpClient != null && rtpPacket != null && AppInstance.getInstance().getConfig().isTest() == false) {
                         udpClient.send(rtpPacket.getRawData());
+
+                        String json = new JsonMessage(JitterSenderInfo.class).build(new JitterSenderInfo(sessionId, seq, ssrc, timestamp));
+                        RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ, json);
                     }
 
                     seq++;

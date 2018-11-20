@@ -57,7 +57,9 @@ public class RedundantConsumer implements Runnable {
             body = new String(bodyBuf);
         }
 
-        logger.debug("<- Redundant: stx [{}] type [{}] length [{}] body [{}]", stx, msgType, length, body);
+        if (msgType != RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ) {
+            logger.debug("<- Redundant: stx [{}] type [{}] length [{}] body [{}]", stx, msgType, length, body);
+        }
 
         switch ((int)msgType) {
             case RedundantMessage.RMT_SN_INBOUND_SET_OFFER_REQ:
@@ -83,6 +85,10 @@ public class RedundantConsumer implements Runnable {
             case RedundantMessage.RMT_SN_HANGUP_REQ:
                 RedunProcHangupReq hangupReq = new RedunProcHangupReq();
                 hangupReq.handle(body);
+                break;
+            case RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ:
+                RedunProcUpdateJitterSenderReq updateJitterSenderReq = new RedunProcUpdateJitterSenderReq();
+                updateJitterSenderReq.handle(body);
                 break;
             default:
                 break;

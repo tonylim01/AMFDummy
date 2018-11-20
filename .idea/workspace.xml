@@ -2,31 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e940f8ba-2c0f-49f4-9fde-4a6a7a882e14" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/config/RedundantConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantInfoSimple.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcHangupReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundGetAnswerReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundSetOfferReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcMessageHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcNegoDoneReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcOutboundGetAnswerReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcOutboundSetOfferReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcUpdateJitterSenderReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/messages/JitterSenderInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/AppInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/AppInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/config/AmfConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/config/AmfConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingHangupReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingHangupReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcNegoDoneReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcNegoDoneReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundGetAnswerReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundGetAnswerReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/amf.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/amf.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantInfoSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/messages/RedundantInfoSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcHangupReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcHangupReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundGetAnswerReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundGetAnswerReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcOutboundGetAnswerReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcOutboundGetAnswerReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -108,12 +95,94 @@
       <file leaf-file-name="RedundantConsumer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="67" column="50" selection-start-line="67" selection-start-column="50" selection-end-line="67" selection-end-column="51" />
+            <state relative-caret-position="128">
+              <caret line="60" selection-start-line="60" selection-end-line="60" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#387#388#0" expanded="true" />
                 <element signature="e#421#422#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RedunProcUpdateJitterSenderReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcUpdateJitterSenderReq.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="32" column="9" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RedundantInfoSimple.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/messages/RedundantInfoSimple.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RtpInboundHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2205">
+              <caret line="181" column="44" selection-start-line="181" selection-start-column="44" selection-end-line="181" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JitterSender.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="73" column="28" selection-start-line="73" selection-start-column="28" selection-end-line="73" selection-end-column="28" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2045#2046#0" expanded="true" />
+                <element signature="e#2087#2088#0" expanded="true" />
+                <element signature="e#2308#2309#0" expanded="true" />
+                <element signature="e#2350#2351#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PrepareStateFunction.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="470">
+              <caret line="154" column="28" selection-start-line="154" selection-start-column="28" selection-end-line="154" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RedundantMessage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="58" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RmqProcInboundSetOfferReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="386">
+              <caret line="137" column="103" selection-start-line="137" selection-start-column="103" selection-end-line="137" selection-end-column="103" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RedundantClient.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -131,8 +200,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>JitterSender</find>
-      <find>new JitterSender</find>
       <find>AVProfile</find>
       <find>AMR</find>
       <find>checksid</find>
@@ -161,6 +228,8 @@
       <find>getAudioEnergyLevel</find>
       <find>RedundantServer</find>
       <find>RmqConsumer</find>
+      <find>JitterSender</find>
+      <find>setJitter</find>
     </findStrings>
     <replaceStrings>
       <replace>x3.player.rtpcore.core.</replace>
@@ -173,8 +242,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/FileStopRes.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioDtmfRpt.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/ReportHeader.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/FileRecordRpt.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/FilePlayRpt.java" />
@@ -187,12 +254,10 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundGetAnswerRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/sdp/SdpParser.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/AmfMain.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/config/DefaultConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/Process/NettyUDPServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/simulator/BiUdpRelayManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqServer.java" />
@@ -201,11 +266,9 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/config/RedundantConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/AppInstance.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/config/AmfConfig.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundanInfoSimple.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerReq.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java" />
         <option value="$PROJECT_DIR$/src/main/resources/amf.conf" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingHangupReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java" />
@@ -223,6 +286,12 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcNegoDoneReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcNegoDoneReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcHangupReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/messages/JitterSenderInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcUpdateJitterSenderReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java" />
       </list>
     </option>
@@ -331,6 +400,16 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="amf" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="socket" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mru_netty" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mru_netty" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="amf" type="462c0819:PsiDirectoryNode" />
               <item name="redundant" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -342,6 +421,16 @@
               <item name="amf" type="462c0819:PsiDirectoryNode" />
               <item name="redundant" type="462c0819:PsiDirectoryNode" />
               <item name="handler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mru_netty" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mru_netty" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="amf" type="462c0819:PsiDirectoryNode" />
+              <item name="redundant" type="462c0819:PsiDirectoryNode" />
+              <item name="messages" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="mru_netty" type="b2602c69:ProjectViewProjectNode" />
@@ -746,7 +835,14 @@
       <option name="project" value="LOCAL" />
       <updated>1541982788051</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="이중화 기능 구현&#10; - SessionInfo 이중화 기능 구현">
+      <created>1542691118369</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1542691118369</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -756,7 +852,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-241" y="-1057" width="1920" height="1057" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -764,9 +859,9 @@
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50319487" side_tool="true" weight="0.22604166" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="8" sideWeight="0.49603805" visible="true" weight="0.11288605" />
+      <window_info anchor="right" id="Maven Projects" order="8" sideWeight="0.49603805" visible="true" weight="0.11288605" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.18333334" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4968051" visible="true" weight="0.22604166" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4968051" visible="true" weight="0.22604166" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32998884" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
@@ -795,7 +890,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Typesafe/slf4j Update" />
     <MESSAGE value="Log format Update" />
     <MESSAGE value="RTP Relay 구현 및 Nego REQ 재정의" />
     <MESSAGE value="Package Name 변경" />
@@ -820,7 +914,8 @@
     <MESSAGE value="Local UDP port 가져오는 부분에 syncronized() 추가" />
     <MESSAGE value="bind 오류 시 다음 채널 할당하는 부분에서 오류 보완" />
     <MESSAGE value="RMQ 수신 시 queue 사이즈 조정 (default: 8 -&gt; 16)&#10;queue size 를 config로 변경 (=RMQ_BUFFER_COUNT)" />
-    <option name="LAST_COMMIT_MESSAGE" value="RMQ 수신 시 queue 사이즈 조정 (default: 8 -&gt; 16)&#10;queue size 를 config로 변경 (=RMQ_BUFFER_COUNT)" />
+    <MESSAGE value="이중화 기능 구현&#10; - SessionInfo 이중화 기능 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="이중화 기능 구현&#10; - SessionInfo 이중화 기능 구현" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -843,52 +938,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="117" lean-forward="true" selection-start-line="117" selection-end-line="117" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionStateManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="127" column="21" selection-start-line="127" selection-start-column="21" selection-end-line="127" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/Process/IncommingPacketHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/core/config/DefaultConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="120" column="29" selection-start-line="120" selection-start-column="29" selection-end-line="120" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2775">
-          <caret line="199" column="121" selection-start-line="199" selection-start-column="121" selection-end-line="199" selection-end-column="121" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/AmfMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="32" column="17" selection-start-line="32" selection-start-column="17" selection-end-line="32" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="196" column="52" selection-start-line="196" selection-start-column="52" selection-end-line="196" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -938,6 +991,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+          <folding>
+            <element signature="e#557#558#0" expanded="true" />
+            <element signature="e#594#595#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -973,6 +1030,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="32" column="28" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1649#1650#0" expanded="true" />
+            <element signature="e#1681#1682#0" expanded="true" />
+            <element signature="e#1716#1717#0" expanded="true" />
+            <element signature="e#1747#1748#0" expanded="true" />
+            <element signature="e#1781#1782#0" expanded="true" />
+            <element signature="e#1814#1815#0" expanded="true" />
+            <element signature="e#1849#1850#0" expanded="true" />
+            <element signature="e#1883#1884#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1045,16 +1113,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="684">
-          <caret line="107" column="19" selection-start-line="107" selection-start-column="19" selection-end-line="107" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/common/JsonMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -1063,13 +1121,6 @@
             <element signature="e#346#347#0" expanded="true" />
             <element signature="e#388#389#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="52" selection-start-line="8" selection-start-column="52" selection-end-line="8" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -1114,17 +1165,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantInfoSimple.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-          <folding>
-            <element signature="e#153#154#0" expanded="true" />
-            <element signature="e#195#196#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerReq.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1143,13 +1183,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="429">
           <caret line="122" column="72" selection-start-line="122" selection-start-column="72" selection-end-line="122" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8">
-          <caret line="94" column="35" selection-start-line="94" selection-start-column="35" selection-end-line="94" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -1228,10 +1261,107 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2205">
+          <caret line="181" column="44" selection-start-line="181" selection-start-column="44" selection-end-line="181" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/message.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="137" column="103" selection-start-line="137" selection-start-column="103" selection-end-line="137" selection-end-column="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="58" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="470">
+          <caret line="154" column="28" selection-start-line="154" selection-start-column="28" selection-end-line="154" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="73" column="28" selection-start-line="73" selection-start-column="28" selection-end-line="73" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2045#2046#0" expanded="true" />
+            <element signature="e#2087#2088#0" expanded="true" />
+            <element signature="e#2308#2309#0" expanded="true" />
+            <element signature="e#2350#2351#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/messages/JitterSenderInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+          <folding>
+            <element signature="e#376#377#0" expanded="true" />
+            <element signature="e#408#409#0" expanded="true" />
+            <element signature="e#458#459#0" expanded="true" />
+            <element signature="e#500#501#0" expanded="true" />
+            <element signature="e#178#179#0" expanded="true" />
+            <element signature="e#204#205#0" expanded="true" />
+            <element signature="e#269#270#0" expanded="true" />
+            <element signature="e#298#299#0" expanded="true" />
+            <element signature="e#325#326#0" expanded="true" />
+            <element signature="e#363#364#0" expanded="true" />
+            <element signature="e#395#396#0" expanded="true" />
+            <element signature="e#429#430#0" expanded="true" />
+            <element signature="e#461#462#0" expanded="true" />
+            <element signature="e#509#510#0" expanded="true" />
+            <element signature="e#551#552#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/messages/RedundantInfoSimple.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcUpdateJitterSenderReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="32" column="9" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="67" column="50" selection-start-line="67" selection-start-column="50" selection-end-line="67" selection-end-column="51" />
+        <state relative-caret-position="128">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#387#388#0" expanded="true" />
