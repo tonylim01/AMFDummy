@@ -12,7 +12,7 @@ public interface Component extends Serializable {
     public String getId();
 
     /**
-     * Gets the name of the component. The component of same type can share same name.
+     * Gets the name of the component. The component of same types can share same name.
      * 
      * @return name of this component;
      */

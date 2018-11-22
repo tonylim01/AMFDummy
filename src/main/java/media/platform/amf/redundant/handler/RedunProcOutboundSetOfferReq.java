@@ -63,12 +63,19 @@ public class RedunProcOutboundSetOfferReq implements RedunProcMessageHandler {
         SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
 
         try {
-            sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
+            sessionInfo.rtpChannel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
         } catch (Exception e) {
-            logger.error("Exception [{}] [{}] port [{}]", e.getClass(), e.getMessage(), sessionInfo.getSrcLocalPort());
+            logger.error("Exception rtp channel [{}] [{}] port [{}]", e.getClass(), e.getMessage(), sessionInfo.getSrcLocalPort());
         }
 
         sessionInfo.setDstLocalPort(fromSessionInfo.getDstLocalPort());
+        sessionInfo.setEnginePort(fromSessionInfo.getEnginePort());
+
+        try {
+            sessionInfo.udpChannel = AppInstance.getInstance().getNettyUDPServer().addBindPort("127.0.0.1", sessionInfo.getDstLocalPort());
+        } catch (Exception e) {
+            logger.error("Exception udp channel [{}] [{}] port [{}]", e.getClass(), e.getMessage(), sessionInfo.getDstLocalPort());
+        }
 
         logger.debug("[{}] Local port: src [{}] dst [{}]", sessionInfo.getSessionId(),
                 sessionInfo.getSrcLocalPort(), sessionInfo.getDstLocalPort());

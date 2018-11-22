@@ -1,13 +1,13 @@
-package media.platform.amf.engine.messages;
+package media.platform.amf.engine.types;
 
-public class ResponseHeader {
+public class EngineResponseHeader {
     public String type;
     public String cmd;
     public String appId;
     public String result;
     public String reason;
 
-    public ResponseHeader(String type, String cmd, String appId, String result, String reason) {
+    public EngineResponseHeader(String type, String cmd, String appId, String result, String reason) {
         this.type = type;
         this.cmd = cmd;
         this.appId = appId;

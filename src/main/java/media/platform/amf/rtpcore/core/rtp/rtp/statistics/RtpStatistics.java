@@ -276,19 +276,19 @@ public class RtpStatistics {
 	}
 
 	/**
-	 * Gets the type of RTCP packet that is scheduled to be transmitted next.
+	 * Gets the types of RTCP packet that is scheduled to be transmitted next.
 	 * 
-	 * @return The type of the packet
+	 * @return The types of the packet
 	 */
 	public RtcpPacketType getRtcpPacketType() {
 		return rtcpNextPacketType;
 	}
 
 	/**
-	 * Sets the type of RTCP packet that is scheduled to be transmitted next.
+	 * Sets the types of RTCP packet that is scheduled to be transmitted next.
 	 * 
 	 * @param packetType
-	 *            The type of the packet
+	 *            The types of the packet
 	 */
 	public void setRtcpPacketType(RtcpPacketType packetType) {
 		this.rtcpNextPacketType = packetType;
@@ -661,12 +661,12 @@ public class RtpStatistics {
 				break;
 
 			default:
-				logger.warn("Unknown type of scheduled event: " + this.rtcpNextPacketType.name());
+				logger.warn("Unknown types of scheduled event: " + this.rtcpNextPacketType.name());
 				break;
 			}
 			break;
 		default:
-			logger.warn("Unkown RTCP packet type: " + rtcpPacket.getPacketType().name() + ". Dropping packet.");
+			logger.warn("Unkown RTCP packet types: " + rtcpPacket.getPacketType().name() + ". Dropping packet.");
 			break;
 		}
 

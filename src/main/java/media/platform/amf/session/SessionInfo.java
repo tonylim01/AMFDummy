@@ -30,6 +30,8 @@ public class SessionInfo {
     private int srcLocalPort;
     private int dstLocalPort;
 
+    private int enginePort;
+
     private String dstIpAddress;
 
     private boolean isCaller;
@@ -48,7 +50,10 @@ public class SessionInfo {
     private transient int volumeMin;
     private transient int volumeMax;
 
-    public transient Channel channel;
+    public transient Channel rtpChannel;
+    public transient Channel udpChannel;
+
+    public transient UdpClient rtpClient;
     public transient UdpClient udpClient;
 
     private transient RtpPacket rtpPacket;
@@ -217,6 +222,14 @@ public class SessionInfo {
 
     public void setDstLocalPort(int dstLocalPort) {
         this.dstLocalPort = dstLocalPort;
+    }
+
+    public int getEnginePort() {
+        return enginePort;
+    }
+
+    public void setEnginePort(int enginePort) {
+        this.enginePort = enginePort;
     }
 
     public String getAiifName() {

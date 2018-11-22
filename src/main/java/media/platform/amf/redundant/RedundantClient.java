@@ -104,7 +104,7 @@ public class RedundantClient {
 
         boolean result = sendMessage(msg);
         if (msgType != RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ) {
-            logger.debug("-> Redundant: type [{}] size [{}] result [{}]", msgType, body.length(), result);
+            logger.debug("-> Redundant: types [{}] size [{}] result [{}]", msgType, body.length(), result);
         }
 
         buf.clear();

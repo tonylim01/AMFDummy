@@ -245,8 +245,8 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
 
         // Relay RTP Packet
-        //sessionInfo.udpClient.send( rcvPktBuf );
-        //sessionInfo.udpClient.send(sessionInfo.getRtpPacket().getRawData());
+        //sessionInfo.rtpClient.send( rcvPktBuf );
+        //sessionInfo.rtpClient.send(sessionInfo.getRtpPacket().getRawData());
 
         //logger.debug( "-> UDP ({}:{}) size={}", sessionInfo.getSdpDeviceInfo().getRemoteIp(), sessionInfo.getSdpDeviceInfo().getRemotePort(), rcvPktBuf.length);
 

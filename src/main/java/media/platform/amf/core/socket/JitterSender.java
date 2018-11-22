@@ -45,6 +45,8 @@ public class JitterSender {
     private List<UdpPacket> buffer;
     private UdpPacket lastPacket;
 
+    private boolean relay;
+
     public JitterSender(int vocoder, int vocoderMode, int payloadType, int duration, int jitterCount, int payloadSize) {
 
         this.vocoder = vocoder;
@@ -54,6 +56,8 @@ public class JitterSender {
         this.duration = (duration > 0) ? duration : DEFAULT_DURATION;
         this.payloadSize = (payloadSize > 0) ? payloadSize : DEFAULT_PAYLOAD_SIZE;
         this.jitterCount = (jitterCount > 0) ? jitterCount : DEFAULT_JITTER_COUNT;
+
+        this.relay = true;      // Set true as default
 
         seq = 0;
         ssrc = new Random().nextLong();
@@ -87,6 +91,14 @@ public class JitterSender {
     public void stop() {
 
         isQuit = true;
+    }
+
+    public boolean isRelay() {
+        return relay;
+    }
+
+    public void setRelay(boolean relay) {
+        this.relay = relay;
     }
 
     public void put(int seqNo, byte[] buf) {
@@ -167,64 +179,11 @@ public class JitterSender {
 
 //                    logger.debug("packet found. client ({}) data ({})", udpPacket != null, udpPacket.getData() != null);
 
-                    if (udpPacket != null && udpPacket.getData() != null) {
-
-                        if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
-                            if (rtpPacket != null) {
-                                rtpPacket.getBuffer().clear();
-                                rtpPacket = null;
-                            }
-                            rtpPacket = new RtpPacket(udpPacket.getData().length + RtpPacket.FIXED_HEADER_SIZE, true);
-                        }
-
-                        rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
-
-                        udpPacket.clear();
-                        udpPacket = null;
-
-                        synchronized (buffer) {
-                            if (buffer.size() > 0) {
-                                buffer.remove(0);
-                            }
-                        }
+                    if (relay) {
+                        relayPacket(udpPacket);
                     }
                     else {
-                        byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
-                        if (silenceBuf != null) {
-                            if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != silenceBuf.length)) {
-                                if (rtpPacket != null) {
-                                    rtpPacket.getBuffer().clear();
-                                    rtpPacket = null;
-                                }
-                                rtpPacket = new RtpPacket(silenceBuf.length + RtpPacket.FIXED_HEADER_SIZE, true);
-                            }
-
-                            rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, silenceBuf, 0, silenceBuf.length);
-                        }
-                        else {
-                            // TODO
-                            logger.error("No rtp packet");
-                            rtpPacket.getBuffer().clear();
-                            rtpPacket = null;
-                        }
-                    }
-
-
-                    if (udpClient != null && rtpPacket != null && AppInstance.getInstance().getConfig().isTest() == false) {
-                        udpClient.send(rtpPacket.getRawData());
-
-                        String json = new JsonMessage(JitterSenderInfo.class).build(new JitterSenderInfo(sessionId, seq, ssrc, timestamp));
-                        RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ, json);
-                    }
-
-                    seq++;
-                    switch (vocoder) {
-                        case Vocoder.VOCODER_AMR_WB:
-                            timestamp += 320;
-                            break;
-                        default:
-                            timestamp += 160;
-                            break;
+                        transferPacket(udpPacket);
                     }
 
                 } catch (Exception e) {
@@ -282,5 +241,111 @@ public class JitterSender {
 
     public int getPayloadType() {
         return payloadType;
+    }
+
+    private RtpPacket rtpPacket = null;
+
+    /**
+     * Sends a packet to a device with a RTP header
+     * @param udpPacket
+     */
+    private void relayPacket(UdpPacket udpPacket) {
+
+        if (udpPacket != null && udpPacket.getData() != null) {
+
+            if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
+                if (rtpPacket != null) {
+                    rtpPacket.getBuffer().clear();
+                    rtpPacket = null;
+                }
+                rtpPacket = new RtpPacket(udpPacket.getData().length + RtpPacket.FIXED_HEADER_SIZE, true);
+            }
+
+            rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
+
+            udpPacket.clear();
+            udpPacket = null;
+
+            synchronized (buffer) {
+                if (buffer.size() > 0) {
+                    buffer.remove(0);
+                }
+            }
+        }
+        else {
+            byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
+            if (silenceBuf != null) {
+                if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != silenceBuf.length)) {
+                    if (rtpPacket != null) {
+                        rtpPacket.getBuffer().clear();
+                        rtpPacket = null;
+                    }
+                    rtpPacket = new RtpPacket(silenceBuf.length + RtpPacket.FIXED_HEADER_SIZE, true);
+                }
+
+                rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, silenceBuf, 0, silenceBuf.length);
+            }
+            else {
+                // TODO
+                logger.error("No rtp packet");
+                rtpPacket.getBuffer().clear();
+                rtpPacket = null;
+            }
+        }
+
+
+        if (udpClient != null && rtpPacket != null && AppInstance.getInstance().getConfig().isTest() == false) {
+            try {
+                udpClient.send(rtpPacket.getRawData());
+
+                String json = new JsonMessage(JitterSenderInfo.class).build(new JitterSenderInfo(sessionId, seq, ssrc, timestamp));
+                RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ, json);
+
+                seq++;
+                switch (vocoder) {
+                    case Vocoder.VOCODER_AMR_WB:
+                        timestamp += 320;
+                        break;
+                    default:
+                        timestamp += 160;
+                        break;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Sends a packet to the media engine without a RTP header
+     * @param udpPacket
+     */
+    private void transferPacket(UdpPacket udpPacket) {
+
+        try {
+            if (udpPacket != null && udpPacket.getData() != null) {
+
+                udpClient.send(udpPacket.getData());
+
+                udpPacket.clear();
+                udpPacket = null;
+
+                synchronized (buffer) {
+                    if (buffer.size() > 0) {
+                        buffer.remove(0);
+                    }
+                }
+            }
+            else {
+                byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
+
+                udpClient.send(silenceBuf);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

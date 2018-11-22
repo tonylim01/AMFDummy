@@ -196,7 +196,7 @@ public class RtcpHandler implements PacketHandler {
 
         try {
             this.reportTaskFuture = this.scheduler.schedule(this.scheduledTask, interval, TimeUnit.MILLISECONDS);
-            // Let the RTP handler know what is the type of scheduled packet
+            // Let the RTP handler know what is the types of scheduled packet
             this.statistics.setRtcpPacketType(packetType);
         } catch (IllegalStateException e) {
             logger.warn("RTCP timer already canceled. No more reports will be scheduled.");
@@ -207,7 +207,7 @@ public class RtcpHandler implements PacketHandler {
         this.scheduledTask = new TxTask(packetType);
         try {
             this.reportTaskFuture = this.scheduler.submit(this.scheduledTask);
-            // Let the RTP handler know what is the type of scheduled packet
+            // Let the RTP handler know what is the types of scheduled packet
             this.statistics.setRtcpPacketType(packetType);
         } catch (IllegalStateException e) {
             logger.warn("RTCP timer already canceled. No more reports will be scheduled.");
@@ -249,7 +249,7 @@ public class RtcpHandler implements PacketHandler {
             // RTP version field must equal 2
             int version = (b0 & 0xC0) >> 6;
             if (version == RtpPacket.VERSION) {
-                // The payload type field of the first RTCP packet in a compound
+                // The payload types field of the first RTCP packet in a compound
                 // packet must be equal to SR or RR.
                 int type = packet[offset + 1] & 0x000000FF;
                 if (type == RtcpHeader.RTCP_SR || type == RtcpHeader.RTCP_RR) {
@@ -509,7 +509,7 @@ public class RtcpHandler implements PacketHandler {
                     break;
 
                 default:
-                    logger.warn("Unkown scheduled event type!");
+                    logger.warn("Unkown scheduled event types!");
                     break;
             }
         }

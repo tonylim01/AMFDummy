@@ -2,6 +2,7 @@ package media.platform.amf.engine.messages;
 
 import media.platform.amf.engine.messages.common.CodecInfo;
 import media.platform.amf.engine.messages.common.NetIP4Address;
+import media.platform.amf.engine.types.EngineRequestHeader;
 
 public class AudioUpdateReq {
 
@@ -15,18 +16,18 @@ public class AudioUpdateReq {
         private boolean dtmf;
     }
 
-    private RequestHeader request;
+    private EngineRequestHeader request;
     private Data data;
 
-    public RequestHeader getRequest() {
+    public EngineRequestHeader getRequest() {
         return request;
     }
 
     public void setRequest(String type, String cmd, String appId) {
-        this.request = new RequestHeader(type, cmd, appId);
+        this.request = new EngineRequestHeader(type, cmd, appId);
     }
 
-    public void setRequest(RequestHeader request) {
+    public void setRequest(EngineRequestHeader request) {
         this.request = request;
     }
 

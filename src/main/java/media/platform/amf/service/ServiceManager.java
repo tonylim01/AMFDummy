@@ -3,11 +3,11 @@ package media.platform.amf.service;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.engine.EngineServer;
 import media.platform.amf.redundant.RedundantServer;
 import media.platform.amf.rmqif.handler.RmqProcLogInReq;
 import media.platform.amf.rmqif.module.RmqClient;
 import media.platform.amf.rmqif.module.RmqServer;
-import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionManager;
@@ -37,6 +37,7 @@ public class ServiceManager {
     private SessionManager sessionManager;
     private HeartbeatManager heartbeatManager;
     private RedundantServer redundantServer;
+    private EngineServer engineServer;
 
     private boolean isQuit = false;
 
@@ -120,6 +121,11 @@ public class ServiceManager {
             redundantServer.start();
         }
 
+        if (config.getEngineLocalPort() > 0) {
+            engineServer = new EngineServer(config.getEngineLocalPort());
+            engineServer.start();
+        }
+
         if(config.getHeartbeat().equals( "true" ))
         {
             heartbeatManager = heartbeatManager.getInstance();
@@ -154,6 +160,10 @@ public class ServiceManager {
             redundantServer.stop();
         }
 
+        if (engineServer != null) {
+            engineServer.stop();
+        }
+
 //        heartbeatManager.stop();
         sessionManager.stop();
 
@@ -184,13 +194,24 @@ public class ServiceManager {
             sessionInfo.getJitterSender().stop();
         }
 
-        if(sessionInfo.channel != null)
-            sessionInfo.channel.close();
+        if(sessionInfo.rtpChannel != null) {
+            sessionInfo.rtpChannel.close();
+        }
+
+        if(sessionInfo.udpChannel != null) {
+            sessionInfo.udpChannel.close();
+        }
 
         logger.warn("Netty session Close : [{}]", sessionId);
 
-        if(sessionInfo.udpClient != null)
+        if(sessionInfo.rtpClient != null) {
+            sessionInfo.rtpClient.close();
+        }
+
+        if(sessionInfo.udpClient != null) {
             sessionInfo.udpClient.close();
+        }
+
 
         logger.warn("Netty UDP session Close : [{}]", sessionId);
 

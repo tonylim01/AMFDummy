@@ -136,7 +136,7 @@ public class RtcpPacketFactory {
 	 * RTP receivers provide reception quality feedback using RTCP report
 	 * packets which may take one of two forms depending upon whether or not the
 	 * receiver is also a sender. The only difference between the sender report
-	 * (SR) and receiver report (RR) forms, besides the packet type code, is
+	 * (SR) and receiver report (RR) forms, besides the packet types code, is
 	 * that the sender report includes a 20-byte sender information section for
 	 * use by active senders. The SR is issued if a site has sent any data
 	 * packets during the interval since issuing the last report or the previous
@@ -221,7 +221,7 @@ public class RtcpPacketFactory {
 			return buildBye(statistics);
 
 		default:
-			throw new IllegalArgumentException("Unsupported RTCP packet type.");
+			throw new IllegalArgumentException("Unsupported RTCP packet types.");
 		}
 	}
 }

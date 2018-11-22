@@ -1,5 +1,6 @@
-package media.platform.amf.redundant;
+package media.platform.amf.engine;
 
+import media.platform.amf.redundant.RedundantConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +10,8 @@ import java.net.DatagramSocket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class RedundantServer {
-    private static final Logger logger = LoggerFactory.getLogger(RedundantServer.class);
+public class EngineServer {
+    private static final Logger logger = LoggerFactory.getLogger(EngineServer.class);
 
     private static final int MAX_BUFFER_SIZE = 4096;
     private static final int DEFAULT_QUEUE_SIZE = 32;
@@ -22,7 +23,7 @@ public class RedundantServer {
     private int serverPort;
     private BlockingQueue<byte[]> queue;
 
-    public RedundantServer(int port) {
+    public EngineServer(int port) {
         try {
             socket = new DatagramSocket(port);
         } catch (Exception e) {
@@ -39,11 +40,13 @@ public class RedundantServer {
             return false;
         }
 
-        consumerThread = new Thread(new RedundantConsumer(queue));
+        consumerThread = new Thread(new EngineConsumer(queue));
         consumerThread.start();
 
-        serverThread = new Thread(new RedundantServer.RedundantServerRunnable(queue));
+        serverThread = new Thread(new EngineServer.EngineServerRunnable(queue));
         serverThread.start();
+
+        EngineClient engineClient = EngineClient.getInstance();
 
         return true;
     }
@@ -62,19 +65,19 @@ public class RedundantServer {
         socket.close();
     }
 
-    class RedundantServerRunnable implements Runnable {
+    class EngineServerRunnable implements Runnable {
 
         private byte[] buf = new byte[MAX_BUFFER_SIZE];
         private BlockingQueue<byte[]> recvQueue;
 
-        public RedundantServerRunnable(BlockingQueue<byte[]> queue) {
+        public EngineServerRunnable(BlockingQueue<byte[]> queue) {
             this.recvQueue = queue;
         }
 
         @Override
         public void run() {
 
-            logger.info("RedundantServer ({}) start", serverPort);
+            logger.info("EngineServer ({}) start", serverPort);
             while (!isQuit) {
                 try {
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
@@ -92,7 +95,7 @@ public class RedundantServer {
                     }
                 }
             }
-            logger.info("RedundantServer ({}) end", serverPort);
+            logger.info("EngineServer ({}) end", serverPort);
         }
     }
 }

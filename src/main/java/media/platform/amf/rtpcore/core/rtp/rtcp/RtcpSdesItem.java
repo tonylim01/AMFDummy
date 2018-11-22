@@ -16,7 +16,7 @@ public class RtcpSdesItem {
 	 * SDES item
 	 */
 
-	/* type of item (rtcp_sdes_type_t) */
+	/* types of item (rtcp_sdes_type_t) */
 	private int type = 0;
 
 	/* length of item (in octets) */
@@ -83,7 +83,7 @@ public class RtcpSdesItem {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder("SDES ITEM: \n");
-		builder.append("type= ").append(resolveType(this.type)).append(", ");
+		builder.append("types= ").append(resolveType(this.type)).append(", ");
 		builder.append("value= ").append(this.text).append(", ");
 		builder.append("length= ").append(this.length).append("\n");
 		return builder.toString();

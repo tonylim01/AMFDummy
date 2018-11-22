@@ -71,7 +71,7 @@ public class PlayStartStateFunction extends PlayStateFunction implements StateFu
             return false;
         }
 
-        logger.debug("[{}] Play file: channel [{}] mediaType [{}] file [{}] defVol [{}] mixVol [{}] type [{}]",
+        logger.debug("[{}] Play file: channel [{}] mediaType [{}] file [{}] defVol [{}] mixVol [{}] types [{}]",
                 sessionInfo.getSessionId(),
                 data.getChannel(), data.getMediaType(), data.getPlayFile(),
                 data.getDefVolume(), data.getMixVolume(), data.getPlayType());

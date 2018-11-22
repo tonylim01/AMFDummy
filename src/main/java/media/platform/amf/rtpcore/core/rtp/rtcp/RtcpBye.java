@@ -70,7 +70,7 @@ public class RtcpBye extends RtcpHeader {
 		builder.append("version= ").append(this.version).append(", ");
 		builder.append("padding= ").append(this.padding).append(", ");
 		builder.append("source count=").append(this.count).append(", ");
-		builder.append("packet type=").append(this.packetType).append(", ");
+		builder.append("packet types=").append(this.packetType).append(", ");
 		builder.append("length=").append(this.length).append(", ");
 		for (int i = 0; i < this.ssrcs.length; i++) {
 			builder.append("ssrc= ").append(this.ssrcs[i]);

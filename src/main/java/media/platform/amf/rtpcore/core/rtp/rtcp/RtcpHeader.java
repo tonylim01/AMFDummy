@@ -23,12 +23,12 @@ public abstract class RtcpHeader {
 	protected boolean padding;
 
 	/**
-	 * varies by packet type
+	 * varies by packet types
 	 */
 	protected int count;
 
 	/**
-	 * RTCP packet type
+	 * RTCP packet types
 	 */
 	protected int packetType;
 

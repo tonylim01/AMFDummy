@@ -11,7 +11,7 @@ public abstract class BaseComponent implements Component {
     private final String id;
     
     //the name of the component. 
-    //name of the component might be same across many components of same type
+    //name of the component might be same across many components of same types
     private final String name;
     
     /**

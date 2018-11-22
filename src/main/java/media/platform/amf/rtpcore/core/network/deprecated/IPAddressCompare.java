@@ -40,7 +40,7 @@ public class IPAddressCompare
     }
 
     /**
-	*  Gets IP address type 
+	*  Gets IP address types
 	*/
     public static IPAddressType getAddressType(String ipAddress)
     {

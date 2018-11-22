@@ -42,7 +42,7 @@ public class RtpInboundHandlerFsmImpl extends AbstractRtpInboundHandlerFsm {
         
         if (format == null) {
             // Drop packet with unknown format
-            logger.warn("RTP Channel " + statistics.getSsrc() + " dropped packet because payload type " + payloadType + " is unknown.");
+            logger.warn("RTP Channel " + statistics.getSsrc() + " dropped packet because payload types " + payloadType + " is unknown.");
         } else {
             // Consume packet
 

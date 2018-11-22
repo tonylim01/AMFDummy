@@ -229,11 +229,11 @@ public class SdpParser {
             }
         }
 
-        // sdp connection addr 1.255.239.173 type IP4 net IN
-        logger.debug("sdp connection addr {} type {} net {}", sdpInfo.getRemoteIp(), connection.getAddressType(), connection.getNetworkType());
+        // sdp connection addr 1.255.239.173 types IP4 net IN
+        logger.debug("sdp connection addr {} types {} net {}", sdpInfo.getRemoteIp(), connection.getAddressType(), connection.getNetworkType());
 
-        // sdp media port 35664 type audio
-        logger.debug("sdp media port {} type {}", sdpInfo.getRemotePort(), media.getMediaType());
+        // sdp media port 35664 types audio
+        logger.debug("sdp media port {} types {}", sdpInfo.getRemotePort(), media.getMediaType());
 
         // sdp media [0, 8, 4, 18, 101]
         logger.debug("sdp media {}", media.getMediaFormats(false).toString());

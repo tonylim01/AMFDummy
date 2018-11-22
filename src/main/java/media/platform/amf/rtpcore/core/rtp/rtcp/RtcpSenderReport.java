@@ -191,7 +191,7 @@ public class RtcpSenderReport extends RtcpReport {
 		StringBuilder builder = new StringBuilder("SENDER REPORT:\n");
 		builder.append("version=").append(this.version).append(", ");
 		builder.append("padding=").append(this.padding).append(", ");
-		builder.append("packet type=").append(this.packetType).append(", ");
+		builder.append("packet types=").append(this.packetType).append(", ");
 		builder.append("length=").append(this.length).append(", ");
 		builder.append("ssrc=").append(this.ssrc).append(", ");
 		builder.append("ntp seconds=").append(this.ntpSec).append(", ");

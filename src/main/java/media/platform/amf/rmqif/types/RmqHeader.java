@@ -92,7 +92,7 @@ public class RmqHeader {
     @Override
     public String toString() {
         return "RmqHeader{" +
-                "type='" + type + '\'' +
+                "types='" + type + '\'' +
                 ", sessionId='" + sessionId + '\'' +
                 ", transactionId=" + transactionId +
                 ", msgFrom='" + msgFrom + '\'' +

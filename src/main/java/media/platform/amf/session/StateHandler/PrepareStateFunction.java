@@ -7,6 +7,9 @@ import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.socket.JitterSender;
 import media.platform.amf.core.socket.packets.Vocoder;
+import media.platform.amf.engine.EngineClient;
+import media.platform.amf.engine.handler.EngineProcAudioCreateReq;
+import media.platform.amf.engine.messages.SysConnectReq;
 import media.platform.amf.rmqif.messages.FileData;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -16,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionState;
 import media.platform.amf.session.SessionStateManager;
+
+import java.util.UUID;
 
 public class PrepareStateFunction implements StateFunction {
     private static final Logger logger = LoggerFactory.getLogger(PrepareStateFunction.class);
@@ -43,6 +48,15 @@ public class PrepareStateFunction implements StateFunction {
         else {
             openCalleeRelayResource(sessionInfo);
         }
+
+        // TEST
+        String appId = UUID.randomUUID().toString();
+        EngineProcAudioCreateReq audioCreateReq = new EngineProcAudioCreateReq(appId);
+        audioCreateReq.setData(sessionInfo);
+
+        if (audioCreateReq.send()) {
+            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioCreateReq.getData());
+        }
     }
 
 
@@ -53,7 +67,6 @@ public class PrepareStateFunction implements StateFunction {
      * @return
      */
     private boolean openCallerRelayResource(SessionInfo sessionInfo) {
-        SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
 
         if (sessionInfo == null) {
             return false;
@@ -69,12 +82,11 @@ public class PrepareStateFunction implements StateFunction {
         logger.debug("[{}] Caller Relay: remote ({}:{}) <- local ({})", sessionInfo.getSessionId(),
                      sdpInfo.getRemoteIp(), sdpInfo.getRemotePort(), sessionInfo.getSrcLocalPort());
 
+        sessionInfo.rtpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
-        //sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
-
-        DatagramChannel datagramChannel = null;
-
-        sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort( sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
+        if (!AppInstance.getInstance().getConfig().isRelayMode()) {
+            sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
+        }
 
         openJitterSender(sessionInfo);
 
@@ -88,7 +100,7 @@ public class PrepareStateFunction implements StateFunction {
      * @return
      */
     private boolean openCalleeRelayResource(SessionInfo sessionInfo) {
-        SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
+
         if (sessionInfo == null) {
             return false;
         }
@@ -107,12 +119,13 @@ public class PrepareStateFunction implements StateFunction {
             return false;
         }
 
-        BiUdpRelayManager udpRelayManager = BiUdpRelayManager.getInstance();
-
         //sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
-        sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort( sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
+        sessionInfo.rtpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
-        //JitterSender jitterSender = new JitterSender(Vocoder.VOCODER_ALAW, Vocoder.MODE_NA, 8, 20, 3, 160);
+        if (!AppInstance.getInstance().getConfig().isRelayMode()) {
+            sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
+        }
+
         openJitterSender(sessionInfo);
 
 
@@ -148,10 +161,11 @@ public class PrepareStateFunction implements StateFunction {
         int payloadId = sessionInfo.getSdpDeviceInfo().getPayloadId();
         int payloadSize = (vocoder == Vocoder.VOCODER_AMR_WB) ? 320 : 160;
 
-
         JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
-        jitterSender.setUdpClient(sessionInfo.udpClient);
+        jitterSender.setUdpClient(sessionInfo.rtpClient);
         jitterSender.setSessionId(sessionInfo.getSessionId());
+        jitterSender.setRelay(AppInstance.getInstance().getConfig().isRelayMode());
+
         jitterSender.start();
 
         sessionInfo.setJitterSender(jitterSender);

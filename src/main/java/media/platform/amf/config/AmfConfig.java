@@ -39,6 +39,7 @@ public class AmfConfig extends DefaultConfig {
 
     private String heartbeat;
     private boolean isTest;
+    private boolean relayMode;
     private String logPath;
     private int logTime;
 
@@ -58,6 +59,10 @@ public class AmfConfig extends DefaultConfig {
     private long silenceEnergyLevel;
     private long silenceDetectDuration;
     private long energyDetectDuration;
+
+    private String engineIp;
+    private int engineLocalPort;
+    private int engineRemotePort;
 
     private String promptConfPath;
 
@@ -101,6 +106,7 @@ public class AmfConfig extends DefaultConfig {
             amfId = getIntValue("COMMON", "AMF_ID", 0);
             heartbeat = getStrValue("COMMON", "HEARTBEAT", "felse");
             isTest = getBooleanValue("COMMON", "TEST", true);
+            relayMode = getBooleanValue("COMMON", "RELAY_MODE", true);
             logPath = getStrValue("COMMON", "LOG_PATH", null);
             logTime = getIntValue("COMMON", "LOG_TIME", 0);
         } catch (Exception e) {
@@ -171,6 +177,10 @@ public class AmfConfig extends DefaultConfig {
 
             localUdpPortMin = getIntValue(instanceSection, "LOCAL_UDP_PORT_MIN", 0);
             localUdpPortMax = getIntValue(instanceSection, "LOCAL_UDP_PORT_MAX", 0);
+
+            engineIp = getStrValue(instanceSection, "ENGINE_IP", null);
+            engineLocalPort = getIntValue(instanceSection, "ENGINE_LOCAL_PORT", 0);
+            engineRemotePort = getIntValue(instanceSection, "ENGINE_REMOTE_PORT", 0);
 
             localNetInterface = getStrValue("MEDIA", "LOCAL_NET_INTERFACE", null);
 
@@ -336,5 +346,21 @@ public class AmfConfig extends DefaultConfig {
 
     public RedundantConfig getRedundantConfig() {
         return redundantConfig;
+    }
+
+    public String getEngineIp() {
+        return engineIp;
+    }
+
+    public int getEngineLocalPort() {
+        return engineLocalPort;
+    }
+
+    public int getEngineRemotePort() {
+        return engineRemotePort;
+    }
+
+    public boolean isRelayMode() {
+        return relayMode;
     }
 }

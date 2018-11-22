@@ -4,6 +4,11 @@ public class NetIP4Address {
     private String ip;
     private int port;
 
+    public NetIP4Address(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
     public String getIp() {
         return ip;
     }

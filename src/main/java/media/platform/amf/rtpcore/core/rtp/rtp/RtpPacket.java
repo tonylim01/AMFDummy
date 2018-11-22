@@ -131,7 +131,7 @@ public class RtpPacket implements Serializable {
      * intended to allow significant events such as frame boundaries to
      * be marked in the packet stream. A profile may define additional
      * marker bits or specify that there is no marker bit by changing
-     * the number of bits in the payload type field
+     * the number of bits in the payload types field
      *
      * @return true if marker set.
      */
@@ -140,15 +140,15 @@ public class RtpPacket implements Serializable {
     }
 
     /**
-     * Payload type.
+     * Payload types.
      *
      * This field identifies the format of the RTP payload and
      * determines its interpretation by the application. A profile
-     * specifies a default static mapping of payload type codes to
-     * payload formats. Additional payload type codes may be defined
+     * specifies a default static mapping of payload types codes to
+     * payload formats. Additional payload types codes may be defined
      * dynamically through non-RTP means
      *
-     * @return integer value of payload type.
+     * @return integer value of payload types.
      */
     public int getPayloadType() {
         return (buffer.get(1) & 0xff & 0x7f);
@@ -287,7 +287,7 @@ public class RtpPacket implements Serializable {
      * Encapsulates data into the packet for transmission via RTP.
      *
      * @param mark mark field
-     * @param payloadType payload type field.
+     * @param payloadType payload types field.
      * @param seqNumber sequence number field
      * @param timestamp timestamp field
      * @param ssrc synchronization source field

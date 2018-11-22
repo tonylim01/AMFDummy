@@ -41,7 +41,7 @@ public class RedundantConsumer implements Runnable {
     }
 
     private void handleMessage(byte[] data) {
-        if (data == null || (data != null && data.length == 00)) {
+        if (data == null || (data != null && data.length == 0)) {
             return;
         }
 
@@ -58,7 +58,7 @@ public class RedundantConsumer implements Runnable {
         }
 
         if (msgType != RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ) {
-            logger.debug("<- Redundant: stx [{}] type [{}] length [{}] body [{}]", stx, msgType, length, body);
+            logger.debug("<- Redundant: stx [{}] types [{}] length [{}] body [{}]", stx, msgType, length, body);
         }
 
         switch ((int)msgType) {

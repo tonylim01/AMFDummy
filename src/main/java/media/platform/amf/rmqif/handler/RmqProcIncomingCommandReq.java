@@ -50,7 +50,7 @@ public class RmqProcIncomingCommandReq extends RmqIncomingMessageHandler {
         }
 
         if (req.getType() == null) {
-            logger.error("[{}] CommandReq: null type", msg.getSessionId());
+            logger.error("[{}] CommandReq: null types", msg.getSessionId());
             sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom(),
                     RmqMessageType.RMQ_MSG_COMMON_REASON_CODE_FAILURE,
                     "INVALID TYPE");
@@ -66,7 +66,7 @@ public class RmqProcIncomingCommandReq extends RmqIncomingMessageHandler {
             return false;
         }
 
-        logger.info("[{}] CommandReq: cmd type [{}] channel [{}] file type [{}] file [{}] def [{}] mix [{}] media [{}]",
+        logger.info("[{}] CommandReq: cmd types [{}] channel [{}] file types [{}] file [{}] def [{}] mix [{}] media [{}]",
                 msg.getSessionId(), req.getType(), req.getChannel(),
                 file.getPlayType(), file.getPlayFile(), file.getDefVolume(), file.getMixVolume(), file.getMediaType());
 
@@ -84,7 +84,7 @@ public class RmqProcIncomingCommandReq extends RmqIncomingMessageHandler {
             SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.PLAY_STOP, file);
         }
         else {
-            logger.warn("[{}] CommandReq: Unsupported type [{}]", msg.getSessionId(), req.getType());
+            logger.warn("[{}] CommandReq: Unsupported types [{}]", msg.getSessionId(), req.getType());
         }
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());

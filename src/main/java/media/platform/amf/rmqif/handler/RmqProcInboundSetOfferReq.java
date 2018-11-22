@@ -111,15 +111,25 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
         do {
             try {
                 localPort = udpRelayManager.getNextLocalPort();
-                sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
+                sessionInfo.rtpChannel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
                 sessionInfo.setSrcLocalPort(localPort);
                 isError = false;
             } catch (Exception e) {
-                logger.error("Exception [{}] [{}] port [{}]", e.getClass(), e.getMessage(), localPort);
+                logger.error("Exception rtp channel [{}] [{}] port [{}]", e.getClass(), e.getMessage(), localPort);
                 isError = true;
             }
 
         } while (isError == true);
+
+        sessionInfo.setDstLocalPort(udpRelayManager.getNextLocalPort());
+        sessionInfo.setEnginePort(udpRelayManager.getNextLocalPort());
+
+        try {
+            sessionInfo.udpChannel = AppInstance.getInstance().getNettyUDPServer().addBindPort("127.0.0.1", sessionInfo.getDstLocalPort());
+
+        } catch (Exception e) {
+            logger.error("Exception udp channel [{}] [{}] port [{}]", e.getClass(), e.getMessage(), sessionInfo.getDstLocalPort());
+        }
 
         logger.debug("[{}] Local port: src [{}] dst [{}]", msg.getSessionId(),
                 sessionInfo.getSrcLocalPort(), sessionInfo.getDstLocalPort());

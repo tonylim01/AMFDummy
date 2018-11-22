@@ -1,11 +1,11 @@
-package media.platform.amf.engine.messages;
+package media.platform.amf.engine.types;
 
-public class RequestHeader {
+public class EngineRequestHeader {
     private String type;
     private String cmd;
     private String appId;
 
-    public RequestHeader(String type, String cmd, String appId) {
+    public EngineRequestHeader(String type, String cmd, String appId) {
         this.type = type;
         this.cmd = cmd;
         this.appId = appId;
