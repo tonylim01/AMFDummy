@@ -10,13 +10,7 @@
 package media.platform.amf.rtpcore.Process;
 
 
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.channel.*;
 import media.platform.amf.rtpcore.core.rtp.jitter.FixedJitterBuffer;
 import media.platform.amf.rtpcore.core.rtp.jitter.JitterBuffer;
 import media.platform.amf.rtpcore.core.rtp.netty.RtpInboundHandler;
@@ -29,6 +23,9 @@ import media.platform.amf.rtpcore.core.scheduler.WallClock;
 import media.platform.amf.rtpcore.core.sdp.format.AVProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -36,18 +33,18 @@ import java.net.UnknownHostException;
 
 import static org.mockito.Mockito.mock;
 
-public class NettyUDPServer {
+public class NettyRTPServer {
 
-    private static final Logger logger = LoggerFactory.getLogger( NettyUDPServer.class );
+    private static final Logger logger = LoggerFactory.getLogger( NettyRTPServer.class );
     private int port;
     Bootstrap b;
     NioEventLoopGroup group;
-    private static NettyUDPServer nettyRTPServer = null;
+    private static NettyRTPServer nettyRTPServer = null;
 
-    public NettyUDPServer() {
+    public NettyRTPServer() {
     }
 
-    public NettyUDPServer run() throws Exception {
+    public NettyRTPServer run() throws Exception {
 
         group = new NioEventLoopGroup();
 

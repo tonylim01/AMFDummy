@@ -20,6 +20,8 @@ public class SdpCodec {
             .put("PCMA", CODEC_ALAW)
             .put("PCMU", CODEC_MULAW)
             .put("AMR", CODEC_AMR)
+            .put("AMR-WB", CODEC_AMR)
+            .put("AMR-NB", CODEC_AMR)
             .put("EVS", CODEC_EVS)
             .build();
 

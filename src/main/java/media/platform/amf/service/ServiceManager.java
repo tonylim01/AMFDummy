@@ -9,9 +9,10 @@ import media.platform.amf.rmqif.handler.RmqProcLogInReq;
 import media.platform.amf.rmqif.module.RmqClient;
 import media.platform.amf.rmqif.module.RmqServer;
 import media.platform.amf.room.RoomManager;
+import media.platform.amf.rtpcore.Process.NettyRTPServer;
+import media.platform.amf.rtpcore.Process.NettyUDPServer;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionManager;
-import media.platform.amf.rtpcore.Process.NettyUDPServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,11 +136,19 @@ public class ServiceManager {
         this.amfLoginToA2S();
 
         try {
-            NettyUDPServer nettyUDPServer = new NettyUDPServer( );
+            NettyRTPServer nettyRTPServer = new NettyRTPServer();
+            nettyRTPServer.run();
 
+            AppInstance.getInstance().setNettyRTPServer(nettyRTPServer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            NettyUDPServer nettyUDPServer = new NettyUDPServer();
             nettyUDPServer.run();
 
-            AppInstance.getInstance().setNettyUDPServer( nettyUDPServer );
+            AppInstance.getInstance().setNettyUDPServer(nettyUDPServer);
         } catch (Exception e) {
             e.printStackTrace();
         }

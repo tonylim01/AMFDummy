@@ -156,4 +156,8 @@ public class EngineClient {
         SentMessageInfo msgInfo = new SentMessageInfo(System.currentTimeMillis(), clss, obj);
         sentQueue.put(appId, msgInfo);
     }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
 }

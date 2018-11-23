@@ -5,36 +5,36 @@ import com.google.gson.JsonElement;
 
 public class EngineResponseMessage {
 
-    private EngineResponseHeader header;
-    private JsonElement body = null;
+    private EngineResponseHeader response;
+    private JsonElement data = null;
 
     public EngineResponseMessage(String type, String cmd, String appId, String result, String reason) {
-        this.header = new EngineResponseHeader(type, cmd, appId,result, reason);
+        this.response = new EngineResponseHeader(type, cmd, appId,result, reason);
     }
 
     public EngineResponseMessage(EngineResponseHeader header)  {
-        this.header = new EngineResponseHeader(header.getType(), header.getCmd(), header.getAppId(),
+        this.response = new EngineResponseHeader(header.getType(), header.getCmd(), header.getAppId(),
                 header.getResult(), header.getReason());
     }
 
     public EngineResponseHeader getHeader() {
-        return header;
+        return response;
     }
 
     public void setHeader(EngineResponseHeader header) {
-        this.header = header;
+        this.response = header;
     }
 
     public JsonElement getBody() {
-        return body;
+        return data;
     }
 
     public void setBody(JsonElement body) {
-        this.body = body;
+        this.data = body;
     }
 
     public void setBody(String body) {
         Gson gson = new Gson();
-        this.body = gson.toJsonTree(body);
+        this.data = gson.toJsonTree(body);
     }
 }

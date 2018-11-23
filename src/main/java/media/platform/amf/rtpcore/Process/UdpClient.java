@@ -23,7 +23,7 @@ public class UdpClient {
     /**
      * The internet address which is the target of this client
      */
-    private static final Logger logger = LoggerFactory.getLogger( NettyUDPServer.class );
+    private static final Logger logger = LoggerFactory.getLogger( NettyRTPServer.class );
     private final InetAddress address;
 
     /**

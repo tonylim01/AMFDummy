@@ -3,7 +3,7 @@ package media.platform.amf;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.PromptConfig;
 import media.platform.amf.config.RedundantConfig;
-import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.rtpcore.Process.NettyRTPServer;
 import media.platform.amf.rtpcore.Process.NettyUDPServer;
 
 public class AppInstance {
@@ -37,7 +37,17 @@ public class AppInstance {
         return amfConfig;
     }
 
-    NettyUDPServer nettyUDPServer;
+    private NettyRTPServer nettyRTPServer;
+
+    public NettyRTPServer getNettyRTPServer() {
+        return nettyRTPServer;
+    }
+
+    public void setNettyRTPServer(NettyRTPServer nettyRTPServer) {
+        this.nettyRTPServer = nettyRTPServer;
+    }
+
+    private NettyUDPServer nettyUDPServer;
 
     public NettyUDPServer getNettyUDPServer() {
         return nettyUDPServer;

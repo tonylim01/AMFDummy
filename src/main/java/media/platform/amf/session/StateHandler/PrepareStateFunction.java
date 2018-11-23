@@ -1,6 +1,5 @@
 package media.platform.amf.session.StateHandler;
 
-import io.netty.channel.socket.DatagramChannel;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
@@ -13,7 +12,6 @@ import media.platform.amf.engine.messages.SysConnectReq;
 import media.platform.amf.rmqif.messages.FileData;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
-import media.platform.amf.simulator.BiUdpRelayManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import media.platform.amf.session.SessionInfo;
@@ -82,10 +80,10 @@ public class PrepareStateFunction implements StateFunction {
         logger.debug("[{}] Caller Relay: remote ({}:{}) <- local ({})", sessionInfo.getSessionId(),
                      sdpInfo.getRemoteIp(), sdpInfo.getRemotePort(), sessionInfo.getSrcLocalPort());
 
-        sessionInfo.rtpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
+        sessionInfo.rtpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
-            sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
+            sessionInfo.udpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
         }
 
         openJitterSender(sessionInfo);
@@ -119,11 +117,11 @@ public class PrepareStateFunction implements StateFunction {
             return false;
         }
 
-        //sessionInfo.channel = AppInstance.getInstance().getNettyUDPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
-        sessionInfo.rtpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
+        //sessionInfo.channel = AppInstance.getInstance().getNettyRTPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
+        sessionInfo.rtpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
-            sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
+            sessionInfo.udpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
         }
 
         openJitterSender(sessionInfo);

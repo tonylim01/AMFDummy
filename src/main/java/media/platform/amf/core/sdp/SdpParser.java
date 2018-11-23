@@ -92,6 +92,8 @@ public class SdpParser {
                     for (String priorityCodec : mediaPriorities) {
 
                         int codecId = SdpCodec.getCodecId(priorityCodec);
+                        logger.debug("priority codec [{}] id [{}]", priorityCodec, codecId);
+
                         if (codecId == SdpCodec.CODEC_UNKNOWN) {
                             continue;
                         }

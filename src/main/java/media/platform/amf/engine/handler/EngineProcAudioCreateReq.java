@@ -50,12 +50,12 @@ public class EngineProcAudioCreateReq extends EngineOutgoingMessage {
             if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-WB")) {
                 codec = "AMR_WB";
                 packing = "OA";
-                rate = "12.2";
+                rate = "23.85";
             }
             else if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-NB")) {
                 codec = "AMR_NB";
                 packing = "OA";
-                rate = "23.85";
+                rate = "12.2";
             }
             else {
                 codec = sessionInfo.getSdpDeviceInfo().getCodecStr();

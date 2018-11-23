@@ -110,7 +110,7 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
         do {
             try {
                 localPort = udpRelayManager.getNextLocalPort();
-                sessionInfo.rtpChannel = AppInstance.getInstance().getNettyUDPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
+                sessionInfo.rtpChannel = AppInstance.getInstance().getNettyRTPServer().addBindPort(sdpConfig.getLocalIpAddress(), localPort);
                 sessionInfo.setSrcLocalPort(localPort);
                 isError = false;
             } catch (Exception e) {
@@ -124,7 +124,7 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
         sessionInfo.setEnginePort(udpRelayManager.getNextLocalPort());
 
         try {
-            sessionInfo.udpChannel = AppInstance.getInstance().getNettyUDPServer().addBindPort("127.0.0.1", sessionInfo.getDstLocalPort());
+            sessionInfo.udpChannel = AppInstance.getInstance().getNettyRTPServer().addBindPort("127.0.0.1", sessionInfo.getDstLocalPort());
         } catch (Exception e) {
             logger.error("Exception udp channel [{}] [{}] port [{}]", e.getClass(), e.getMessage(), sessionInfo.getDstLocalPort());
         }

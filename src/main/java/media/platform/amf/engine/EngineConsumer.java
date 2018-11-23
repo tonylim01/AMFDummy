@@ -57,5 +57,22 @@ public class EngineConsumer implements Runnable {
         if (msg == null || msg.getHeader() == null) {
             return;
         }
+
+        if (compareString(msg.getHeader().getType(), "sys")) {
+            if (compareString(msg.getHeader().getCmd(), "connect")) {
+                if (compareString(msg.getHeader().getResult(), "success")) {
+                    // Ok
+                    EngineClient.getInstance().setConnected(true);
+                }
+                else {
+                    // Error
+                    EngineClient.getInstance().setConnected(false);
+                }
+            }
+        }
+    }
+
+    private boolean compareString(String src, String dst) {
+        return (src != null && dst != null && src.equals(dst)) ? true : false;
     }
 }
