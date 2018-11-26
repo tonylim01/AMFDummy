@@ -33,6 +33,7 @@ public class EngineManager {
         long timestamp = System.currentTimeMillis();
 
         for (int i = 0; i < toolInfoRefs.length; i++) {
+            toolInfoRefs[i] = new EngineToolInfo();
             toolInfoRefs[i].setIdleTime(timestamp);
         }
     }

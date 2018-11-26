@@ -1,5 +1,6 @@
 package media.platform.amf.session.StateHandler;
 
+import media.platform.amf.AppInstance;
 import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.EngineProcAudioCreateReq;
@@ -30,16 +31,20 @@ public class IdleStateFunction implements StateFunction {
             sessionInfo.setServiceState(SessionState.IDLE);
         }
 
-        String appId = UUID.randomUUID().toString();
-        EngineProcAudioDeleteReq audioDeleteReq = new EngineProcAudioDeleteReq(appId);
-        audioDeleteReq.setData(sessionInfo);
+        if (!AppInstance.getInstance().getConfig().isRelayMode()) {
 
-        if (audioDeleteReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioDeleteReq.getData());
-        }
+            String appId = UUID.randomUUID().toString();
+            EngineProcAudioDeleteReq audioDeleteReq = new EngineProcAudioDeleteReq(appId);
+            audioDeleteReq.setData(sessionInfo);
 
-        if (sessionInfo.getEngineToolId() >= 0) {
-            EngineManager.getInstance().freeTool(sessionInfo.getEngineToolId());
+            if (audioDeleteReq.send()) {
+                EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioDeleteReq.getData());
+            }
+
+            if (sessionInfo.getEngineToolId() >= 0) {
+                EngineManager.getInstance().freeTool(sessionInfo.getEngineToolId());
+            }
+
         }
 
         ServiceManager.getInstance().releaseResource(sessionInfo.getSessionId());

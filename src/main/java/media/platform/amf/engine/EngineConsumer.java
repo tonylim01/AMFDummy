@@ -48,6 +48,7 @@ public class EngineConsumer implements Runnable {
 
         String json = new String(data);
         logger.debug("<- Engine: json {}", json);
+        json = json.trim();
 
         //
         // TODO

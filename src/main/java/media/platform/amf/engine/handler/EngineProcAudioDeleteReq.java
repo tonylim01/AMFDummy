@@ -25,16 +25,23 @@ public class EngineProcAudioDeleteReq extends EngineOutgoingMessage {
 
     public void setData(SessionInfo sessionInfo) {
 
+        if (sessionInfo == null) {
+            logger.error("Null sessionInfo");
+            return;
+        }
+
+        if (sessionInfo.getEngineToolId() < 0) {
+            logger.warn("[{}] Tool not defined", sessionInfo.getSessionId());
+            return;
+        }
+
         AmfConfig config = AppInstance.getInstance().getConfig();
         if (config == null) {
             return;
         }
 
         data = new AudioDeleteReq();
-        data.setId(1);      // tool id
-
-        int[] dstIds = new int[1];
-        dstIds[0] = 2;      // dest ids;
+        data.setId(sessionInfo.getEngineToolId());      // tool id
 
         setBody(data, AudioDeleteReq.class);
     }

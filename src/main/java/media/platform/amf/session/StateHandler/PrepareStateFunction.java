@@ -47,13 +47,15 @@ public class PrepareStateFunction implements StateFunction {
             openCalleeRelayResource(sessionInfo);
         }
 
-        // TEST
-        String appId = UUID.randomUUID().toString();
-        EngineProcAudioCreateReq audioCreateReq = new EngineProcAudioCreateReq(appId);
-        audioCreateReq.setData(sessionInfo);
+        if (!AppInstance.getInstance().getConfig().isRelayMode()) {
+            String appId = UUID.randomUUID().toString();
+            EngineProcAudioCreateReq audioCreateReq = new EngineProcAudioCreateReq(appId);
+            audioCreateReq.setData(sessionInfo);
 
-        if (audioCreateReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioCreateReq.getData());
+            if (audioCreateReq.send()) {
+                EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioCreateReq.getData());
+            }
+
         }
     }
 
@@ -223,7 +225,7 @@ public class PrepareStateFunction implements StateFunction {
             return false;
         }
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        //AmfConfig config = AppInstance.getInstance().getConfig();
 
 
         return true;
