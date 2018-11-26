@@ -1,6 +1,7 @@
 package media.platform.amf.engine;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,8 @@ public class EngineConsumer implements Runnable {
         //
         // TODO
         //
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setLenient().create();
         EngineResponseMessage msg = gson.fromJson(json, EngineResponseMessage.class);
 
         if (msg == null || msg.getHeader() == null) {

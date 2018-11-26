@@ -65,6 +65,8 @@ public class SessionInfo {
 
     private transient List<String> playIds;
 
+    private int engineToolId;
+
     public String getSessionId() {
         return sessionId;
     }
@@ -375,4 +377,12 @@ public class SessionInfo {
         this.lastSeqNo = lastSeqNo;
     }
 
+
+    public int getEngineToolId() {
+        return engineToolId;
+    }
+
+    public void setEngineToolId(int engineToolId) {
+        this.engineToolId = engineToolId;
+    }
 }

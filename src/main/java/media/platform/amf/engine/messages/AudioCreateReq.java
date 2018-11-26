@@ -7,7 +7,7 @@ import media.platform.amf.engine.types.EngineRequestHeader;
 public class AudioCreateReq {
 
     private int id;
-    private int[] dstIds;
+    private Integer[] dstIds;
     private NetIP4Address remote;
     private int local;
     private CodecInfo decoder;
@@ -22,11 +22,11 @@ public class AudioCreateReq {
         this.id = id;
     }
 
-    public int[] getDstIds() {
+    public Integer[] getDstIds() {
         return dstIds;
     }
 
-    public void setDstIds(int[] dstIds) {
+    public void setDstIds(Integer[] dstIds) {
         this.dstIds = dstIds;
     }
 

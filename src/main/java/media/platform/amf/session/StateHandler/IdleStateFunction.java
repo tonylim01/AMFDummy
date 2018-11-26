@@ -1,6 +1,7 @@
 package media.platform.amf.session.StateHandler;
 
 import media.platform.amf.engine.EngineClient;
+import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.EngineProcAudioCreateReq;
 import media.platform.amf.engine.handler.EngineProcAudioDeleteReq;
 import media.platform.amf.engine.messages.SysConnectReq;
@@ -37,6 +38,11 @@ public class IdleStateFunction implements StateFunction {
             EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioDeleteReq.getData());
         }
 
+        if (sessionInfo.getEngineToolId() >= 0) {
+            EngineManager.getInstance().freeTool(sessionInfo.getEngineToolId());
+        }
+
         ServiceManager.getInstance().releaseResource(sessionInfo.getSessionId());
+
     }
 }

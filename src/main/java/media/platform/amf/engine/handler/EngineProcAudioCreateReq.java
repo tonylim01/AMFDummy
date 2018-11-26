@@ -3,6 +3,7 @@ package media.platform.amf.engine.handler;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.core.sdp.SdpInfo;
+import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.AudioCreateReq;
 import media.platform.amf.engine.messages.common.CodecInfo;
@@ -25,18 +26,34 @@ public class EngineProcAudioCreateReq extends EngineOutgoingMessage {
 
     public void setData(SessionInfo sessionInfo) {
 
+        if (sessionInfo == null) {
+            logger.error("Null sessionInfo");
+            return;
+        }
+
         AmfConfig config = AppInstance.getInstance().getConfig();
         if (config == null) {
             return;
         }
 
-        data = new AudioCreateReq();
-        data.setId(1);      // tool id
+        int toolId = EngineManager.getInstance().getIdleToolId();
+        if (toolId < 0) {
+            // Error
+            logger.error("[{}] No available tools", sessionInfo.getSessionId());
+            return;
+        }
 
+        sessionInfo.setEngineToolId(toolId);
+
+        data = new AudioCreateReq();
+        data.setId(EngineManager.getInstance().getIdleToolId());      // tool id
+
+        /*
         int[] dstIds = new int[1];
         dstIds[0] = 2;      // dest ids;
 
         data.setDstIds(dstIds);
+        */
 
         data.setRemote(new NetIP4Address("127.0.0.1", sessionInfo.getDstLocalPort()));    // On amf side
         data.setLocal(sessionInfo.getEnginePort());   // On engine side

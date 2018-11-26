@@ -36,7 +36,7 @@ public class EngineProcAudioDeleteReq extends EngineOutgoingMessage {
         int[] dstIds = new int[1];
         dstIds[0] = 2;      // dest ids;
 
-        setBody(data, AudioCreateReq.class);
+        setBody(data, AudioDeleteReq.class);
     }
 
     public Object getData() {
