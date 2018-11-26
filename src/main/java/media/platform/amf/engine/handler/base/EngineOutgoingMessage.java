@@ -65,7 +65,7 @@ public class EngineOutgoingMessage implements EngineOutgoingMessageInterface {
             if (json != null) {
                 EngineClient client = EngineClient.getInstance();
                 if (client != null) {
-                    result = client.sendMessage(json);
+                    result = client.sendMessage(json, msg.getHeader().getType().equals("heartbeat") ? false : true);
                 }
             }
             else {

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -80,6 +81,7 @@ public class EngineServer {
             logger.info("EngineServer ({}) start", serverPort);
             while (!isQuit) {
                 try {
+                    Arrays.fill(buf, (byte)0);
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
                     socket.receive(packet);
 

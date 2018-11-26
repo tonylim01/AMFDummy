@@ -36,8 +36,12 @@ public class PrepareStateFunction implements StateFunction {
         }
 
 
-        logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpInfo().getPayloadId());
-        logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpDeviceInfo().getPayloadId());
+        if (sessionInfo.getSdpDeviceInfo() != null) {
+            logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpDeviceInfo().getPayloadId());
+        }
+        else if (sessionInfo.getSdpInfo() != null) {
+            logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpInfo().getPayloadId());
+        }
 
         if (sessionInfo.isCaller()) {
             openCallerRelayResource(sessionInfo);
@@ -76,7 +80,12 @@ public class PrepareStateFunction implements StateFunction {
 
         SdpInfo sdpInfo = sessionInfo.getSdpDeviceInfo();
         if (sdpInfo == null) {
-            return false;
+            if (sessionInfo.getSdpInfo() != null) {
+                sdpInfo = sessionInfo.getSdpInfo();
+            }
+            else {
+                return false;
+            }
         }
 
         logger.debug("[{}] Caller Relay: remote ({}:{}) <- local ({})", sessionInfo.getSessionId(),
@@ -115,8 +124,13 @@ public class PrepareStateFunction implements StateFunction {
 
         SdpInfo sdpInfo = sessionInfo.getSdpDeviceInfo();
         if (sdpInfo == null) {
-            logger.error("[{}] sdpInfo null", sessionInfo.getSessionId());
-            return false;
+            if (sessionInfo.getSdpInfo() != null) {
+                sdpInfo = sessionInfo.getSdpInfo();
+            }
+            else {
+                logger.error("[{}] sdpInfo null", sessionInfo.getSessionId());
+                return false;
+            }
         }
 
         //sessionInfo.channel = AppInstance.getInstance().getNettyRTPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
@@ -138,17 +152,32 @@ public class PrepareStateFunction implements StateFunction {
         }
 
         int vocoder = 0;
-        if (sessionInfo.getSdpDeviceInfo().getCodecStr() != null) {
-            if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-WB")) {
+
+        SdpInfo sdpInfo = sessionInfo.getSdpDeviceInfo();
+        if (sdpInfo == null) {
+            if (sessionInfo.getSdpInfo() != null) {
+                sdpInfo = sessionInfo.getSdpInfo();
+            }
+            else {
+                logger.error("[{}] Null sdpInfo", sessionInfo.getSessionId());
+                return;
+            }
+        }
+
+        if (sdpInfo.getCodecStr() != null) {
+            if (sdpInfo.getCodecStr().equals("AMR-WB")) {
                 vocoder = Vocoder.VOCODER_AMR_WB;
             }
-            else if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-NB")) {
+            else if (sdpInfo.getCodecStr().equals("AMR-NB")) {
                 vocoder = Vocoder.VOCODER_AMR_NB;
+            }
+            else if (sdpInfo.getCodecStr().equals("EVS")) {
+                vocoder = Vocoder.VOCODER_EVS;
             }
         }
 
         if (vocoder == 0) {
-            switch (sessionInfo.getSdpDeviceInfo().getPayloadId()) {
+            switch (sdpInfo.getPayloadId()) {
                 case 0: vocoder = Vocoder.VOCODER_ULAW; break;
                 case 8: vocoder = Vocoder.VOCODER_ALAW; break;
             }
@@ -158,8 +187,12 @@ public class PrepareStateFunction implements StateFunction {
             vocoder = Vocoder.VOCODER_ALAW;
         }
 
-        int payloadId = sessionInfo.getSdpDeviceInfo().getPayloadId();
-        int payloadSize = (vocoder == Vocoder.VOCODER_AMR_WB) ? 320 : 160;
+        int payloadId = sdpInfo.getPayloadId();
+        //int payloadSize = (vocoder == Vocoder.VOCODER_AMR_WB) ? 320 : 160;
+        int payloadSize = Vocoder.getPayloadSize(vocoder);
+
+        logger.debug("[{}] codec [{}] vocoder [{}] payloadId [{}] payloadSize [{}]", sessionInfo.getSessionId(),
+                sdpInfo.getCodecStr(), vocoder, payloadId, payloadSize);
 
         JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
         jitterSender.setUdpClient(sessionInfo.rtpClient);

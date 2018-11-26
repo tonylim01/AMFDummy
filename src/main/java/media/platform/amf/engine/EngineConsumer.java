@@ -2,6 +2,7 @@ package media.platform.amf.engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import media.platform.amf.engine.messages.SysHeartbeatRes;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,6 @@ public class EngineConsumer implements Runnable {
         }
 
         String json = new String(data);
-        logger.debug("<- Engine: json {}", json);
         json = json.trim();
 
         //
@@ -58,20 +58,44 @@ public class EngineConsumer implements Runnable {
         EngineResponseMessage msg = gson.fromJson(json, EngineResponseMessage.class);
 
         if (msg == null || msg.getHeader() == null) {
+            logger.debug("<- Engine: json {}", json);
             return;
         }
 
+        if (msg.getHeader().getAppId() == null) {
+            logger.debug("<- Engine: json {}", json);
+            logger.warn("No appId in engine message");
+            return;
+        }
+
+        EngineClient engineClient = EngineClient.getInstance();
+
         if (compareString(msg.getHeader().getType(), "sys")) {
+            logger.debug("<- Engine: json {}", json);
             if (compareString(msg.getHeader().getCmd(), "connect")) {
+
                 if (compareString(msg.getHeader().getResult(), "success")) {
                     // Ok
-                    EngineClient.getInstance().setConnected(true);
+                    engineClient.setConnected(true);
                 }
                 else {
                     // Error
-                    EngineClient.getInstance().setConnected(false);
+                    engineClient.setConnected(false);
                 }
             }
+            else if (compareString(msg.getHeader().getCmd(), "heartbeat")) {
+
+                engineClient.checkHeartbeat(msg.getHeader().appId);
+
+                SysHeartbeatRes heartbeatRes = gson.fromJson(msg.getBody(), SysHeartbeatRes.class);
+                if (heartbeatRes != null && EngineManager.getInstance().isResourceChanged(heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle())) {
+                    logger.debug("Heart resource: total [{}] busy [{}] idle [{}]", heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle());
+                    EngineManager.getInstance().setResourceCount(heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle());
+                }
+            }
+        }
+        else {
+            logger.debug("<- Engine: json {}", json);
         }
     }
 

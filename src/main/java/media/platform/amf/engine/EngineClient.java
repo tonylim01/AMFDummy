@@ -3,7 +3,9 @@ package media.platform.amf.engine;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.engine.handler.EngineProcSysConnectReq;
+import media.platform.amf.engine.handler.EngineProcSysHeartbeatReq;
 import media.platform.amf.engine.messages.SysConnectReq;
+import media.platform.amf.engine.messages.SysHeartbeatReq;
 import media.platform.amf.engine.types.SentMessageInfo;
 import media.platform.amf.rtpcore.Process.UdpClient;
 import org.slf4j.Logger;
@@ -108,12 +110,19 @@ public class EngineClient {
         return result;
     }
 
-    public boolean sendMessage(String msg) {
+    public boolean sendMessage(String msg, boolean printLog) {
 
         boolean result = sendBytes(msg.getBytes());
-        logger.debug("-> Engine: msg [{}] result [{}]", msg, result);
+        if (printLog) {
+            logger.debug("-> Engine: msg [{}] result [{}]", msg, result);
+        }
 
         return result;
+    }
+
+    public boolean sendMessage(String msg) {
+
+        return sendMessage(msg, true);
     }
 
     private synchronized boolean isConnected() {
@@ -137,14 +146,25 @@ public class EngineClient {
                 //
                 // TODO
                 //
+                String appId = UUID.randomUUID().toString();
+
                 if (!isConnected()) {
-                    String appId = UUID.randomUUID().toString();
                     EngineProcSysConnectReq sysConnectReq = new EngineProcSysConnectReq(appId);
 
                     if (sysConnectReq.send()) {
                         pushSentQueue(appId, SysConnectReq.class, sysConnectReq.getData());
                     }
                 }
+                else if (checkHeartbeat()) {
+                    EngineProcSysHeartbeatReq sysHeartbeatReq = new EngineProcSysHeartbeatReq(appId);
+                    if (sysHeartbeatReq.send()) {
+                        pushSentQueue(appId, SysHeartbeatReq.class, sysHeartbeatReq.getData());
+                    }
+                }
+                else {
+                    setConnected(false);
+                }
+
 
             }
 
@@ -152,12 +172,56 @@ public class EngineClient {
         }
     }
 
-    public void pushSentQueue(String appId, Class clss, Object obj) {
+    public synchronized void pushSentQueue(String appId, Class clss, Object obj) {
         SentMessageInfo msgInfo = new SentMessageInfo(System.currentTimeMillis(), clss, obj);
         sentQueue.put(appId, msgInfo);
     }
 
-    public void setConnected(boolean connected) {
+    public synchronized void setConnected(boolean connected) {
         this.connected = connected;
     }
+
+    private synchronized boolean checkHeartbeat() {
+        boolean result = true;
+
+        for (Map.Entry<String, SentMessageInfo> entry: sentQueue.entrySet()) {
+            SentMessageInfo msgInfo = entry.getValue();
+
+            if (entry.getKey() == null || msgInfo == null) {
+                continue;
+            }
+
+            if (msgInfo.getClss() == SysHeartbeatReq.class) {
+                logger.info("Heartbeat found in queue [{}]", entry.getKey());
+                sentQueue.remove(entry.getKey());
+                result = false;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    public synchronized void checkHeartbeat(String appId) {
+
+        if (appId == null) {
+            return;
+        }
+
+        for (Map.Entry<String, SentMessageInfo> entry: sentQueue.entrySet()) {
+            String id = entry.getKey();
+            SentMessageInfo msgInfo = entry.getValue();
+
+            if (id == null || msgInfo == null) {
+                continue;
+            }
+
+            if (msgInfo.getClss() == SysHeartbeatReq.class && appId.equals(id)) {
+//                logger.info("Heartbeat ok [{}]", entry.getKey());
+                sentQueue.remove(entry.getKey());
+                break;
+            }
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ package media.platform.amf.rmqif.types;
 public class RmqHeader {
 
     private String type;
+    private String callId;
     private String sessionId;
     private String transactionId;
     private String msgFrom;
@@ -42,6 +43,9 @@ public class RmqHeader {
     }
 
     public String getSessionId() {
+        if (sessionId == null && callId != null) {
+            sessionId = callId;
+        }
         return sessionId;
     }
 
@@ -87,6 +91,15 @@ public class RmqHeader {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getCallId() {
+        return callId;
+    }
+
+    public void setCallId(String callId) {
+        this.callId = callId;
+        this.sessionId = sessionId;
     }
 
     @Override

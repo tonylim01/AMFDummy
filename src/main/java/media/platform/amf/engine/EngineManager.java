@@ -85,4 +85,25 @@ public class EngineManager {
         }
     }
 
+    private int resourceTotal = 0;
+    private int resourceBusy = 0;
+    private int resourceIdle = 0;
+
+    public void setResourceCount(int total, int busy, int idle) {
+        if (total >= 0) {
+            resourceTotal = total;
+        }
+
+        if (busy >= 0) {
+            resourceBusy = busy;
+        }
+
+        if (idle >= 0) {
+            resourceIdle = idle;
+        }
+    }
+
+    public boolean isResourceChanged(int total, int busy, int idle) {
+        return (resourceTotal != total || resourceBusy != busy || resourceIdle != idle) ? true : false;
+    }
 }

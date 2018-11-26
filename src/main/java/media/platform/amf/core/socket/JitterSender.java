@@ -103,6 +103,7 @@ public class JitterSender {
 
     public void put(int seqNo, byte[] buf) {
         if (buf == null) {
+            logger.info("Null buf. seq [{}]", seqNo);
             return;
         }
 
@@ -251,6 +252,7 @@ public class JitterSender {
      */
     private void relayPacket(UdpPacket udpPacket) {
 
+        //logger.debug("[{}] Relay seq [{}] timestamp [{}]", sessionId, seq, timestamp);
         if (udpPacket != null && udpPacket.getData() != null) {
 
             if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
@@ -287,7 +289,7 @@ public class JitterSender {
             }
             else {
                 // TODO
-                logger.error("No rtp packet");
+                //logger.error("No rtp packet");
                 rtpPacket.getBuffer().clear();
                 rtpPacket = null;
             }
@@ -301,8 +303,8 @@ public class JitterSender {
                 String json = new JsonMessage(JitterSenderInfo.class).build(new JitterSenderInfo(sessionId, seq, ssrc, timestamp));
                 RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ, json);
 
-                seq++;
-                switch (vocoder) {
+                /*
+
                     case Vocoder.VOCODER_AMR_WB:
                         timestamp += 320;
                         break;
@@ -310,10 +312,15 @@ public class JitterSender {
                         timestamp += 160;
                         break;
                 }
+                */
 
             } catch (Exception e) {
+                logger.warn("Exception [{}] [{}]", e.getClass(), e.getMessage());
                 e.printStackTrace();
             }
+
+            seq++;
+            timestamp += Vocoder.getPayloadSize(vocoder);
         }
     }
 
@@ -323,6 +330,7 @@ public class JitterSender {
      */
     private void transferPacket(UdpPacket udpPacket) {
 
+        //logger.debug("[{}] Transfer seq [{}] timestamp [{}]", sessionId, seq, timestamp);
         try {
             if (udpPacket != null && udpPacket.getData() != null) {
 
