@@ -6,7 +6,7 @@ public class EVSSilencePacket {
      * AMR-WB silence packets
      */
     private static final byte[] EVS_SID = {
-            (byte)0x22, (byte)0x12, (byte)0xe9, (byte)0x0e, (byte)0x01, (byte)0x80
+            (byte)0x46, (byte)0x46, (byte)0xec, (byte)0xa6, (byte)0x01, (byte)0x80
     };
 
 
