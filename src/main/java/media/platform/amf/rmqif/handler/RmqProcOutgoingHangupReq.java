@@ -11,6 +11,8 @@
 package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqOutgoingMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

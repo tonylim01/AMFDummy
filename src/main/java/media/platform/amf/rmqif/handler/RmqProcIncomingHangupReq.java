@@ -42,7 +42,7 @@ public class RmqProcIncomingHangupReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        if (AppInstance.getInstance().getConfig().getRedundantConfig().isRun()) {
+        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
             RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_HANGUP_REQ, msg.getSessionId());
         }
 

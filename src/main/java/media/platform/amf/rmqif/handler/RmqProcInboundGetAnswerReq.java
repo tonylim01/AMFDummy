@@ -45,7 +45,7 @@ public class RmqProcInboundGetAnswerReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        if (AppInstance.getInstance().getConfig().getRedundantConfig().isRun()) {
+        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
             RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_INBOUND_GET_ANSER_REQ, msg.getSessionId());
         }
 

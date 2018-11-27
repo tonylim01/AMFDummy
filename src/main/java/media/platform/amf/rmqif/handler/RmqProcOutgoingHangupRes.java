@@ -9,6 +9,9 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.AppInstance;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,10 @@ public class RmqProcOutgoingHangupRes extends RmqIncomingMessageHandler {
         ServiceManager.getInstance().releaseResource(msg.getSessionId());
 
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.IDLE);
+
+        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
+            RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_HANGUP_REQ, msg.getSessionId());
+        }
 
         return true;
     }

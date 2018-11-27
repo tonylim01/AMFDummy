@@ -75,4 +75,8 @@ public class RedundantConfig extends DefaultConfig {
     public boolean isRun() {
         return isRun;
     }
+
+    public boolean isActive() {
+        return (isRun & (defaultMode == MODE_ACTIVE));
+    }
 }

@@ -73,7 +73,7 @@ public class RmqProcNegoDoneReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        if (AppInstance.getInstance().getConfig().getRedundantConfig().isRun()) {
+        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
             String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
             RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_NEGO_DONE_REQ, json);
         }
