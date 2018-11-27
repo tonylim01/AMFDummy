@@ -35,6 +35,10 @@ public class EngineManager {
         for (int i = 0; i < toolInfoRefs.length; i++) {
             toolInfoRefs[i] = new EngineToolInfo();
             toolInfoRefs[i].setIdleTime(timestamp);
+            //
+            // TODO: TEST
+            //
+            toolInfoRefs[i].setState(EngineToolState.TOOL_IDLE);
         }
     }
 

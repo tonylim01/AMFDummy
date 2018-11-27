@@ -71,7 +71,6 @@ public class EngineConsumer implements Runnable {
         EngineClient engineClient = EngineClient.getInstance();
 
         if (compareString(msg.getHeader().getType(), "sys")) {
-            logger.debug("<- Engine: json {}", json);
             if (compareString(msg.getHeader().getCmd(), "connect")) {
 
                 if (compareString(msg.getHeader().getResult(), "success")) {

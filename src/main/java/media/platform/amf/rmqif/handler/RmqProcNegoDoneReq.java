@@ -9,6 +9,7 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.AppInstance;
 import media.platform.amf.common.JsonMessage;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.core.sdp.SdpParser;
@@ -72,8 +73,10 @@ public class RmqProcNegoDoneReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
-        RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_NEGO_DONE_REQ, json);
+        if (AppInstance.getInstance().getConfig().getRedundantConfig().isRun()) {
+            String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
+            RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_NEGO_DONE_REQ, json);
+        }
 
         return false;
     }

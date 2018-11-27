@@ -169,6 +169,7 @@ public class AmfConfig extends DefaultConfig {
             for (int i = 0; ; i++) {
                 String key = String.format("SDP_LOCAL_ATTR_%d", i);
                 String attr = getStrValue("MEDIA", key, null);
+                logger.debug("SDP config: key [{}] attr [{}]", key, attr);
                 if (attr == null) {
                     break;
                 }

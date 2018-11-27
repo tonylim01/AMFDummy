@@ -139,10 +139,12 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
-        logger.debug("[{}] JSON: {}", msg.getSessionId(), json);
+        if (AppInstance.getInstance().getConfig().getRedundantConfig().isRun()) {
+            String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
+            logger.debug("[{}] JSON: {}", msg.getSessionId(), json);
 
-        RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_OUTBOUND_SET_OFFER_REQ, json);
+            RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_OUTBOUND_SET_OFFER_REQ, json);
+        }
 
         return true;
     }

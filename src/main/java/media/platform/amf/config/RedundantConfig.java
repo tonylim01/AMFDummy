@@ -18,6 +18,7 @@ public class RedundantConfig extends DefaultConfig {
     private static final int MODE_ACTIVE = 1;
     private static final int MODE_STANDBY = 2;
 
+    private boolean isRun;
     private int localPort;
     private String remoteIp;
     private int remotePort;
@@ -37,6 +38,7 @@ public class RedundantConfig extends DefaultConfig {
 
     private void loadConfig() {
         try {
+            isRun = getBooleanValue("REDUNDANT", "RUN", false);
             localPort = getIntValue("REDUNDANT", "LOCAL_PORT", DEFAULT_PORT);
             remoteIp = getStrValue("REDUNDANT", "REMOTE_IP", null);
             remotePort = getIntValue("REDUNDANT", "REMOTE_PORT", DEFAULT_PORT);
@@ -68,5 +70,9 @@ public class RedundantConfig extends DefaultConfig {
 
     public int getDefaultMode() {
         return defaultMode;
+    }
+
+    public boolean isRun() {
+        return isRun;
     }
 }
