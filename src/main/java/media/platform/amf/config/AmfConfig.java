@@ -192,6 +192,10 @@ public class AmfConfig extends DefaultConfig {
                 logger.error("Local IP not found for [{}]", localNetInterface);
             }
 
+            if (localIpAddress != null && (localIp == null || (localIp != null && localIp.startsWith("xxx")))) {
+                sdpConfig.setLocalIpAddress(localIpAddress);
+            }
+
             localBasePath = getStrValue("MEDIA", "LOCAL_BASE_PATH", null);
 
             audioEnergyLevel = (long)getIntValue("MEDIA", "AUDIO_ENERGY_LEVEL", 0);
