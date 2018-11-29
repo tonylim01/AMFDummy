@@ -13,6 +13,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import media.platform.amf.AppInstance;
 import media.platform.amf.core.socket.packets.Vocoder;
+import media.platform.amf.rmqif.handler.RmqProcDtmfDetectReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import media.platform.amf.service.AudioFileReader;
@@ -28,6 +29,7 @@ import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetAddress;
 import java.util.Random;
+import java.util.UUID;
 
 public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
@@ -133,6 +135,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             if (logger.isDebugEnabled()) {
                 logger.debug("RTP Channel " + this.context.getStatistics().getSsrc() + " dropped RTP v0 packet.");
             }
+            rtpPacket.getBuffer().clear();
             return;
         }
 
@@ -145,6 +148,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             if (logger.isDebugEnabled()) {
                 logger.debug("RTP Channel " + this.context.getStatistics().getSsrc() + " dropped packet because channel mode does not allow to receive traffic.");
             }
+            rtpPacket.getBuffer().clear();
             return;
         }
 
@@ -156,6 +160,18 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             if (logger.isDebugEnabled()) {
                 logger.debug("RTP Channel " + this.context.getStatistics().getSsrc() + " dropped packet because payload was empty.");
             }
+            rtpPacket.getBuffer().clear();
+            return;
+        }
+
+        // Detect 2833
+        if (sessionInfo.getPayload2833() > 0 && rtpPacket.getPayloadType() == sessionInfo.getPayload2833()) {
+            // 2833 detected
+            // TODO
+
+            handle2833Dtmf(sessionInfo, rtpPacket, rcvPktLength - rtpPacket.getPayloadLength());
+
+            rtpPacket.getBuffer().clear();
             return;
         }
 
@@ -182,7 +198,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                         if (otherSession.getJitterSender() != null) {
                             otherSession.getJitterSender().put(rtpPacket.getSeqNumber(), payload);
                         }
-                        toOtherSession = true;
+
 
                         payload = null;
                     }
@@ -252,5 +268,52 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
         rtpPacket.getBuffer().clear();
         rtpPacket = null;
+    }
+
+    private void handle2833Dtmf(SessionInfo sessionInfo, RtpPacket rtpPacket, int offset) {
+        if (sessionInfo == null || rtpPacket == null) {
+            return;
+        }
+
+        byte[] payload = new byte[rtpPacket.getPayloadLength()];
+        rtpPacket.readRegionToBuff(offset, rtpPacket.getPayloadLength(), payload);
+
+        int dtmf = payload[0] & 0xff;
+        boolean dtmfEnd = ((payload[1] & 0x80) > 0);
+
+        //logger.info("[{}] 2833 detected. dtmf [{}] end [{}]", sessionInfo.getSessionId(), dtmf, dtmfEnd);
+        boolean newDtmf;
+
+        if (dtmf != sessionInfo.getLastDtmf()) {
+            newDtmf = true;
+            sessionInfo.setLastDtmfEnd(false);
+        }
+        else if (sessionInfo.isLastDtmfEnd() && !dtmfEnd) {
+            newDtmf = true;
+            sessionInfo.setLastDtmfEnd(false);
+        }
+        else {
+            newDtmf = false;
+            if (!sessionInfo.isLastDtmfEnd() && dtmfEnd) {
+                sessionInfo.setLastDtmfEnd(true);
+            }
+        }
+
+        if (newDtmf) {
+            sessionInfo.setLastDtmf(dtmf);
+            logger.info("[{}] 2833 detected. dtmf [{}]", sessionInfo.getSessionId(), dtmf);
+        }
+
+        //
+        // TODO
+        //
+        if (sessionInfo.getRemoteRmqName() == null) {
+            logger.warn("[{}} 2833 ignored. No target queue", sessionInfo.getSessionId());
+            return;
+        }
+
+        RmqProcDtmfDetectReq detectReq = new RmqProcDtmfDetectReq(sessionInfo.getSessionId(), UUID.randomUUID().toString());
+        detectReq.setDtmfInfo(dtmf);
+        detectReq.send(sessionInfo.getRemoteRmqName());
     }
 }

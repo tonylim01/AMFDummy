@@ -67,6 +67,11 @@ public class SessionInfo {
 
     private int engineToolId;
 
+    public SessionInfo() {
+        payload2833 = -1;
+        lastDtmf = -1;
+    }
+
     public String getSessionId() {
         return sessionId;
     }
@@ -384,5 +389,59 @@ public class SessionInfo {
 
     public void setEngineToolId(int engineToolId) {
         this.engineToolId = engineToolId;
+    }
+
+    private transient int payload2833;
+
+    private int get2833PayloadType() {
+        SdpInfo tSdpInfo = null;
+        if (sdpDeviceInfo != null) {
+            tSdpInfo = sdpDeviceInfo;
+        }
+        else if (sdpInfo != null) {
+            tSdpInfo = sdpInfo;
+        }
+
+        return (tSdpInfo != null) ? tSdpInfo.getPayload2833() : 0;
+    }
+
+    public int getPayload2833() {
+        if (payload2833 < 0) {
+            payload2833 = get2833PayloadType();
+        }
+        return payload2833;
+    }
+
+    public void setPayload2833(int payload2833) {
+        this.payload2833 = payload2833;
+    }
+
+    private transient int lastDtmf;
+    private transient boolean lastDtmfEnd;
+
+    public int getLastDtmf() {
+        return lastDtmf;
+    }
+
+    public void setLastDtmf(int lastDtmf) {
+        this.lastDtmf = lastDtmf;
+    }
+
+    public boolean isLastDtmfEnd() {
+        return lastDtmfEnd;
+    }
+
+    public void setLastDtmfEnd(boolean lastDtmfEnd) {
+        this.lastDtmfEnd = lastDtmfEnd;
+    }
+
+    private String remoteRmqName;
+
+    public String getRemoteRmqName() {
+        return remoteRmqName;
+    }
+
+    public void setRemoteRmqName(String remoteRmqName) {
+        this.remoteRmqName = remoteRmqName;
     }
 }

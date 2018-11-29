@@ -101,6 +101,7 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
         sessionInfo.setFromNo(req.getFromNo());
         sessionInfo.setToNo(req.getToNo());
         sessionInfo.setCaller((parCount == 1) ? true : false);
+        sessionInfo.setRemoteRmqName(msg.getHeader().getMsgFrom());
 
         BiUdpRelayManager udpRelayManager = BiUdpRelayManager.getInstance();
         SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
