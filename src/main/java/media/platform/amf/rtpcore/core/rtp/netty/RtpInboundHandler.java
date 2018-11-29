@@ -299,14 +299,13 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             }
         }
 
-        if (newDtmf) {
-            sessionInfo.setLastDtmf(dtmf);
-            logger.info("[{}] 2833 detected. dtmf [{}]", sessionInfo.getSessionId(), dtmf);
+        if (!newDtmf) {
+            return;
         }
 
-        //
-        // TODO
-        //
+        sessionInfo.setLastDtmf(dtmf);
+        logger.info("[{}] 2833 detected. dtmf [{}]", sessionInfo.getSessionId(), dtmf);
+
         if (sessionInfo.getRemoteRmqName() == null) {
             logger.warn("[{}} 2833 ignored. No target queue", sessionInfo.getSessionId());
             return;

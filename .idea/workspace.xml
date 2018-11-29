@@ -3,13 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e940f8ba-2c0f-49f4-9fde-4a6a7a882e14" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcDtmfDetectReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcDtmfDetectReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/DtmfDetectReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/DtmfDetectReq.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/amf.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/amf.conf" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -91,8 +85,8 @@
       <file leaf-file-name="RtpInboundHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="531">
-              <caret line="314" column="54" selection-start-line="314" selection-start-column="54" selection-end-line="314" selection-end-column="54" />
+            <state relative-caret-position="480">
+              <caret line="305" selection-start-line="305" selection-end-line="305" />
             </state>
           </provider>
         </entry>
@@ -1024,7 +1018,14 @@
       <option name="project" value="LOCAL" />
       <updated>1543386905394</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="2833 DTMF 수집 기능 구현">
+      <created>1543450921276</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1543450921276</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1053,11 +1054,11 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50319487" side_tool="true" weight="0.22604166" />
       <window_info anchor="right" id="Maven Projects" order="8" sideWeight="0.49603805" visible="true" weight="0.083599575" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.18333334" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4968051" visible="true" weight="0.22604166" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4968051" visible="true" weight="0.22604166" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32998884" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2284345" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2284345" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32916668" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24964234" />
@@ -1108,7 +1109,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="잘못된 prompt config 보완" />
     <MESSAGE value="메모리 이슈 디버깅" />
     <MESSAGE value="엔진 연동 메시지 정의" />
     <MESSAGE value="패킷 re-ordering 구현" />
@@ -1133,7 +1133,8 @@
     <MESSAGE value="EVS SID 값 변경" />
     <MESSAGE value="이중화를 위한 메시지 전송부 보완" />
     <MESSAGE value="Config 보완&#10; - local ip 를 xxx.xxx.xxx.xxx 로 변경&#10; - pcm 삭제&#10; Config에서 localip가 xxx.xxx~ 일 경우 인터페이스에서 ip를 읽도록 보완" />
-    <option name="LAST_COMMIT_MESSAGE" value="Config 보완&#10; - local ip 를 xxx.xxx.xxx.xxx 로 변경&#10; - pcm 삭제&#10; Config에서 localip가 xxx.xxx~ 일 경우 인터페이스에서 ip를 읽도록 보완" />
+    <MESSAGE value="2833 DTMF 수집 기능 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="2833 DTMF 수집 기능 구현" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1528,8 +1529,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="314" column="54" selection-start-line="314" selection-start-column="54" selection-end-line="314" selection-end-column="54" />
+        <state relative-caret-position="480">
+          <caret line="305" selection-start-line="305" selection-end-line="305" />
         </state>
       </provider>
     </entry>
