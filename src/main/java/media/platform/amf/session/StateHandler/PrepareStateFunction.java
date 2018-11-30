@@ -1,5 +1,6 @@
 package media.platform.amf.session.StateHandler;
 
+import media.platform.amf.common.AppId;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
@@ -7,7 +8,9 @@ import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.socket.JitterSender;
 import media.platform.amf.core.socket.packets.Vocoder;
 import media.platform.amf.engine.EngineClient;
+import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.EngineProcAudioCreateReq;
+import media.platform.amf.engine.handler.EngineProcMixerCreateReq;
 import media.platform.amf.engine.messages.SysConnectReq;
 import media.platform.amf.rmqif.messages.FileData;
 import media.platform.amf.room.RoomInfo;
@@ -46,20 +49,20 @@ public class PrepareStateFunction implements StateFunction {
         if (sessionInfo.isCaller()) {
             openCallerRelayResource(sessionInfo);
 
+            if (!AppInstance.getInstance().getConfig().isRelayMode()) {
+                sendMixerCreateReq(sessionInfo);
+            }
         }
         else {
             openCalleeRelayResource(sessionInfo);
         }
 
+        //
+        // TODO
+        // Waiting for mixer done
+        //
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
-            String appId = UUID.randomUUID().toString();
-            EngineProcAudioCreateReq audioCreateReq = new EngineProcAudioCreateReq(appId);
-            audioCreateReq.setData(sessionInfo);
-
-            if (audioCreateReq.send()) {
-                EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioCreateReq.getData());
-            }
-
+            sendAudioCreateReq(sessionInfo);
         }
     }
 
@@ -303,5 +306,46 @@ public class PrepareStateFunction implements StateFunction {
         SessionStateManager.getInstance().setState(sessionInfo.getSessionId(), SessionState.PLAY_START, file);
 
         return true;
+    }
+
+    private void sendAudioCreateReq(SessionInfo sessionInfo) {
+        String appId = AppId.newId();
+        EngineProcAudioCreateReq audioCreateReq = new EngineProcAudioCreateReq(appId);
+        audioCreateReq.setData(sessionInfo);
+
+        if (audioCreateReq.send()) {
+            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioCreateReq.getData());
+        }
+    }
+
+    private void sendMixerCreateReq(SessionInfo sessionInfo) {
+        String appId = AppId.newId();
+
+        int mixerId = EngineManager.getInstance().getIdleToolId();
+        if (mixerId < 0) {
+            // Error
+            logger.error("[{}] No available tools", sessionInfo.getSessionId());
+            return;
+        }
+
+        if (sessionInfo.getConferenceId() != null) {
+
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null) {
+                roomInfo.setMixerId(mixerId);
+            }
+        }
+
+        sessionInfo.setMixerToolId(mixerId);
+
+        EngineProcMixerCreateReq mixerCreateReq = new EngineProcMixerCreateReq(appId);
+        mixerCreateReq.setData(sessionInfo, mixerId, 2);
+
+        if (mixerCreateReq.send()) {
+            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, mixerCreateReq.getData());
+            if (sessionInfo.getConferenceId() != null) {
+                AppId.getInstance().push(appId, sessionInfo.getConferenceId());
+            }
+        }
     }
  }

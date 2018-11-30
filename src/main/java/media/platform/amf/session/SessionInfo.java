@@ -66,6 +66,7 @@ public class SessionInfo {
     private transient List<String> playIds;
 
     private int engineToolId;
+    private int mixerToolId;
 
     public SessionInfo() {
         payload2833 = -1;
@@ -389,6 +390,14 @@ public class SessionInfo {
 
     public void setEngineToolId(int engineToolId) {
         this.engineToolId = engineToolId;
+    }
+
+    public int getMixerToolId() {
+        return mixerToolId;
+    }
+
+    public void setMixerToolId(int mixerToolId) {
+        this.mixerToolId = mixerToolId;
     }
 
     private transient int payload2833;

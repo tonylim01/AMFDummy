@@ -4,13 +4,16 @@ import media.platform.amf.session.StateHandler.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import media.platform.amf.session.StateHandler.*;
+import sun.nio.ch.ThreadPool;
 
 import java.net.SocketException;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,6 +21,7 @@ public class SessionStateManager {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionStateManager.class);
 
+    private static final int THREAD_POOL_SIZE = 600;
     private static final int QUEUE_SIZE = 128;
 
     private static SessionStateManager sessionStateManager = null;
@@ -29,10 +33,12 @@ public class SessionStateManager {
         return sessionStateManager;
     }
 
+    private ThreadPoolExecutor statePoolExcutor;
     private BlockingQueue<SessionStateMessage> stateQueue;
     private Thread stateMachineThread;
 
     public SessionStateManager() {
+        statePoolExcutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         stateQueue = new LinkedBlockingQueue<>(QUEUE_SIZE);
         stateMachineThread = new Thread(new SessionStateMachine(stateQueue));
         stateMachineThread.start();
@@ -43,6 +49,7 @@ public class SessionStateManager {
     public void stop() {
         stateMachineThread.interrupt();
         stateMachineThread = null;
+        statePoolExcutor.shutdown();
     }
 
     /**

@@ -9,6 +9,7 @@ public class RoomInfo {
 
     private int groupId;
     private int mixerId;
+    private boolean mixerAvailable;
 
     private boolean isVolumeMin;
     private boolean isBgm;
@@ -119,5 +120,13 @@ public class RoomInfo {
         if (isVoice != voice) {
             isVoice = voice;
         }
+    }
+
+    public boolean isMixerAvailable() {
+        return mixerAvailable;
+    }
+
+    public void setMixerAvailable(boolean mixerAvailable) {
+        this.mixerAvailable = mixerAvailable;
     }
 }

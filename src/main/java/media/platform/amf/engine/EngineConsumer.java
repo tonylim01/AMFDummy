@@ -2,8 +2,11 @@ package media.platform.amf.engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import media.platform.amf.common.AppId;
 import media.platform.amf.engine.messages.SysHeartbeatRes;
 import media.platform.amf.engine.types.EngineResponseMessage;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +19,11 @@ public class EngineConsumer implements Runnable {
 
     private BlockingQueue<byte[]> queue;
     private boolean isQuit = false;
+    private Gson gson;
 
     public EngineConsumer(BlockingQueue<byte[]> queue) {
         this.queue = queue;
+        gson = new GsonBuilder().setLenient().create();
     }
 
     @Override
@@ -53,8 +58,7 @@ public class EngineConsumer implements Runnable {
         //
         // TODO
         //
-        //Gson gson = new Gson();
-        Gson gson = new GsonBuilder().setLenient().create();
+
         EngineResponseMessage msg = gson.fromJson(json, EngineResponseMessage.class);
 
         if (msg == null || msg.getHeader() == null) {
@@ -68,30 +72,14 @@ public class EngineConsumer implements Runnable {
             return;
         }
 
-        EngineClient engineClient = EngineClient.getInstance();
-
         if (compareString(msg.getHeader().getType(), "sys")) {
-            if (compareString(msg.getHeader().getCmd(), "connect")) {
+            handleSysResponse(msg);
+        }
+        else if (compareString(msg.getHeader().getType(), "audio")) {
 
-                if (compareString(msg.getHeader().getResult(), "success")) {
-                    // Ok
-                    engineClient.setConnected(true);
-                }
-                else {
-                    // Error
-                    engineClient.setConnected(false);
-                }
-            }
-            else if (compareString(msg.getHeader().getCmd(), "heartbeat")) {
-
-                engineClient.checkHeartbeat(msg.getHeader().appId);
-
-                SysHeartbeatRes heartbeatRes = gson.fromJson(msg.getBody(), SysHeartbeatRes.class);
-                if (heartbeatRes != null && EngineManager.getInstance().isResourceChanged(heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle())) {
-                    logger.debug("Heart resource: total [{}] busy [{}] idle [{}]", heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle());
-                    EngineManager.getInstance().setResourceCount(heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle());
-                }
-            }
+        }
+        else if (compareString(msg.getHeader().getType(), "mixer")) {
+            handleMixerResponse(msg);
         }
         else {
             logger.debug("<- Engine: json {}", json);
@@ -101,4 +89,70 @@ public class EngineConsumer implements Runnable {
     private boolean compareString(String src, String dst) {
         return (src != null && dst != null && src.equals(dst)) ? true : false;
     }
+
+    private void handleSysResponse(EngineResponseMessage msg) {
+
+        if (msg == null || (msg != null && msg.getHeader() == null)) {
+            return;
+        }
+
+        EngineClient engineClient = EngineClient.getInstance();
+
+        if (compareString(msg.getHeader().getCmd(), "connect")) {
+
+            if (compareString(msg.getHeader().getResult(), "success")) {
+                // Ok
+                engineClient.setConnected(true);
+            }
+            else {
+                // Error
+                engineClient.setConnected(false);
+            }
+        }
+        else if (compareString(msg.getHeader().getCmd(), "heartbeat")) {
+
+            engineClient.checkHeartbeat(msg.getHeader().appId);
+
+            SysHeartbeatRes heartbeatRes = gson.fromJson(msg.getBody(), SysHeartbeatRes.class);
+            if (heartbeatRes != null && EngineManager.getInstance().isResourceChanged(heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle())) {
+                logger.debug("Heart resource: total [{}] busy [{}] idle [{}]", heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle());
+                EngineManager.getInstance().setResourceCount(heartbeatRes.getTotal(), heartbeatRes.getBusy(), heartbeatRes.getIdle());
+            }
+        }
+    }
+
+    private void handleMixerResponse(EngineResponseMessage msg) {
+
+        if (msg == null || (msg != null && msg.getHeader() == null)) {
+            return;
+        }
+
+        if (compareString(msg.getHeader().getCmd(), "create")) {
+
+            if (compareString(msg.getHeader().getResult(), "ok")) {
+                // Success
+                if (msg.getHeader().getAppId() == null) {
+                    return;
+                }
+
+                String roomId = AppId.getInstance().get(msg.getHeader().getAppId());
+                if (roomId == null) {
+                    return;
+                }
+
+                RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(roomId);
+                if (roomInfo == null) {
+                    return;
+                }
+
+                roomInfo.setMixerAvailable(true);
+
+                //
+                // TODO
+                //
+            }
+        }
+
+    }
 }
+
