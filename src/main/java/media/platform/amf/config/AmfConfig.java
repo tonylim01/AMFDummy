@@ -12,6 +12,7 @@ package media.platform.amf.config;
 
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.common.StringUtil;
+import media.platform.amf.core.config.ConfigChangedListener;
 import media.platform.amf.core.config.DefaultConfig;
 import media.platform.amf.redundant.RedundantClient;
 import org.slf4j.Logger;
@@ -65,6 +66,7 @@ public class AmfConfig extends DefaultConfig {
     private int engineRemotePort;
 
     private String promptConfPath;
+    private int instanceId;
 
     public AmfConfig(int instanceId, String configPath) {
 
@@ -73,9 +75,18 @@ public class AmfConfig extends DefaultConfig {
         boolean result = load();
         logger.info("Load config ... [{}]", StringUtil.getOkFail(result));
 
+        this.instanceId =instanceId;
         mediaPriorities = new ArrayList<>();
         sdpConfig = new SdpConfig();
         redundantConfig = new RedundantConfig(configPath);
+
+        setConfigChangedListener(new ConfigChangedListener() {
+            @Override
+            public void configChanged(boolean changed) {
+                logger.warn("Config changed");
+                loadConfig(instanceId);
+            }
+        });
 
         if (result == true) {
             loadConfig(instanceId);
