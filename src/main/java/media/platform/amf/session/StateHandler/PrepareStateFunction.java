@@ -3,7 +3,6 @@ package media.platform.amf.session.StateHandler;
 import media.platform.amf.common.AppId;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.AppInstance;
-import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.socket.JitterSender;
 import media.platform.amf.core.socket.packets.Vocoder;
@@ -11,6 +10,9 @@ import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.EngineProcAudioCreateReq;
 import media.platform.amf.engine.handler.EngineProcMixerCreateReq;
+import media.platform.amf.engine.handler.EngineProcParAddReq;
+import media.platform.amf.engine.messages.AudioCreateReq;
+import media.platform.amf.engine.messages.ParAddReq;
 import media.platform.amf.engine.messages.SysConnectReq;
 import media.platform.amf.rmqif.messages.FileData;
 import media.platform.amf.room.RoomInfo;
@@ -20,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionState;
 import media.platform.amf.session.SessionStateManager;
-
-import java.util.UUID;
 
 public class PrepareStateFunction implements StateFunction {
     private static final Logger logger = LoggerFactory.getLogger(PrepareStateFunction.class);
@@ -57,12 +57,40 @@ public class PrepareStateFunction implements StateFunction {
             openCalleeRelayResource(sessionInfo);
         }
 
-        //
-        // TODO
-        // Waiting for mixer done
-        //
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
+            //
+            // TODO
+            // Waiting for mixer done
+            //
+            if (sessionInfo.getConferenceId() != null) {
+                RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+                if ((roomInfo != null) && (!roomInfo.isMixerAvailable())) {
+                    logger.info("[{}] Waiting for mixer ready", sessionInfo.getSessionId());
+
+                    if (roomInfo.waitReady(1000)) {
+                        logger.info("[{}] Mixer ready", sessionInfo.getSessionId());
+                    }
+                    else {
+                        logger.warn("[{}] Mixer timeout", sessionInfo.getSessionId());
+                    }
+
+                }
+            }
+
             sendAudioCreateReq(sessionInfo);
+
+            if (!sessionInfo.isAudioCreated()) {
+                logger.info("[{}] Waiting for audio created", sessionInfo.getSessionId());
+
+                if (sessionInfo.waitAudioCreated(1000)) {
+                    logger.info("[{}] Audio Ready", sessionInfo.getSessionId());
+                }
+                else {
+                    logger.warn("[{}] Audio timeout", sessionInfo.getSessionId());
+                }
+            }
+
+            sendParAddReq(sessionInfo);
         }
     }
 
@@ -91,8 +119,8 @@ public class PrepareStateFunction implements StateFunction {
             }
         }
 
-        logger.debug("[{}] Caller Relay: remote ({}:{}) <- local ({})", sessionInfo.getSessionId(),
-                     sdpInfo.getRemoteIp(), sdpInfo.getRemotePort(), sessionInfo.getSrcLocalPort());
+        logger.debug("[{}] Open caller relay resources: device [{}:{}] -> [{}] -> engine [{}]", sessionInfo.getSessionId(),
+                sdpInfo.getRemoteIp(), sdpInfo.getRemotePort(), sessionInfo.getSrcLocalPort(), sessionInfo.getEnginePort());
 
         sessionInfo.rtpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
@@ -136,6 +164,9 @@ public class PrepareStateFunction implements StateFunction {
             }
         }
 
+        logger.debug("[{}] Open callee relay resources: device [{}:{}] -> [{}] -> engine [{}]", sessionInfo.getSessionId(),
+                sdpInfo.getRemoteIp(), sdpInfo.getRemotePort(), sessionInfo.getSrcLocalPort(), sessionInfo.getEnginePort());
+
         //sessionInfo.channel = AppInstance.getInstance().getNettyRTPServer().addBindPort( sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());
         sessionInfo.rtpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
@@ -160,8 +191,7 @@ public class PrepareStateFunction implements StateFunction {
         if (sdpInfo == null) {
             if (sessionInfo.getSdpInfo() != null) {
                 sdpInfo = sessionInfo.getSdpInfo();
-            }
-            else {
+            } else {
                 logger.error("[{}] Null sdpInfo", sessionInfo.getSessionId());
                 return;
             }
@@ -170,19 +200,21 @@ public class PrepareStateFunction implements StateFunction {
         if (sdpInfo.getCodecStr() != null) {
             if (sdpInfo.getCodecStr().equals("AMR-WB")) {
                 vocoder = Vocoder.VOCODER_AMR_WB;
-            }
-            else if (sdpInfo.getCodecStr().equals("AMR-NB")) {
+            } else if (sdpInfo.getCodecStr().equals("AMR-NB")) {
                 vocoder = Vocoder.VOCODER_AMR_NB;
-            }
-            else if (sdpInfo.getCodecStr().equals("EVS")) {
+            } else if (sdpInfo.getCodecStr().equals("EVS")) {
                 vocoder = Vocoder.VOCODER_EVS;
             }
         }
 
         if (vocoder == 0) {
             switch (sdpInfo.getPayloadId()) {
-                case 0: vocoder = Vocoder.VOCODER_ULAW; break;
-                case 8: vocoder = Vocoder.VOCODER_ALAW; break;
+                case 0:
+                    vocoder = Vocoder.VOCODER_ULAW;
+                    break;
+                case 8:
+                    vocoder = Vocoder.VOCODER_ALAW;
+                    break;
             }
         }
 
@@ -197,15 +229,24 @@ public class PrepareStateFunction implements StateFunction {
         logger.debug("[{}] codec [{}] vocoder [{}] payloadId [{}] payloadSize [{}]", sessionInfo.getSessionId(),
                 sdpInfo.getCodecStr(), vocoder, payloadId, payloadSize);
 
-        JitterSender jitterSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
-        jitterSender.setUdpClient(sessionInfo.rtpClient);
-        jitterSender.setSessionId(sessionInfo.getSessionId());
-        jitterSender.setRelay(AppInstance.getInstance().getConfig().isRelayMode());
+        JitterSender rtpSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
+        rtpSender.setUdpClient(sessionInfo.getRtpClient());
+        rtpSender.setSessionId(sessionInfo.getSessionId());
+        rtpSender.setRelay(AppInstance.getInstance().getConfig().isRelayMode());
+        rtpSender.start();
 
-        jitterSender.start();
+        sessionInfo.setRtpSender(rtpSender);
 
-        sessionInfo.setJitterSender(jitterSender);
+        if (!AppInstance.getInstance().getConfig().isRelayMode()) {
+            JitterSender udpSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
+            udpSender.setUdpClient(sessionInfo.getUdpClient());
+            udpSender.setSessionId(sessionInfo.getSessionId());
+            udpSender.setRelay(AppInstance.getInstance().getConfig().isRelayMode());
+            udpSender.start();
 
+            sessionInfo.setUdpSender(udpSender);
+
+        }
     }
 
     private boolean openMixerResource(RoomInfo roomInfo, String sessionId) {
@@ -314,7 +355,23 @@ public class PrepareStateFunction implements StateFunction {
         audioCreateReq.setData(sessionInfo);
 
         if (audioCreateReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioCreateReq.getData());
+            EngineClient.getInstance().pushSentQueue(appId, AudioCreateReq.class, audioCreateReq.getData());
+            if (sessionInfo.getSessionId() != null) {
+                AppId.getInstance().push(appId, sessionInfo.getSessionId());
+            }
+        }
+    }
+
+    private void sendParAddReq(SessionInfo sessionInfo) {
+        String appId = AppId.newId();
+        EngineProcParAddReq parAddReq = new EngineProcParAddReq(appId);
+        parAddReq.setData(sessionInfo);
+
+        if (parAddReq.send()) {
+            EngineClient.getInstance().pushSentQueue(appId, ParAddReq.class, parAddReq.getData());
+            if (sessionInfo.getSessionId() != null) {
+                AppId.getInstance().push(appId, sessionInfo.getSessionId());
+            }
         }
     }
 

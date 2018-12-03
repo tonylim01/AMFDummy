@@ -28,7 +28,6 @@ import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetAddress;
-import java.util.Random;
 import java.util.UUID;
 
 public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacket> {
@@ -187,20 +186,31 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
             RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
             if (roomInfo != null) {
-                String otherSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
-                if (otherSessionId != null) {
-                    SessionInfo otherSession = SessionManager.findSession(otherSessionId);
-                    if (otherSession != null) {
 
-                        byte[] payload = new byte[rtpPacket.getPayloadLength()];
-                        rtpPacket.readRegionToBuff(rcvPktLength - rtpPacket.getPayloadLength(), rtpPacket.getPayloadLength(), payload);
+                if (AppInstance.getInstance().getConfig().isRelayMode()) {
+                    String otherSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
+                    if (otherSessionId != null) {
+                        SessionInfo otherSession = SessionManager.findSession(otherSessionId);
+                        if (otherSession != null) {
 
-                        if (otherSession.getJitterSender() != null) {
-                            otherSession.getJitterSender().put(rtpPacket.getSeqNumber(), payload);
+                            byte[] payload = new byte[rtpPacket.getPayloadLength()];
+                            rtpPacket.readRegionToBuff(rcvPktLength - rtpPacket.getPayloadLength(), rtpPacket.getPayloadLength(), payload);
+
+                            if (otherSession.getRtpSender() != null) {
+                                otherSession.getRtpSender().put(rtpPacket.getSeqNumber(), payload);
+                            }
+
+
+                            payload = null;
                         }
+                    }
+                }
+                else {  // Sends to engine
+                    byte[] payload = new byte[rtpPacket.getPayloadLength()];
+                    rtpPacket.readRegionToBuff(rcvPktLength - rtpPacket.getPayloadLength(), rtpPacket.getPayloadLength(), payload);
 
-
-                        payload = null;
+                    if (sessionInfo.getUdpSender() != null) {
+                        sessionInfo.getUdpSender().put(rtpPacket.getSeqNumber(), payload);
                     }
                 }
             }
@@ -212,9 +222,9 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                 RtpPacket sentPacket = new RtpPacket(rcvPktLength, true);
                 sessionInfo.setRtpPacket(sentPacket);
 
-                logger.info("Jitter vocoder {}", sessionInfo.getJitterSender().getVocoder());
+                logger.info("Jitter vocoder {}", sessionInfo.getRtpSender().getVocoder());
 
-                String audioFilename = AppInstance.getInstance().getPromptConfig().getWaitingPrompt(sessionInfo.getJitterSender().getVocoder());
+                String audioFilename = AppInstance.getInstance().getPromptConfig().getWaitingPrompt(sessionInfo.getRtpSender().getVocoder());
                 if (audioFilename == null) {
                     audioFilename = "test.alaw";
                 }
@@ -222,12 +232,12 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
                 AudioFileReader fileReader = new AudioFileReader(audioFilename);
                 fileReader.load();
 
-                if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
+                if (sessionInfo.getRtpSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
                     byte[] header = new byte[9];    // #!AMR-WB\a
                     fileReader.get(header, header.length);
                     header = null;
                 }
-                else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
+                else if (sessionInfo.getRtpSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
                     byte[] header = new byte[6];    // #!AMR\a
                     fileReader.get(header, header.length);
                     header = null;
@@ -239,10 +249,10 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
                 byte[] payload = null;
 
-                if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
+                if (sessionInfo.getRtpSender().getVocoder() == Vocoder.VOCODER_AMR_WB) {
                     payload = sessionInfo.getFileReader().getAMRWBPayload();
                 }
-                else if (sessionInfo.getJitterSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
+                else if (sessionInfo.getRtpSender().getVocoder() == Vocoder.VOCODER_AMR_NB) {
                     payload = sessionInfo.getFileReader().getAMRNBPayload();
                 }
                 else {
@@ -252,7 +262,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
 
                 if (payload != null) {
-                    sessionInfo.getJitterSender().put(-1, payload);
+                    sessionInfo.getRtpSender().put(-1, payload);
                     payload = null;
                 }
             }

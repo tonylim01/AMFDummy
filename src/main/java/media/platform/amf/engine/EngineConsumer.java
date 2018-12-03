@@ -7,6 +7,8 @@ import media.platform.amf.engine.messages.SysHeartbeatRes;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
+import media.platform.amf.session.SessionInfo;
+import media.platform.amf.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,9 +78,11 @@ public class EngineConsumer implements Runnable {
             handleSysResponse(msg);
         }
         else if (compareString(msg.getHeader().getType(), "audio")) {
-
+            logger.debug("<- Engine: json {}", json);
+            handleAudioResponse(msg);
         }
         else if (compareString(msg.getHeader().getType(), "mixer")) {
+            logger.debug("<- Engine: json {}", json);
             handleMixerResponse(msg);
         }
         else {
@@ -100,7 +104,8 @@ public class EngineConsumer implements Runnable {
 
         if (compareString(msg.getHeader().getCmd(), "connect")) {
 
-            if (compareString(msg.getHeader().getResult(), "success")) {
+            if (compareString(msg.getHeader().getResult(), "ok") ||
+                compareString(msg.getHeader().getResult(), "success")) {
                 // Ok
                 engineClient.setConnected(true);
             }
@@ -121,27 +126,77 @@ public class EngineConsumer implements Runnable {
         }
     }
 
-    private void handleMixerResponse(EngineResponseMessage msg) {
+    private void handleAudioResponse(EngineResponseMessage msg) {
 
         if (msg == null || (msg != null && msg.getHeader() == null)) {
+            logger.warn("Null response message");
             return;
         }
 
         if (compareString(msg.getHeader().getCmd(), "create")) {
 
-            if (compareString(msg.getHeader().getResult(), "ok")) {
+            if (compareString(msg.getHeader().getResult(), "ok") ||
+                    compareString(msg.getHeader().getResult(), "success")) {
                 // Success
                 if (msg.getHeader().getAppId() == null) {
+                    logger.warn("Null appId in response message");
+                    return;
+                }
+
+                String sessionId = AppId.getInstance().get(msg.getHeader().getAppId());
+                if (sessionId == null) {
+                    logger.warn("No sessionId for appId=[{}]", msg.getHeader().getAppId());
+                    return;
+                }
+
+                SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
+                if (sessionInfo == null) {
+                    logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
+                    return;
+                }
+
+                sessionInfo.setAudioCreated(true);
+
+                //
+                // TODO
+                //
+            }
+            else {
+                logger.warn("Undefined result [{}]", msg.getHeader().getResult());
+            }
+        }
+        else {
+            logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
+        }
+
+    }
+
+    private void handleMixerResponse(EngineResponseMessage msg) {
+
+        if (msg == null || (msg != null && msg.getHeader() == null)) {
+            logger.warn("Null response message");
+            return;
+        }
+
+        if (compareString(msg.getHeader().getCmd(), "create")) {
+
+            if (compareString(msg.getHeader().getResult(), "ok") ||
+                compareString(msg.getHeader().getResult(), "success")) {
+                // Success
+                if (msg.getHeader().getAppId() == null) {
+                    logger.warn("Null appId in response message");
                     return;
                 }
 
                 String roomId = AppId.getInstance().get(msg.getHeader().getAppId());
                 if (roomId == null) {
+                    logger.warn("No roomId for appId=[{}]", msg.getHeader().getAppId());
                     return;
                 }
 
                 RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(roomId);
                 if (roomInfo == null) {
+                    logger.warn("Cannot find room for appId=[{}]", msg.getHeader().getAppId());
                     return;
                 }
 
@@ -151,6 +206,12 @@ public class EngineConsumer implements Runnable {
                 // TODO
                 //
             }
+            else {
+                logger.warn("Undefined result [{}]", msg.getHeader().getResult());
+            }
+        }
+        else {
+            logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
         }
 
     }

@@ -1,8 +1,13 @@
 package media.platform.amf.room;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Vector;
 
 public class RoomInfo {
+    private static final Logger logger = LoggerFactory.getLogger(RoomInfo.class);
+
     private String roomId;
 
     private Vector<String> sessions;
@@ -16,10 +21,15 @@ public class RoomInfo {
     private boolean isMent;
     private boolean isVoice;
 
+    private transient Object syncObj;
+
     public RoomInfo() {
         this.sessions = new Vector<>();
         groupId = -1;
         mixerId = -1;
+
+        isSyncWait = false;
+        syncObj = new Object();
     }
 
     public boolean addSession(String sessionId) {
@@ -122,11 +132,44 @@ public class RoomInfo {
         }
     }
 
-    public boolean isMixerAvailable() {
+    private transient boolean isSyncWait;
+
+    public synchronized boolean isMixerAvailable() {
         return mixerAvailable;
     }
 
-    public void setMixerAvailable(boolean mixerAvailable) {
+    public synchronized void setMixerAvailable(boolean mixerAvailable) {
+        logger.debug("({}) Set mixer [{}]", roomId, mixerAvailable);
         this.mixerAvailable = mixerAvailable;
+
+        if (isSyncWait) {
+            synchronized (syncObj) {
+                syncObj.notify();
+            }
+        }
+
+        isSyncWait = false;
+    }
+
+    public synchronized boolean waitReady(int millisec) {
+        boolean result = false;
+        isSyncWait = true;
+
+        synchronized (syncObj) {
+            try {
+                if (millisec > 0) {
+                    syncObj.wait(millisec);
+                }
+                else {
+                    syncObj.wait();
+                }
+
+                result = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 }

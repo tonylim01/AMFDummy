@@ -4,19 +4,20 @@ import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.MixerDeleteReq;
+import media.platform.amf.engine.messages.ParAddReq;
 import media.platform.amf.session.SessionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EngineProcMixerDeleteReq extends EngineOutgoingMessage {
-    private static final Logger logger = LoggerFactory.getLogger(EngineProcMixerDeleteReq.class);
+public class EngineProcParAddReq extends EngineOutgoingMessage {
+    private static final Logger logger = LoggerFactory.getLogger(EngineProcParAddReq.class);
 
     private String appId;
-    private MixerDeleteReq data;
+    private ParAddReq data;
 
-    public EngineProcMixerDeleteReq(String appId) {
+    public EngineProcParAddReq(String appId) {
 
-        super("mixer", "delete", appId);
+        super("par", "add", appId);
         this.appId = appId;
     }
 
@@ -37,10 +38,15 @@ public class EngineProcMixerDeleteReq extends EngineOutgoingMessage {
             return;
         }
 
-        data = new MixerDeleteReq();
+        data = new ParAddReq();
         data.setId(sessionInfo.getMixerToolId());      // tool id
 
-        setBody(data, MixerDeleteReq.class);
+        int[] srcIds = new int[1];
+        srcIds[0] = sessionInfo.getEngineToolId();
+
+        data.setSrcIds(srcIds);
+
+        setBody(data, ParAddReq.class);
     }
 
     public Object getData() {

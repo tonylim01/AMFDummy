@@ -2,11 +2,8 @@ package media.platform.amf.redundant.handler;
 
 import media.platform.amf.common.JsonMessage;
 import media.platform.amf.redundant.messages.JitterSenderInfo;
-import media.platform.amf.redundant.messages.RedundantInfoSimple;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionManager;
-import media.platform.amf.session.SessionState;
-import media.platform.amf.session.SessionStateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +32,7 @@ public class RedunProcUpdateJitterSenderReq implements RedunProcMessageHandler {
             return false;
         }
 
-        sessionInfo.getJitterSender().updateRtpInfo(jitterSenderInfo.getSeq(),
+        sessionInfo.getUdpSender().updateRtpInfo(jitterSenderInfo.getSeq(),
                 jitterSenderInfo.getSsrc(), jitterSenderInfo.getTimestamp());
 
         return true;

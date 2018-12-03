@@ -47,6 +47,7 @@ public class SessionStateManager {
     }
 
     public void stop() {
+
         stateMachineThread.interrupt();
         stateMachineThread = null;
         statePoolExcutor.shutdown();
@@ -146,7 +147,7 @@ public class SessionStateManager {
 
             StateFunction stateFunction = stateFunctions().get(msg.getState());
             if (stateFunction != null) {
-                stateFunction.run(sessionInfo, msg.getData());
+                statePoolExcutor.execute(new StateFunctionRunnable(stateFunction, sessionInfo, msg.getData()));
             }
         }
     }

@@ -1,7 +1,6 @@
 package media.platform.amf.session;
 
 import io.netty.channel.Channel;
-import io.netty.channel.socket.DatagramChannel;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.core.socket.JitterSender;
 import media.platform.amf.rmqif.messages.FileData;
@@ -61,7 +60,8 @@ public class SessionInfo {
     private transient int lastSeqNo;
 
     private transient AudioFileReader fileReader;
-    private transient JitterSender jitterSender;
+    private transient JitterSender udpSender;
+    private transient JitterSender rtpSender;
 
     private transient List<String> playIds;
 
@@ -71,6 +71,9 @@ public class SessionInfo {
     public SessionInfo() {
         payload2833 = -1;
         lastDtmf = -1;
+
+        audioCreated = false;
+        syncObj = new Object();
     }
 
     public String getSessionId() {
@@ -350,13 +353,34 @@ public class SessionInfo {
         this.fileReader = fileReader;
     }
 
-    public JitterSender getJitterSender() {
-        return jitterSender;
+    public JitterSender getUdpSender() {
+        return udpSender;
     }
 
-    public void setJitterSender(JitterSender jitterSender) {
-        this.jitterSender = jitterSender;
+    public void setUdpSender(JitterSender udpSender) {
+        this.udpSender = udpSender;
     }
+
+    public UdpClient getRtpClient() {
+        return rtpClient;
+    }
+
+    public UdpClient getUdpClient() {
+        return udpClient;
+    }
+
+    public void setUdpClient(UdpClient udpClient) {
+        this.udpClient = udpClient;
+    }
+
+    public JitterSender getRtpSender() {
+        return rtpSender;
+    }
+
+    public void setRtpSender(JitterSender rtpSender) {
+        this.rtpSender = rtpSender;
+    }
+
 
     public byte[] getLastPacket() {
         return lastPacket;
@@ -452,5 +476,63 @@ public class SessionInfo {
 
     public void setRemoteRmqName(String remoteRmqName) {
         this.remoteRmqName = remoteRmqName;
+    }
+
+    private transient Object syncObj;
+    private transient boolean isSyncWait;
+    private boolean audioCreated;
+
+    public synchronized boolean isAudioCreated() {
+        return audioCreated;
+    }
+
+    public synchronized void setAudioCreated(boolean audioCreated) {
+        this.audioCreated = audioCreated;
+
+        if (isSyncWait) {
+            synchronized (syncObj) {
+                syncObj.notify();
+            }
+        }
+
+        isSyncWait = false;
+    }
+
+    public synchronized boolean waitAudioCreated(int millisec) {
+        boolean result = false;
+        isSyncWait = true;
+
+        synchronized (syncObj) {
+            try {
+                if (millisec > 0) {
+                    syncObj.wait(millisec);
+                }
+                else {
+                    syncObj.wait();
+                }
+
+                result = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
+    public Channel getRtpChannel() {
+        return rtpChannel;
+    }
+
+    public void setRtpChannel(Channel rtpChannel) {
+        this.rtpChannel = rtpChannel;
+    }
+
+    public Channel getUdpChannel() {
+        return udpChannel;
+    }
+
+    public void setUdpChannel(Channel udpChannel) {
+        this.udpChannel = udpChannel;
     }
 }

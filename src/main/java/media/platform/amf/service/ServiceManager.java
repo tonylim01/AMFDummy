@@ -199,8 +199,8 @@ public class ServiceManager {
             return false;
         }
 
-        if (sessionInfo.getJitterSender() != null) {
-            sessionInfo.getJitterSender().stop();
+        if (sessionInfo.getUdpSender() != null) {
+            sessionInfo.getUdpSender().stop();
         }
 
         if(sessionInfo.rtpChannel != null) {
