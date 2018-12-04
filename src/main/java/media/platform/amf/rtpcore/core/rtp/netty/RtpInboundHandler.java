@@ -127,7 +127,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
         String temp = adddress.substring(port + 1, adddress.length());
 
         SessionManager sessionManager = SessionManager.getInstance();
-        SessionInfo sessionInfo = sessionManager.getFinePort(Integer.parseInt(temp));
+        SessionInfo sessionInfo = sessionManager.getSrcLocalPort(Integer.parseInt(temp));
 
         int version = rtpPacket.getVersion();
         if (version == 0) {

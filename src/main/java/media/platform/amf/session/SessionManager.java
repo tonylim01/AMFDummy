@@ -342,7 +342,7 @@ public class SessionManager {
         return true;
     }
 
-    public SessionInfo getFinePort(int port) {
+    public SessionInfo getSrcLocalPort(int port) {
 
         synchronized (sessionInfos) {
             if (sessionInfos.size() != lastSessionCount) {
@@ -358,6 +358,29 @@ public class SessionManager {
 
                 if(sessionInfo.getSrcLocalPort() == port)
                 {
+                    return sessionInfo;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public SessionInfo getDstLocalPort(int port) {
+
+        synchronized (sessionInfos) {
+            if (sessionInfos.size() != lastSessionCount) {
+                lastSessionCount = sessionInfos.size();
+                logger.debug("Session count: {}", lastSessionCount);
+            }
+
+            for (Map.Entry<String, SessionInfo> entry: sessionInfos.entrySet()) {
+                SessionInfo sessionInfo = entry.getValue();
+                if (sessionInfo == null) {
+                    continue;
+                }
+
+                if(sessionInfo.getDstLocalPort() == port) {
                     return sessionInfo;
                 }
             }

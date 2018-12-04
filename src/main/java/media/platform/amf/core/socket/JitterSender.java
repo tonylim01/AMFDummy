@@ -178,7 +178,7 @@ public class JitterSender {
                         }
                     }
 
-//                    logger.debug("packet found. client ({}) data ({})", udpPacket != null, udpPacket.getData() != null);
+//                    logger.debug("packet found. client ({}) data ({}) relay {}", udpPacket != null, udpPacket.getData() != null, relay);
 
                     if (relay) {
                         relayPacket(udpPacket);

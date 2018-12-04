@@ -199,6 +199,10 @@ public class ServiceManager {
             return false;
         }
 
+        if (sessionInfo.getRtpSender() != null) {
+            sessionInfo.getRtpSender().stop();
+        }
+
         if (sessionInfo.getUdpSender() != null) {
             sessionInfo.getUdpSender().stop();
         }

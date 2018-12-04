@@ -21,6 +21,7 @@ import media.platform.amf.rtpcore.core.rtp.jitter.FixedJitterBuffer;
 import media.platform.amf.rtpcore.core.rtp.jitter.JitterBuffer;
 import media.platform.amf.rtpcore.core.rtp.netty.RtpInboundHandler;
 import media.platform.amf.rtpcore.core.rtp.netty.RtpInboundHandlerGlobalContext;
+import media.platform.amf.rtpcore.core.rtp.netty.UdpInboundHandler;
 import media.platform.amf.rtpcore.core.rtp.rtp.RTPInput;
 import media.platform.amf.rtpcore.core.rtp.rtp.RtpClock;
 import media.platform.amf.rtpcore.core.rtp.rtp.statistics.RtpStatistics;
@@ -76,7 +77,7 @@ public class NettyUDPServer {
                             context.setFormats( AVProfile.audio );
 
                             //pipeline.addLast("logger", new LoggingHandler( LogLevel.DEBUG));
-                            pipeline.addLast(new RtpInboundHandler( context));
+                            pipeline.addLast(new UdpInboundHandler( context));
                         }
                     });
 

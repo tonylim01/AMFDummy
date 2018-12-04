@@ -125,7 +125,7 @@ public class PrepareStateFunction implements StateFunction {
         sessionInfo.rtpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
-            sessionInfo.udpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
+            sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
         }
 
         openJitterSender(sessionInfo);
@@ -171,7 +171,7 @@ public class PrepareStateFunction implements StateFunction {
         sessionInfo.rtpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort(sdpInfo.getRemoteIp(), sdpInfo.getRemotePort());
 
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
-            sessionInfo.udpClient = AppInstance.getInstance().getNettyRTPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
+            sessionInfo.udpClient = AppInstance.getInstance().getNettyUDPServer().addConnectPort("127.0.0.1", sessionInfo.getEnginePort());
         }
 
         openJitterSender(sessionInfo);
@@ -232,7 +232,8 @@ public class PrepareStateFunction implements StateFunction {
         JitterSender rtpSender = new JitterSender(vocoder, Vocoder.MODE_NA, payloadId, 20, 3, payloadSize);
         rtpSender.setUdpClient(sessionInfo.getRtpClient());
         rtpSender.setSessionId(sessionInfo.getSessionId());
-        rtpSender.setRelay(AppInstance.getInstance().getConfig().isRelayMode());
+        //rtpSender.setRelay(AppInstance.getInstance().getConfig().isRelayMode());
+        rtpSender.setRelay(true);   // TODO: Needs to change the name. 'relay' do not have a proper meaning
         rtpSender.start();
 
         sessionInfo.setRtpSender(rtpSender);

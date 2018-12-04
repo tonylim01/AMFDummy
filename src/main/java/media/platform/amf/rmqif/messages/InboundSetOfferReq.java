@@ -21,8 +21,9 @@ public class InboundSetOfferReq {
     private String conferenceId;
     @SerializedName("sdp")
     private String sdp;
+    // 0 - inbound, 1 - outbound, 2 - inbound_only(not used)
     @SerializedName("outbound")
-    private boolean outbound;
+    private int outbound;
 
     public String getFromNo() {
         return fromNo;
@@ -56,11 +57,11 @@ public class InboundSetOfferReq {
         this.sdp = sdp;
     }
 
-    public boolean isOutbound() {
+    public int getOutbound() {
         return outbound;
     }
 
-    public void setOutbound(boolean outbound) {
+    public void setOutbound(int outbound) {
         this.outbound = outbound;
     }
 }
