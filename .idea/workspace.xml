@@ -2,19 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e940f8ba-2c0f-49f4-9fde-4a6a7a882e14" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/UdpInboundHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcOutboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcOutboundSetOfferReq.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/Process/NettyUDPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/Process/NettyUDPServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferRes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/OutboundSetOfferReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/OutboundSetOfferReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -93,29 +86,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="JitterSender.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UdpInboundHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/UdpInboundHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="142" column="25" selection-start-line="142" selection-start-column="25" selection-end-line="142" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RmqProcInboundSetOfferRes.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RmqProcInboundSetOfferRes.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="43" column="61" selection-start-line="43" selection-start-column="61" selection-end-line="43" selection-end-column="61" />
+            <state relative-caret-position="459">
+              <caret line="57" column="26" selection-start-line="57" selection-start-column="26" selection-end-line="57" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -138,6 +113,28 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="SessionInfo.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="636">
+              <caret line="538" column="18" selection-start-line="538" selection-start-column="18" selection-end-line="538" selection-end-column="18" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#5022#5023#0" expanded="true" />
+                <element signature="e#5055#5056#0" expanded="true" />
+                <element signature="e#8110#8111#0" expanded="true" />
+                <element signature="e#8142#8143#0" expanded="true" />
+                <element signature="e#8195#8196#0" expanded="true" />
+                <element signature="e#8237#8238#0" expanded="true" />
+                <element signature="e#11967#11968#0" expanded="true" />
+                <element signature="e#11998#11999#0" expanded="true" />
+                <element signature="e#12043#12044#0" expanded="true" />
+                <element signature="e#12083#12084#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="RmqMessageType.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -147,41 +144,57 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InboundSetOfferReq.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="InboundSetOfferReq.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferReq.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
+            <state relative-caret-position="651">
+              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
               <folding>
                 <element signature="e#0#1302#0" expanded="true" />
+                <element signature="e#1178#1179#0" expanded="true" />
+                <element signature="e#1209#1210#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SessionManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionManager.java">
+      <file leaf-file-name="InboundSetOfferRes.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferRes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3803">
-              <caret line="382" column="36" selection-start-line="382" selection-start-column="36" selection-end-line="382" selection-end-column="36" />
+            <state relative-caret-position="180">
+              <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+              <folding>
+                <element signature="e#458#459#0" expanded="true" />
+                <element signature="e#503#504#0" expanded="true" />
+                <element signature="e#543#544#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IdleStateFunction.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/IdleStateFunction.java">
+      <file leaf-file-name="RmqProcInboundSetOfferReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="49" column="41" lean-forward="true" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+            <state relative-caret-position="495">
+              <caret line="103" column="51" selection-start-line="103" selection-start-column="51" selection-end-line="103" selection-end-column="51" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServiceManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java">
+      <file leaf-file-name="RmqProcOutboundSetOfferReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="604">
-              <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
+            <state relative-caret-position="185">
+              <caret line="44" column="19" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OutboundSetOfferReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/OutboundSetOfferReq.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="555">
+              <caret line="62" column="30" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -242,16 +255,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqHeader.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/packets/Vocoder.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantConsumer.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/packets/SilencePacket.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/base/EngineOutgoingMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/packets/EVSSilencePacket.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/config/RedundantConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcNegoDoneReq.java" />
@@ -262,7 +272,6 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/DtmfDetectReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcDtmfDetectReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerReq.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/MixerCreateReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/MixerDeleteReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/IdleStateFunction.java" />
@@ -282,17 +291,21 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioCreateReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcParAddReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/RtpInboundHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/handler/RedunProcInboundSetOfferReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/Process/NettyUDPServer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/service/ServiceManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/JitterSender.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rtpcore/core/rtp/netty/UdpInboundHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferRes.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/OutboundSetOfferReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java" />
       </list>
     </option>
   </component>
@@ -1117,7 +1130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1543829021772</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="엔지으로부터 패킷 수신부 구현/보완&#10;set_offer_req의 outbound 타입 변경(boolean -&gt; int)">
+      <created>1543900612030</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1543900612030</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1145,7 +1165,7 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50319487" side_tool="true" weight="0.22604166" />
       <window_info anchor="right" id="Maven Projects" order="8" sideWeight="0.49603805" visible="true" weight="0.083599575" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.18333334" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4968051" visible="true" weight="0.22604166" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4968051" weight="0.22604166" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32998884" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
@@ -1200,7 +1220,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="자원 종료 시 room 해제하도록 보완" />
     <MESSAGE value="RTP delay 현상 보완" />
     <MESSAGE value="EVS 지원 기능 추가 (연동 시험 준비)" />
     <MESSAGE value="Log 파일을 주기적으로 읽는 코드 추가&#10;Local port bind 실패 시 다른 포트 이용하도록 보완" />
@@ -1225,7 +1244,8 @@
     <MESSAGE value="mixer_create_req 구현" />
     <MESSAGE value="config 라이브러리 변경 (-&gt; apache.configuration2)" />
     <MESSAGE value="mixer_create 기능 구현/보완 &#10;par_add 기능 구현&#10;수신 rtp 패킷을 엔진으로 전송하는 기능 구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="mixer_create 기능 구현/보완 &#10;par_add 기능 구현&#10;수신 rtp 패킷을 엔진으로 전송하는 기능 구현" />
+    <MESSAGE value="엔지으로부터 패킷 수신부 구현/보완&#10;set_offer_req의 outbound 타입 변경(boolean -&gt; int)" />
+    <option name="LAST_COMMIT_MESSAGE" value="엔지으로부터 패킷 수신부 구현/보완&#10;set_offer_req의 outbound 타입 변경(boolean -&gt; int)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1248,20 +1268,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcDtmfDetectRes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcDtmfDetectReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="44" column="22" selection-start-line="44" selection-start-column="22" selection-end-line="44" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundGetAnswerRes.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1294,13 +1300,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="477">
           <caret line="49" column="4" selection-start-line="49" selection-start-column="4" selection-end-line="49" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-308">
-          <caret line="103" column="66" selection-start-line="103" selection-start-column="66" selection-end-line="103" selection-end-column="66" />
         </state>
       </provider>
     </entry>
@@ -1488,20 +1487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3630">
-          <caret line="355" column="17" selection-start-line="355" selection-start-column="17" selection-end-line="355" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#8110#8111#0" expanded="true" />
-            <element signature="e#8142#8143#0" expanded="true" />
-            <element signature="e#8195#8196#0" expanded="true" />
-            <element signature="e#8237#8238#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/AppInstance.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
@@ -1531,13 +1516,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6">
           <caret line="63" column="68" selection-start-line="63" selection-start-column="68" selection-end-line="63" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="129" column="30" selection-start-line="129" selection-start-column="30" selection-end-line="129" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -1593,13 +1571,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="43" column="61" selection-start-line="43" selection-start-column="61" selection-end-line="43" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferRes.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1623,11 +1594,73 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferReq.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
+        <state relative-caret-position="651">
+          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
           <folding>
             <element signature="e#0#1302#0" expanded="true" />
+            <element signature="e#1178#1179#0" expanded="true" />
+            <element signature="e#1209#1210#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/InboundSetOfferRes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="23" column="29" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+          <folding>
+            <element signature="e#458#459#0" expanded="true" />
+            <element signature="e#503#504#0" expanded="true" />
+            <element signature="e#543#544#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="636">
+          <caret line="538" column="18" selection-start-line="538" selection-start-column="18" selection-end-line="538" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#5022#5023#0" expanded="true" />
+            <element signature="e#5055#5056#0" expanded="true" />
+            <element signature="e#8110#8111#0" expanded="true" />
+            <element signature="e#8142#8143#0" expanded="true" />
+            <element signature="e#8195#8196#0" expanded="true" />
+            <element signature="e#8237#8238#0" expanded="true" />
+            <element signature="e#11967#11968#0" expanded="true" />
+            <element signature="e#11998#11999#0" expanded="true" />
+            <element signature="e#12043#12044#0" expanded="true" />
+            <element signature="e#12083#12084#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="103" column="51" selection-start-line="103" selection-start-column="51" selection-end-line="103" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutboundSetOfferReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="44" column="19" selection-start-line="44" selection-start-column="19" selection-end-line="44" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/OutboundSetOfferReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="62" column="30" selection-start-line="62" selection-start-column="30" selection-end-line="62" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcInboundSetOfferRes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="57" column="26" selection-start-line="57" selection-start-column="26" selection-end-line="57" selection-end-column="26" />
         </state>
       </provider>
     </entry>

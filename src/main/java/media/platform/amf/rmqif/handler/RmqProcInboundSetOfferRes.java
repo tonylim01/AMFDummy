@@ -56,6 +56,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
 
         InboundSetOfferRes res = new InboundSetOfferRes();
         res.setSdp(sdpStr);
+        res.setOutbound(sessionInfo.getOutbound());
 
         setBody(res, InboundSetOfferRes.class);
 

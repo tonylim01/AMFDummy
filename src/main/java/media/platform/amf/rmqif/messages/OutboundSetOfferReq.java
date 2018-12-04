@@ -22,7 +22,7 @@ public class OutboundSetOfferReq {
     @SerializedName("sdp")
     private String sdp;
     @SerializedName("outbound")
-    private boolean outbound;
+    private int outbound;
 
     public String getFromNo() {
         return fromNo;
@@ -56,11 +56,11 @@ public class OutboundSetOfferReq {
         this.sdp = sdp;
     }
 
-    public boolean isOutbound() {
+    public int getOutbound() {
         return outbound;
     }
 
-    public void setOutbound(boolean outbound) {
+    public void setOutbound(int outbound) {
         this.outbound = outbound;
     }
 }

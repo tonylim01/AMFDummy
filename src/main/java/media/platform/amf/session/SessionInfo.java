@@ -535,4 +535,15 @@ public class SessionInfo {
     public void setUdpChannel(Channel udpChannel) {
         this.udpChannel = udpChannel;
     }
+
+    // 20181204 Add
+    private int outbound;
+
+    public int getOutbound() {
+        return outbound;
+    }
+
+    public void setOutbound(int outbound) {
+        this.outbound = outbound;
+    }
 }

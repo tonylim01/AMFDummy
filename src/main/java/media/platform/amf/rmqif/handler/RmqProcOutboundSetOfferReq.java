@@ -101,6 +101,7 @@ public class RmqProcOutboundSetOfferReq extends RmqIncomingMessageHandler {
         sessionInfo.setFromNo(req.getFromNo());
         sessionInfo.setToNo(req.getToNo());
         sessionInfo.setCaller((parCount == 1) ? true : false);
+        sessionInfo.setOutbound(req.getOutbound());
         sessionInfo.setRemoteRmqName(msg.getHeader().getMsgFrom());
 
         BiUdpRelayManager udpRelayManager = BiUdpRelayManager.getInstance();

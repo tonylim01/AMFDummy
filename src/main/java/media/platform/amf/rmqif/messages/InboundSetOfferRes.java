@@ -11,6 +11,7 @@ package media.platform.amf.rmqif.messages;
 
 public class InboundSetOfferRes {
     private String sdp;
+    private int outbound;
 
     public String getSdp() {
         return sdp;
@@ -18,5 +19,13 @@ public class InboundSetOfferRes {
 
     public void setSdp(String sdp) {
         this.sdp = sdp;
+    }
+
+    public int getOutbound() {
+        return outbound;
+    }
+
+    public void setOutbound(int outbound) {
+        this.outbound = outbound;
     }
 }
