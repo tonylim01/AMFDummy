@@ -36,6 +36,8 @@ public class EngineProcMixerCreateReq extends EngineOutgoingMessage {
         data = new MixerCreateReq();
         data.setId(mixerId);
         data.setMax(max);
+        data.setFrom(sessionInfo.getFromNo());
+        data.setTo(sessionInfo.getToNo());
 
         setBody(data, MixerCreateReq.class);
     }

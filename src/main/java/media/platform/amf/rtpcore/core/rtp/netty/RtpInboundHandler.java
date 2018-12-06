@@ -216,6 +216,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             }
         }
 
+        /* TEST CODE: TO PLAY AN AUDIO FILE
         if (!toOtherSession && AppInstance.getInstance().getConfig().isTest() == false) {
             if (sessionInfo.getRtpPacket() == null) {
 
@@ -268,6 +269,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             }
 
         }
+        END OF TEST CODE */
 
 
         // Relay RTP Packet

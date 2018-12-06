@@ -48,6 +48,8 @@ public class EngineProcAudioCreateReq extends EngineOutgoingMessage {
         data = new AudioCreateReq();
 //        data.setId(EngineManager.getInstance().getIdleToolId());      // tool id
         data.setId(toolId);
+        data.setFrom(sessionInfo.getFromNo());
+        data.setTo(sessionInfo.getToNo());
 
         /*
         int[] dstIds = new int[1];

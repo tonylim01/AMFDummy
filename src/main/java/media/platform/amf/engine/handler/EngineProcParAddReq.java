@@ -5,6 +5,8 @@ import media.platform.amf.config.AmfConfig;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.MixerDeleteReq;
 import media.platform.amf.engine.messages.ParAddReq;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +40,18 @@ public class EngineProcParAddReq extends EngineOutgoingMessage {
             return;
         }
 
+        int mixerId;
+
+        RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+        if (roomInfo != null) {
+            mixerId = roomInfo.getMixerId();
+        }
+        else {
+            mixerId = sessionInfo.getMixerToolId();
+        }
+
         data = new ParAddReq();
-        data.setId(sessionInfo.getMixerToolId());      // tool id
+        data.setId(mixerId);      // tool id
 
         int[] srcIds = new int[1];
         srcIds[0] = sessionInfo.getEngineToolId();

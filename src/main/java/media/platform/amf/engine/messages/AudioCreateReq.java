@@ -8,6 +8,10 @@ public class AudioCreateReq {
 
     private int id;
     private Integer[] dstIds;
+
+    private String from;
+    private String to;
+
     private NetIP4Address remote;
     private int local;
     private CodecInfo decoder;
@@ -28,6 +32,22 @@ public class AudioCreateReq {
 
     public void setDstIds(Integer[] dstIds) {
         this.dstIds = dstIds;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public NetIP4Address getRemote() {
