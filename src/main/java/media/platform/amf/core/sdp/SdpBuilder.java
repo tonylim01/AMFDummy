@@ -59,7 +59,9 @@ public class  SdpBuilder {
         sb.append("v=0\r\n");
         // Origin
         if (host != null) {
-            sb.append("o=- 0 0 IN IP4 ");
+            sb.append("o=- ");
+            sb.append(System.currentTimeMillis());
+            sb.append(" 0 IN IP4 ");
             sb.append(host);
             sb.append(CRLF);
         }
