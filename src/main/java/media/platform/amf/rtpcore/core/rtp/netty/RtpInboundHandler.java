@@ -13,6 +13,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import media.platform.amf.AppInstance;
 import media.platform.amf.core.socket.packets.Vocoder;
+import media.platform.amf.engine.handler.EngineProcFilePlayReq;
 import media.platform.amf.rmqif.handler.RmqProcDtmfDetectReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -326,5 +327,50 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
         RmqProcDtmfDetectReq detectReq = new RmqProcDtmfDetectReq(sessionInfo.getSessionId(), UUID.randomUUID().toString());
         detectReq.setDtmfInfo(dtmf);
         detectReq.send(sessionInfo.getRemoteRmqName());
+
+        //
+        // TEST CODE
+        //
+        if (dtmf == 1) {
+            EngineProcFilePlayReq filePlayReq = new EngineProcFilePlayReq(UUID.randomUUID().toString());
+
+            String[] filenames = new String[1];
+            filenames[0] = "/home/app/prompts/music.pcm";
+            int [] dstIds =  new int[1];
+            dstIds[0] = sessionInfo.getEngineToolId();
+            filePlayReq.setData(sessionInfo, sessionInfo.getEngineToolId(), dstIds, false, filenames);
+            filePlayReq.send();
+        }
+        else if (dtmf == 2) {
+
+            int otherToolId = -1;
+            int mixerId = -1;
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null) {
+                mixerId = roomInfo.getMixerId();
+                String otherSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
+                if (otherSessionId != null) {
+                    SessionInfo otherSession = SessionManager.findSession(otherSessionId);
+                    if (otherSession != null) {
+                        otherToolId = otherSession.getEngineToolId();
+                    }
+                }
+            }
+            else {
+                mixerId = sessionInfo.getMixerToolId();
+            }
+
+            EngineProcFilePlayReq filePlayReq = new EngineProcFilePlayReq(UUID.randomUUID().toString());
+
+            String[] filenames = new String[1];
+            filenames[0] = "/home/app/prompts/music.pcm";
+            int [] dstIds =  new int[2];
+            dstIds[0] = sessionInfo.getEngineToolId();
+            dstIds[1] = otherToolId;
+
+            filePlayReq.setData(sessionInfo, mixerId, dstIds, false, filenames);
+            filePlayReq.send();
+
+        }
     }
 }

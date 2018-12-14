@@ -6,33 +6,40 @@ import media.platform.amf.engine.messages.common.SendVocoderInfo;
 
 public class FilePlayReq {
 
-    public class Data {
-        private int id;
-        private FileInfos file;
-        private SendVocoderInfo audio;
-        private SendVocoderInfo video;
+    private int id;
+    private FileInfos file;
+    private SendVocoderInfo audio;
+    private SendVocoderInfo video;
+
+    public int getId() {
+        return id;
     }
 
-    private EngineRequestHeader request;
-    private Data data;
-
-    public EngineRequestHeader getRequest() {
-        return request;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setRequest(String type, String cmd, String appId) {
-        this.request = new EngineRequestHeader(type, cmd, appId);
+    public FileInfos getFile() {
+        return file;
     }
 
-    public void setRequest(EngineRequestHeader request) {
-        this.request = request;
+    public void setFile(FileInfos file) {
+        this.file = file;
     }
 
-    public Data getData() {
-        return data;
+    public SendVocoderInfo getAudio() {
+        return audio;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setAudio(SendVocoderInfo audio) {
+        this.audio = audio;
+    }
+
+    public SendVocoderInfo getVideo() {
+        return video;
+    }
+
+    public void setVideo(SendVocoderInfo video) {
+        this.video = video;
     }
 }
