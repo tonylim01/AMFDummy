@@ -11,6 +11,7 @@ import media.platform.amf.rtpcore.core.spi.memory.Frame;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class SpectraAnalyzer extends AbstractSink {
@@ -143,7 +144,7 @@ public class SpectraAnalyzer extends AbstractSink {
     public void print(String fileName) throws FileNotFoundException, IOException {
         FileOutputStream fout = new FileOutputStream(fileName, false);
         for (int i = 0; i < len; i++) {
-            fout.write((i + "  " + buffer[i] + "\n").getBytes());
+            fout.write((i + "  " + buffer[i] + "\n").getBytes(Charset.defaultCharset()));
         }
         fout.flush();
         fout.close();

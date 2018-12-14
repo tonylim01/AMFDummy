@@ -99,7 +99,6 @@ public class RmqHeader {
 
     public void setCallId(String callId) {
         this.callId = callId;
-        this.sessionId = sessionId;
     }
 
     @Override

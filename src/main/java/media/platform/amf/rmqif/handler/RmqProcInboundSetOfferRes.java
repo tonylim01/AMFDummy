@@ -233,7 +233,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
                                 if (sampleRate.contains("/")) {
                                     sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
                                 }
-                                sdpInfo.setSampleRate(Integer.valueOf(sampleRate));
+                                sdpInfo.setSampleRate(Integer.parseInt(sampleRate));
                             }
                         }
 

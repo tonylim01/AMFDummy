@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -112,7 +113,7 @@ public class EngineClient {
 
     public boolean sendMessage(String msg, boolean printLog) {
 
-        boolean result = sendBytes(msg.getBytes());
+        boolean result = sendBytes(msg.getBytes(Charset.defaultCharset()));
         if (printLog) {
             logger.debug("-> Engine: msg [{}] result [{}]", msg, result);
         }

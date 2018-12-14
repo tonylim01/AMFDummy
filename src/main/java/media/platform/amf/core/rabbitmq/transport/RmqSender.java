@@ -12,6 +12,8 @@ package media.platform.amf.core.rabbitmq.transport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.Charset;
+
 public class RmqSender extends RmqTransport {
 
     private static final Logger logger = LoggerFactory.getLogger(RmqSender.class);
@@ -50,7 +52,7 @@ public class RmqSender extends RmqTransport {
 
     public boolean send(String msg) {
 
-        return send(msg.getBytes(), msg.length());
+        return send(msg.getBytes(Charset.defaultCharset()), msg.length());
     }
 
     public boolean isOpened() {

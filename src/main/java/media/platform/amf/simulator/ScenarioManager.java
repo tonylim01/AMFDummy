@@ -67,7 +67,7 @@ public class ScenarioManager {
     private void sleepCommand(String line) {
         String [] args = line.split(" ");
         if (args.length >= 2) {
-            int sleepValue = Integer.valueOf(args[1]);
+            int sleepValue = Integer.parseInt(args[1]);
             logger.info("Sleep value [{}]", sleepValue);
 
             try {

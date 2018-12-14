@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.SocketException;
+import java.nio.charset.Charset;
 import java.util.concurrent.BlockingQueue;
 
 public class EngineConsumer implements Runnable {
@@ -54,7 +55,7 @@ public class EngineConsumer implements Runnable {
             return;
         }
 
-        String json = new String(data);
+        String json = new String(data, Charset.defaultCharset());
         json = json.trim();
 
         //

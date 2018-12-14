@@ -30,7 +30,7 @@ public class SdpUtil {
         SdpAttribute attribute = new SdpAttribute();
         Matcher m = rtpmapPattern.matcher(attributeStr);
         if (m.find() && m.groupCount() >= 2) {
-            attribute.setPayloadId(Integer.valueOf(m.group(1)));
+            attribute.setPayloadId(Integer.parseInt(m.group(1)));
             attribute.setDescription(m.group(2));
         }
         else {

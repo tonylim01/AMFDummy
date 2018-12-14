@@ -12,6 +12,7 @@ import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -60,7 +61,7 @@ public class JitterSender {
         this.relay = true;      // Set true as default
 
         seq = 0;
-        ssrc = new Random().nextLong();
+        ssrc= new SecureRandom().nextLong();
         timestamp = System.currentTimeMillis();
 
         //buffer = new ConcurrentLinkedQueue<>();

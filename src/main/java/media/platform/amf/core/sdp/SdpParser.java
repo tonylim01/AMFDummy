@@ -115,7 +115,7 @@ public class SdpParser {
                                     if (sampleRate.contains("/")) {
                                         sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
                                     }
-                                    sdpInfo.setSampleRate(Integer.valueOf(sampleRate));
+                                    sdpInfo.setSampleRate(Integer.parseInt(sampleRate));
                                 }
                             }
 

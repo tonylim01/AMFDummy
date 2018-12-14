@@ -157,12 +157,7 @@ public class RoomInfo {
 
         synchronized (syncObj) {
             try {
-                if (millisec > 0) {
-                    syncObj.wait(millisec);
-                }
-                else {
-                    syncObj.wait();
-                }
+                syncObj.wait(millisec);
 
                 result = true;
             } catch (InterruptedException e) {

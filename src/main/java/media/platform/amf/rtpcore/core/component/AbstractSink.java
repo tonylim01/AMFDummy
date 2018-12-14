@@ -16,7 +16,8 @@ public abstract class AbstractSink extends BaseComponent implements MediaSink {
     private volatile boolean started = false;
     
     //transmission statisctics
-    private volatile long rxPackets;
+    //private volatile long rxPackets;
+    private long rxPackets;
     private volatile long rxBytes;
 
 

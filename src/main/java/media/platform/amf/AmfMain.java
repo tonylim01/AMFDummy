@@ -17,7 +17,7 @@ public class AmfMain
 
         if (args != null && args.length > 0) {
             if (StringUtil.isNumeric( args[0])) {
-                instanceId = Integer.valueOf(args[0]);
+                instanceId = Integer.parseInt(args[0]);
             }
 
             if (args.length > 1) {

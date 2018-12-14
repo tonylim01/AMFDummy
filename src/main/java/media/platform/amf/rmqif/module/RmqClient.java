@@ -15,6 +15,7 @@ import media.platform.amf.core.rabbitmq.transport.RmqSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class RmqClient {
     }
 
     public boolean send(String msg) {
-        return send(msg.getBytes(), msg.length());
+        return send(msg.getBytes(Charset.defaultCharset()), msg.length());
     }
 
     public boolean send(byte[] msg, int size) {

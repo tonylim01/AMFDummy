@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class XmlParser {
     public Document parse(String xml) {
@@ -22,7 +23,7 @@ public class XmlParser {
             return null;
         }
 
-        InputStream is = new ByteArrayInputStream(xml.getBytes());
+        InputStream is = new ByteArrayInputStream(xml.getBytes(Charset.defaultCharset()));
         DocumentBuilderFactory dbf = null;
         DocumentBuilder db = null;
         Document doc = null;

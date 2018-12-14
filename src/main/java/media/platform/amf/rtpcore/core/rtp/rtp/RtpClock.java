@@ -4,9 +4,10 @@ import media.platform.amf.rtpcore.core.scheduler.Clock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-public class RtpClock {
+public class RtpClock implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger( RtpClock.class);
 	

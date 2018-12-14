@@ -87,7 +87,7 @@ public class RedundantConsumer implements Runnable {
                 hangupReq.handle(body);
                 break;
             case RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ:
-                RedunProcUpdateJitterSenderReq updateJitterSenderReq = new RedunProcUpdateJitterSenderReq();
+                //RedunProcUpdateJitterSenderReq updateJitterSenderReq = new RedunProcUpdateJitterSenderReq();
                 //updateJitterSenderReq.handle(body);
                 break;
             default:

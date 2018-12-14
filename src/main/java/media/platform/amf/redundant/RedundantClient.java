@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 public class RedundantClient {
 
@@ -95,7 +96,7 @@ public class RedundantClient {
         buf.put(STX);
         buf.put((byte)msgType);
         buf.putShort((short)body.length());
-        buf.put(body.getBytes());
+        buf.put(body.getBytes(Charset.defaultCharset()));
 
         byte[] msg = new byte[buf.position()];
 
