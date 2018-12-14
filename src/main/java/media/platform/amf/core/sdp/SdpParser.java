@@ -76,6 +76,16 @@ public class SdpParser {
      * @return SdpInfo
      */
     public static SdpInfo parseSdp(String sdp) {
+        return parseSdp(sdp, 0);
+    }
+
+    /**
+     * Simple static parser to call the parse() of SdpParser
+     * @param sdp
+     * @param startPriorityIndex
+     * @return SdpInfo
+     */
+    public static SdpInfo parseSdp(String sdp, int startPriorityIndex) {
         if (sdp == null) {
             return null;
         }
@@ -89,7 +99,9 @@ public class SdpParser {
                 List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
 
                 if (mediaPriorities != null && mediaPriorities.size() > 0) {
-                    for (String priorityCodec : mediaPriorities) {
+                    for (int i = startPriorityIndex; i < mediaPriorities.size(); i++) {
+
+                        String priorityCodec = mediaPriorities.get(i);
 
                         int codecId = SdpCodec.getCodecId(priorityCodec);
                         logger.debug("priority codec [{}] id [{}]", priorityCodec, codecId);
@@ -120,6 +132,7 @@ public class SdpParser {
                             }
 
                             sdpInfo.setPayloadId(attr.getPayloadId());
+                            sdpInfo.setPriority(i);
                             break;
                         }
                     }

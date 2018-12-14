@@ -10,7 +10,9 @@
 package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.rmqif.handler.base.RmqOutgoingMessage;
+import media.platform.amf.rmqif.messages.NegoDoneRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
+import media.platform.amf.session.SessionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,17 @@ public class RmqProcNegoDoneRes extends RmqOutgoingMessage {
     }
 
     public boolean send(String queueName) {
+
+        SessionInfo sessionInfo = checkAndGetSession(getSessionId());
+        if (sessionInfo == null) {
+            return sendTo(queueName);
+        }
+
+        NegoDoneRes res = new NegoDoneRes();
+        res.setInOutFlag(sessionInfo.getOutbound());
+
+        setBody(res, NegoDoneRes.class);
+
         return sendTo(queueName);
     }
 }

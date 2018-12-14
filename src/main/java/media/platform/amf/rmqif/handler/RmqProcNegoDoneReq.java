@@ -19,7 +19,10 @@ import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.NegoDoneReq;
 import media.platform.amf.rmqif.types.RmqMessage;
 import media.platform.amf.rmqif.types.RmqMessageType;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
+import media.platform.amf.session.SessionManager;
 import media.platform.amf.session.SessionState;
 import media.platform.amf.session.SessionStateManager;
 import media.platform.amf.rmqif.module.RmqData;
@@ -58,15 +61,69 @@ public class RmqProcNegoDoneReq extends RmqIncomingMessageHandler {
 
         //sessionInfo.getSdpInfo();
 
-        if (req.getSdp() != null) {
-            SdpInfo sdpInfo = SdpParser.parseSdp( req.getSdp());
+        SdpInfo sdpInfo = null;
+        SdpInfo sdpDeviceInfo = null;
 
+        if (req.getSdp() != null) {
+            sdpInfo = SdpParser.parseSdp(req.getSdp());
             sessionInfo.setSdpInfo(sdpInfo);
         }
 
         if (req.getDeviceSdp() != null) {
-            SdpInfo sdpDeviceInfo = SdpParser.parseSdp(req.getDeviceSdp());
+            sdpDeviceInfo = SdpParser.parseSdp(req.getDeviceSdp());
             sessionInfo.setSdpDeviceInfo(sdpDeviceInfo);
+        }
+
+        if (req.getInOutFlag() != sessionInfo.getOutbound()) {
+            sessionInfo.setOutbound(req.getInOutFlag());
+        }
+
+        if (sessionInfo.getConferenceId() != null &&
+                ((req.getPeerSdp() != null) || (req.getPeerDeviceSdp() != null))) {
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+
+            if (roomInfo != null) {
+                String peerSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
+                if (peerSessionId != null) {
+                    SessionInfo peerSessionInfo = SessionManager.getInstance().getSession(peerSessionId);
+                    if (peerSessionInfo != null) {
+                        if (peerSessionInfo.getSdpInfo() == null && req.getPeerSdp() != null) {
+                            peerSessionInfo.setSdpInfo(SdpParser.parseSdp(req.getPeerSdp()));
+                        }
+
+                        if (peerSessionInfo.getSdpInfo() != null && sdpInfo != null &&
+                                peerSessionInfo.getSdpInfo().getPayloadId() != sdpInfo.getPayloadId()) {
+
+                            if (peerSessionInfo.getSdpInfo().getPriority() < sdpInfo.getPriority()) {
+                                // Change peer
+                                peerSessionInfo.setSdpInfo(SdpParser.parseSdp(req.getPeerSdp(), sdpInfo.getPriority()));
+                            }
+                            else {
+                                // Change mine
+                                sessionInfo.setSdpInfo(SdpParser.parseSdp(req.getSdp(), peerSessionInfo.getSdpInfo().getPriority()));
+                            }
+                        }
+
+                        if (peerSessionInfo.getSdpDeviceInfo() == null && req.getPeerDeviceSdp() != null) {
+                            peerSessionInfo.setSdpDeviceInfo(SdpParser.parseSdp(req.getPeerDeviceSdp()));
+                        }
+
+                        if (peerSessionInfo.getSdpDeviceInfo() != null && sdpDeviceInfo != null &&
+                                peerSessionInfo.getSdpDeviceInfo().getPayloadId() != sdpDeviceInfo.getPayloadId()) {
+
+                            if (peerSessionInfo.getSdpDeviceInfo().getPriority() < sdpDeviceInfo.getPriority()) {
+                                // Change peer
+                                peerSessionInfo.setSdpDeviceInfo(SdpParser.parseSdp(req.getPeerDeviceSdp(), sdpDeviceInfo.getPriority()));
+                            }
+                            else {
+                                // Change mine
+                                sessionInfo.setSdpDeviceInfo(SdpParser.parseSdp(req.getDeviceSdp(), peerSessionInfo.getSdpDeviceInfo().getPriority()));
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.PREPARE);

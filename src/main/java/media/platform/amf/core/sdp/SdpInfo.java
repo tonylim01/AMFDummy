@@ -22,6 +22,7 @@ public class SdpInfo {
     private int sampleRate;
 
     private int payload2833;
+    private int priority;
 
     List<SdpAttribute> attributes = null;
 
@@ -145,4 +146,11 @@ public class SdpInfo {
         return result;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 }
