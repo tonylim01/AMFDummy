@@ -24,7 +24,7 @@ public class SessionStateManager {
     private static final int THREAD_POOL_SIZE = 600;
     private static final int QUEUE_SIZE = 128;
 
-    private static SessionStateManager sessionStateManager = null;
+    private volatile static SessionStateManager sessionStateManager = null;
 
     public static SessionStateManager getInstance() {
         if (sessionStateManager == null) {
@@ -40,6 +40,12 @@ public class SessionStateManager {
     public SessionStateManager() {
         statePoolExcutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         stateQueue = new LinkedBlockingQueue<>(QUEUE_SIZE);
+
+        start();
+    }
+
+    private void start() {
+
         stateMachineThread = new Thread(new SessionStateMachine(stateQueue));
         stateMachineThread.start();
 

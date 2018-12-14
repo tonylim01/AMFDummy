@@ -36,7 +36,7 @@ public class PlayStopStateFunction extends PlayStateFunction implements StateFun
         }
 
         if (arg != null && arg instanceof FileData) {
-            FileData fileData = (FileData) arg;
+            //FileData fileData = (FileData) arg;
 
             SessionStateManager.getInstance().setState(sessionInfo.getSessionId(), SessionState.UPDATE, (Boolean)false);
 

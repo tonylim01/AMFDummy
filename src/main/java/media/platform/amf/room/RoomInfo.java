@@ -151,13 +151,18 @@ public class RoomInfo {
         isSyncWait = false;
     }
 
-    public synchronized boolean waitReady(int millisec) {
+    public boolean waitReady(int millisec) {
         boolean result = false;
         isSyncWait = true;
 
         synchronized (syncObj) {
             try {
-                syncObj.wait(millisec);
+                if (millisec > 0) {
+                    syncObj.wait(millisec);
+                }
+                else {
+                    syncObj.wait();
+                }
 
                 result = true;
             } catch (InterruptedException e) {

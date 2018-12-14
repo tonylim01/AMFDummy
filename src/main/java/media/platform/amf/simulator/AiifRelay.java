@@ -145,7 +145,7 @@ public class AiifRelay {
     }
 
     public boolean send(byte[] buf, int size) {
-        if (buf == null || (buf != null && buf.length == 0)) {
+        if (buf == null || buf.length == 0) {
             return false;
         }
 
@@ -164,14 +164,7 @@ public class AiifRelay {
                 }
 
                 if (!alreadyWrite) {
-                    if (!isAMR) {
-                        inputPipeFile.write(buf, RTP_HEADER_SIZE + 1, size - RTP_HEADER_SIZE - 1);
-                    }
-                    else {
-//                        logger.debug("AMR frame: Voice Frame {} size : {} ",inputPipeFile.toString(),size - RTP_HEADER_SIZE - 1);
-                        // In case of AMR, the 1st byte of the payload should be removed
-                        inputPipeFile.write(buf, RTP_HEADER_SIZE + 1, size - RTP_HEADER_SIZE - 1);
-                    }
+                    inputPipeFile.write(buf, RTP_HEADER_SIZE + 1, size - RTP_HEADER_SIZE - 1);
                 }
                 result = true;
             } catch (Exception e) {

@@ -140,7 +140,9 @@ public class SessionInfo {
     }
 
     public void setT4Time(long t4Time) {
-        this.t4Time = t4Time;
+        synchronized (this) {
+            this.t4Time = t4Time;
+        }
     }
 
     public void updateT2Time(long t2interval) {
@@ -392,7 +394,7 @@ public class SessionInfo {
         }
 
         if (lastPacket == null ||
-                ((lastPacket != null) && (lastPacket.length != srcPacket.length))) {
+                (lastPacket.length != srcPacket.length)) {
             lastPacket = new byte[srcPacket.length];
         }
 
@@ -498,13 +500,18 @@ public class SessionInfo {
         isSyncWait = false;
     }
 
-    public synchronized boolean waitAudioCreated(int millisec) {
+    public boolean waitAudioCreated(int millisec) {
         boolean result = false;
         isSyncWait = true;
 
         synchronized (syncObj) {
             try {
-                syncObj.wait(millisec);
+                if (millisec > 0) {
+                    syncObj.wait(millisec);
+                }
+                else {
+                    syncObj.wait();
+                }
 
                 result = true;
             } catch (InterruptedException e) {

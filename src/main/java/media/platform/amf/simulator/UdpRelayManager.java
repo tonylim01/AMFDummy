@@ -15,7 +15,7 @@ public class UdpRelayManager {
     private static final int DEFAULT_LOCAL_UDP_PORT_MIN = 20000;
     private static final int DEFAULT_LOCAL_UDP_PORT_MAX = 65535;
 
-    private static UdpRelayManager udpRelayManager = null;
+    private volatile static UdpRelayManager udpRelayManager = null;
 
     public static UdpRelayManager getInstance() {
         if (udpRelayManager == null) {

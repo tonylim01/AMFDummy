@@ -23,7 +23,7 @@ public class AppInstance {
     private String configFile = null;
     private AmfConfig amfConfig = null;
     private PromptConfig promptConfig = null;
-    private RedundantConfig redundantConfig = null;
+    //private RedundantConfig redundantConfig = null;
 
     public int getInstanceId() {
         return instanceId;

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HeartbeatManager {
 
-    public static HeartbeatManager heartbeatManager = null;
+    private volatile static HeartbeatManager heartbeatManager = null;
 
     public static HeartbeatManager getInstance() {
         if (heartbeatManager == null) {

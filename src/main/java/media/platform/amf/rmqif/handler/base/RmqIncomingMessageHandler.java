@@ -62,7 +62,7 @@ public abstract class RmqIncomingMessageHandler implements RmqIncomingMessageInt
     protected SessionInfo validateSessionId(String sessionId, String transactionId, String msgFrom) {
         if (sessionId == null) {
             logger.error("[{}] No sessionId found");
-            sendResponse(sessionId, transactionId, msgFrom,
+            sendResponse(null, transactionId, msgFrom,
                     RmqMessageType.RMQ_MSG_COMMON_REASON_CODE_WRONG_PARAM,
                     "NO SESSION ID");
             return null;
@@ -71,7 +71,7 @@ public abstract class RmqIncomingMessageHandler implements RmqIncomingMessageInt
         SessionInfo sessionInfo = SessionManager.findSession(sessionId);
         if (sessionInfo == null) {
             logger.error("[{}] No sessionInfo found", sessionId);
-            sendResponse(sessionId, transactionId, msgFrom,
+            sendResponse(null, transactionId, msgFrom,
                     RmqMessageType.RMQ_MSG_COMMON_REASON_CODE_FAILURE,
                     "NO SESSION");
             return null;

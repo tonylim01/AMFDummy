@@ -113,7 +113,8 @@ public class PlayStartStateFunction extends PlayStateFunction implements StateFu
             }
         }
 
-        String json;
+        logger.debug("[{}] playfile [{}]", sessionInfo.getSessionId(), filename);
+
         int groupId = roomInfo.getGroupId();
         int mixerId = roomInfo.getMixerId();
 

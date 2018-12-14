@@ -25,7 +25,7 @@ public class EngineClient {
     private String ip;
     private int port;
 
-    private static EngineClient engineClient = null;
+    private volatile static EngineClient engineClient = null;
     private boolean connected;
     private boolean isQuit;
 

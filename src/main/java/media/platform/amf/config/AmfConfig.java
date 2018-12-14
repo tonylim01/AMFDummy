@@ -203,7 +203,7 @@ public class AmfConfig extends DefaultConfig {
                 logger.error("Local IP not found for [{}]", localNetInterface);
             }
 
-            if (localIpAddress != null && (localIp == null || (localIp != null && localIp.startsWith("xxx")))) {
+            if (localIpAddress != null && (localIp == null || localIp.startsWith("xxx"))) {
                 sdpConfig.setLocalIpAddress(localIpAddress);
             }
 

@@ -13,7 +13,7 @@ public class EngineManager {
 
     private static final int NUM_OF_TOOLIDS = 1024;
 
-    private static EngineManager engineManager = null;
+    private volatile static EngineManager engineManager = null;
 
     public static EngineManager getInstance() {
         if (engineManager == null) {

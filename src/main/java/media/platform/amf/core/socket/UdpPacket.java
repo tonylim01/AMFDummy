@@ -1,5 +1,7 @@
 package media.platform.amf.core.socket;
 
+import java.util.Arrays;
+
 public class UdpPacket {
 
     private int seqNo;

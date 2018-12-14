@@ -34,11 +34,11 @@ public class RtpTransfer {
 
     public void start()
     {
-        long timestamp = -1;
-        int seqNumber = 0;
+        //long timestamp = -1;
+        //int seqNumber = 0;
 
-        timestamp = this.generateTimeStamp();
-        this.rtpPacket();
+        //timestamp = this.generateTimeStamp();
+        rtpPacket();
     }
 
     private void rtpPacket()  {

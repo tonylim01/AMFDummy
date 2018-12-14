@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.concurrent.BlockingQueue;
 
 public class RedundantConsumer implements Runnable {
@@ -41,7 +42,7 @@ public class RedundantConsumer implements Runnable {
     }
 
     private void handleMessage(byte[] data) {
-        if (data == null || (data != null && data.length == 0)) {
+        if (data == null || data.length == 0) {
             return;
         }
 
@@ -54,7 +55,7 @@ public class RedundantConsumer implements Runnable {
         if (length > 0) {
             byte[] bodyBuf = new byte[length];
             buf.get(bodyBuf, 0, length);
-            body = new String(bodyBuf);
+            body = new String(bodyBuf, Charset.defaultCharset());
         }
 
         if (msgType != RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ) {

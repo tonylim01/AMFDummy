@@ -80,7 +80,7 @@ public class RmqProcOutboundGetAnswerRes extends RmqOutgoingMessage {
             return null;
         }
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        //AmfConfig config = AppInstance.getInstance().getConfig();
         SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
 
         SdpBuilder builder = new SdpBuilder();

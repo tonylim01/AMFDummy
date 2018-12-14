@@ -10,7 +10,7 @@ public class RoomManager {
 
     private static final Logger logger = LoggerFactory.getLogger(RoomManager.class);
 
-    private static RoomManager roomManager = null;
+    private volatile static RoomManager roomManager = null;
 
     public static RoomManager getInstance() {
         if (roomManager == null) {

@@ -110,7 +110,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
 
-        InetAddress srcAddr = msg.sender().getAddress();
+        //InetAddress srcAddr = msg.sender().getAddress();
         ByteBuf buf = msg.content();
 
         int rcvPktLength = buf.readableBytes();

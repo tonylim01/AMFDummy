@@ -18,7 +18,7 @@ public class BiUdpRelayManager {
     private static final int DEFAULT_LOCAL_UDP_PORT_MIN = 20000;
     private static final int DEFAULT_LOCAL_UDP_PORT_MAX = 65535;
 
-    private static BiUdpRelayManager udpRelayManager = null;
+    private volatile  static BiUdpRelayManager udpRelayManager = null;
 
     public static BiUdpRelayManager getInstance() {
         if (udpRelayManager == null) {

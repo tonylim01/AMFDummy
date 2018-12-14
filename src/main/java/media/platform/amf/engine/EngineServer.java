@@ -23,6 +23,7 @@ public class EngineServer {
     private boolean isQuit = false;
     private int serverPort;
     private BlockingQueue<byte[]> queue;
+    private EngineClient engineClient;
 
     public EngineServer(int port) {
         try {
@@ -47,7 +48,7 @@ public class EngineServer {
         serverThread = new Thread(new EngineServer.EngineServerRunnable(queue));
         serverThread.start();
 
-        EngineClient engineClient = EngineClient.getInstance();
+        engineClient = EngineClient.getInstance();
 
         return true;
     }

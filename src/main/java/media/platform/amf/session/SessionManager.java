@@ -35,7 +35,7 @@ public class SessionManager {
     public static final int TIMER_HANGUP_T2 = DEFAULT_T2;
     public static final int TIMER_HANGUP_T4 = DEFAULT_T4;
 
-    private static SessionManager sessionManager = null;
+    private volatile static SessionManager sessionManager = null;
 
     public static SessionManager getInstance() {
         if (sessionManager == null) {
@@ -273,7 +273,7 @@ public class SessionManager {
     /**
      * Calls checkSessionValidity() periodically
      */
-    class SessionMonitorRunnable implements Runnable {
+    private class SessionMonitorRunnable implements Runnable {
         @Override
         public void run() {
             SessionManager manager = SessionManager.getInstance();

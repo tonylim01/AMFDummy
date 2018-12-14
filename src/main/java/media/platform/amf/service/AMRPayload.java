@@ -15,6 +15,8 @@ public class AMRPayload {
             case 0x14:  result = 33;    break;
             case 0x0c:  result = 24;    break;
             case 0x04:  result = 18;    break;
+            default:
+                break;
         }
 
         return result;
@@ -32,6 +34,8 @@ public class AMRPayload {
             case 0x14:  result = 17;    break;
             case 0x0c:  result = 14;    break;
             case 0x04:  result = 13;    break;
+            default:
+                break;
         }
 
         return result;

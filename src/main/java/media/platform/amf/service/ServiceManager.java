@@ -63,9 +63,7 @@ public class ServiceManager {
      */
     public void loop() {
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
-
-        if (USE_PING && !pingRmqServer(config.getRmqHost())) {
+        if (USE_PING && !pingRmqServer(AppInstance.getInstance().getConfig().getRmqHost())) {
             return;
         }
 

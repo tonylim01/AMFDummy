@@ -50,6 +50,8 @@ public class G711SilencePacket {
             case Vocoder.VOCODER_ULAW:
                 buf = BUF_SILENCE_ULAW;
                 break;
+            default:
+                break;
         }
 
         return buf;

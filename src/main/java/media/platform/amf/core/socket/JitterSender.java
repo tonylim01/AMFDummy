@@ -256,7 +256,7 @@ public class JitterSender {
         //logger.debug("[{}] Relay seq [{}] timestamp [{}]", sessionId, seq, timestamp);
         if (udpPacket != null && udpPacket.getData() != null) {
 
-            if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
+            if (rtpPacket == null || (rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
                 if (rtpPacket != null) {
                     rtpPacket.getBuffer().clear();
                     rtpPacket = null;

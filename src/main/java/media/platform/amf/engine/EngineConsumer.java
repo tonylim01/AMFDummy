@@ -51,7 +51,7 @@ public class EngineConsumer implements Runnable {
     }
 
     private void handleMessage(byte[] data) {
-        if (data == null || (data != null && data.length == 0)) {
+        if (data == null || data.length == 0) {
             return;
         }
 
@@ -97,7 +97,7 @@ public class EngineConsumer implements Runnable {
 
     private void handleSysResponse(EngineResponseMessage msg) {
 
-        if (msg == null || (msg != null && msg.getHeader() == null)) {
+        if (msg == null || msg.getHeader() == null) {
             return;
         }
 
@@ -129,7 +129,7 @@ public class EngineConsumer implements Runnable {
 
     private void handleAudioResponse(EngineResponseMessage msg) {
 
-        if (msg == null || (msg != null && msg.getHeader() == null)) {
+        if (msg == null || msg.getHeader() == null) {
             logger.warn("Null response message");
             return;
         }
@@ -174,7 +174,7 @@ public class EngineConsumer implements Runnable {
 
     private void handleMixerResponse(EngineResponseMessage msg) {
 
-        if (msg == null || (msg != null && msg.getHeader() == null)) {
+        if (msg == null || msg.getHeader() == null) {
             logger.warn("Null response message");
             return;
         }

@@ -215,6 +215,8 @@ public class PrepareStateFunction implements StateFunction {
                 case 8:
                     vocoder = Vocoder.VOCODER_ALAW;
                     break;
+                default:
+                    break;
             }
         }
 
@@ -269,7 +271,7 @@ public class PrepareStateFunction implements StateFunction {
     }
 
     private boolean openCallerResource(SessionInfo sessionInfo, RoomInfo roomInfo) {
-        SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
+        //SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
 
         if (sessionInfo == null) {
             return false;
