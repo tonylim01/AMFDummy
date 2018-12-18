@@ -99,7 +99,14 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
 
             builder.addRtpAttribute(attr.getPayloadId(), attr.getDescription());
 
-            SdpAttribute dtmfAttr = getTelephonyEvent(sessionInfo);
+            SdpAttribute dtmfAttr;
+            if (sessionInfo.getSdpInfo() != null && sessionInfo.getSdpInfo().getPayload2833() > 0) {
+                dtmfAttr = getTelephonyEvent(sessionInfo, sessionInfo.getSdpInfo().getPayload2833());
+            }
+            else {
+                dtmfAttr = getTelephonyEvent(sessionInfo);
+            }
+
             if (dtmfAttr != null) {
                 builder.addRtpAttribute(dtmfAttr.getPayloadId(), dtmfAttr.getDescription());
                 if (sessionInfo.getSdpInfo() != null &&
@@ -264,9 +271,39 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
             List<SdpAttribute> attributes = sdpInfo.getAttributes();
             for (SdpAttribute attribute: attributes) {
                 if (attribute.getDescription() != null &&
-                        attribute.getDescription().equals(SdpAttribute.DESC_TELEPHONY_EVENT)) {
-                    attr = attribute;
-                    break;
+                        attribute.getDescription().startsWith(SdpAttribute.DESC_TELEPHONY_EVENT)) {
+                    if (attribute.getPayloadId() > 0) {
+                        attr = attribute;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return attr;
+    }
+
+    private SdpAttribute getTelephonyEvent(SessionInfo sessionInfo, int defaultValue) {
+        SdpAttribute attr = null;
+        SdpInfo sdpInfo = sessionInfo.getSdpInfo();
+
+        if (sdpInfo == null) {
+            // Outbound case
+            return null;
+        }
+
+        if (sdpInfo.getAttributes() != null) {
+            List<SdpAttribute> attributes = sdpInfo.getAttributes();
+            for (SdpAttribute attribute: attributes) {
+                if (attribute.getDescription() != null &&
+                        attribute.getDescription().startsWith(SdpAttribute.DESC_TELEPHONY_EVENT)) {
+                    if (attribute.getPayloadId() > 0) {
+                        logger.debug("[{}] 2833 payload [{}] found. default [{}]", sessionInfo.getSessionId(), attribute.getPayloadId(), defaultValue);
+                        attr = attribute;
+                        if (attribute.getPayloadId() == defaultValue) {
+                            break;
+                        }
+                    }
                 }
             }
         }

@@ -16,7 +16,7 @@ public class SdpAttribute {
 
     public static final String NAME_RTPMAP = "rtpmap";
     public static final String NAME_FMTP = "fmtp";
-    public static final String DESC_TELEPHONY_EVENT = "telephone-event/8000";
+    public static final String DESC_TELEPHONY_EVENT = "telephone-event";
     public static final String NAME_SENDRECV = "sendrecv";
 
     private String name;

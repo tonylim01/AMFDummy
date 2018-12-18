@@ -207,7 +207,7 @@ public class SdpParser {
             Integer payloadId = Integer.valueOf((String)obj);
 
             mediaFormats.add(payloadId);
-            sdpInfo.addAttribute(payloadId, null);
+            //sdpInfo.addAttribute(payloadId, null);
         }
 
         for (Object obj: md.getAttributes(false)) {
@@ -224,6 +224,8 @@ public class SdpParser {
 
             String value = attr.getValue();
 
+            //logger.debug("parse: name [{}] value [{}]", attr.getName(), value);
+
             if (attr.getName().equals("rtpmap")) {
                 int space = value.indexOf(' ');
                 if (space <= 0) {
@@ -237,11 +239,17 @@ public class SdpParser {
                     mediaFormats.remove(payloadId);
                 }
 
-                sdpInfo.updateAttribute(payloadId, description);
+                //sdpInfo.updateAttribute(payloadId, description);
+                sdpInfo.addAttribute(payloadId, description);
             }
             else {
                 sdpInfo.addAttribute(attr.getName(), value);
             }
+        }
+
+        for (Integer mediaOnlyPayloadId: mediaFormats) {
+            logger.debug("sdp insert media [{}]", mediaOnlyPayloadId);
+            sdpInfo.addFirstAttribute(mediaOnlyPayloadId, null);
         }
 
         // sdp connection addr 1.255.239.173 types IP4 net IN

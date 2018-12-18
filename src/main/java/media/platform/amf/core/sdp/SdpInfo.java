@@ -78,6 +78,18 @@ public class SdpInfo {
         return attributes;
     }
 
+    public void addFirstAttribute(int payloadId, String description) {
+        SdpAttribute sdpAttribute = new SdpAttribute(payloadId, description);
+
+        if (attributes == null) {
+            attributes = new ArrayList<>();
+            attributes.add(sdpAttribute);
+        }
+        else {
+            attributes.add(0, sdpAttribute);
+        }
+    }
+
     public void addAttribute(int payloadId, String description) {
         if (attributes == null) {
             attributes = new ArrayList<>();

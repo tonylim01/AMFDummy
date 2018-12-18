@@ -164,6 +164,8 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             return;
         }
 
+        //logger.debug("[{}] rtp payload {} size {} ref {}", sessionInfo.getSessionId(), rtpPacket.getPayloadType(), rtpPacket.getLength(), sessionInfo.getPayload2833());
+
         // Detect 2833
         if (sessionInfo.getPayload2833() > 0 && rtpPacket.getPayloadType() == sessionInfo.getPayload2833()) {
             // 2833 detected
@@ -335,7 +337,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             EngineProcFilePlayReq filePlayReq = new EngineProcFilePlayReq(UUID.randomUUID().toString());
 
             String[] filenames = new String[1];
-            filenames[0] = "/home/app/prompts/music.pcm";
+            filenames[0] = "/home/amf/prompts/music.pcm";
             int [] dstIds =  new int[1];
             dstIds[0] = sessionInfo.getEngineToolId();
             filePlayReq.setData(sessionInfo, sessionInfo.getEngineToolId(), dstIds, false, filenames);
@@ -363,7 +365,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             EngineProcFilePlayReq filePlayReq = new EngineProcFilePlayReq(UUID.randomUUID().toString());
 
             String[] filenames = new String[1];
-            filenames[0] = "/home/app/prompts/music.pcm";
+            filenames[0] = "/home/amf/prompts/music.pcm";
             int [] dstIds =  new int[2];
             dstIds[0] = sessionInfo.getEngineToolId();
             dstIds[1] = otherToolId;

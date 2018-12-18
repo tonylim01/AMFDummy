@@ -32,5 +32,11 @@ public class AmfMain
 
         ServiceManager serviceManager = ServiceManager.getInstance();
         serviceManager.loop();
+
+        // Get the Java runtime
+        Runtime runtime = Runtime.getRuntime();
+
+        long memory = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Used memory is bytes: " + memory);
     }
 }
