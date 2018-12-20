@@ -343,7 +343,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             filePlayReq.setData(sessionInfo, sessionInfo.getEngineToolId(), dstIds, false, filenames);
             filePlayReq.send();
         }
-        else if (dtmf == 2) {
+        else if ((dtmf == 2) || (dtmf == 3) || (dtmf == 4)) {
 
             int otherToolId = -1;
             int mixerId = -1;
@@ -366,9 +366,20 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
             String[] filenames = new String[1];
             filenames[0] = "/home/amf/prompts/music.pcm";
-            int [] dstIds =  new int[2];
-            dstIds[0] = sessionInfo.getEngineToolId();
-            dstIds[1] = otherToolId;
+            int [] dstIds =  null;
+            if (dtmf == 2) {
+                dstIds = new int[2];
+                dstIds[0] = sessionInfo.getEngineToolId();
+                dstIds[1] = otherToolId;
+            }
+            else if (dtmf == 3) {
+                dstIds = new int[1];
+                dstIds[0] = sessionInfo.getEngineToolId();
+            }
+            else if (dtmf == 4) {
+                dstIds = new int[1];
+                dstIds[0] = otherToolId;
+            }
 
             filePlayReq.setData(sessionInfo, mixerId, dstIds, false, filenames);
             filePlayReq.send();

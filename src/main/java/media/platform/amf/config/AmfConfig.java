@@ -177,9 +177,28 @@ public class AmfConfig extends DefaultConfig {
             sdpConfig.setLocalHost(localHost);
             sdpConfig.setLocalIpAddress(localIp);
 
+            for (String codec: mediaPriorities) {
+
+                if (codec == null) {
+                    continue;
+                }
+
+                String codecSession = String.format("SDP-ATTR-%s", codec);
+
+                for (int i = 0; ; i++) {
+                    String key = String.format("SDP_LOCAL_ATTR_%d", i);
+                    String attr = getStrValue(codecSession, key, null);
+                    logger.debug("SDP [{}] attr config: key [{}] attr [{}]", codec, key, attr);
+                    if (attr == null) {
+                        break;
+                    }
+                    sdpConfig.addCodecAttribute(codec, attr);
+                }
+            }
+
             for (int i = 0; ; i++) {
                 String key = String.format("SDP_LOCAL_ATTR_%d", i);
-                String attr = getStrValue("MEDIA", key, null);
+                String attr = getStrValue("SDP-ATTR", key, null);
                 logger.debug("SDP config: key [{}] attr [{}]", key, attr);
                 if (attr == null) {
                     break;

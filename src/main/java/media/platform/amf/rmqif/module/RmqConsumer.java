@@ -41,6 +41,7 @@ public class RmqConsumer implements Runnable {
                 parseRmqMesage(msg);
 
             } catch (Exception e) {
+                e.printStackTrace();
                 logger.warn("Exception [{}] [{}]", e.getClass(), e.getMessage());
                 if (e.getClass() == InterruptedException.class || e.getClass() == SocketException.class) {
                     isQuit = true;

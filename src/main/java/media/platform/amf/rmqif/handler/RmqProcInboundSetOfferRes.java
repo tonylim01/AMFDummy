@@ -21,6 +21,7 @@ import media.platform.amf.rmqif.types.RmqMessageType;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
+import media.platform.amf.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -169,24 +170,79 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
             int localPort = sessionInfo.getSrcLocalPort();
             builder.setLocalPort(localPort);
 
-            for (String desc: sdpConfig.getAttributes()) {
-                if (desc == null) {
-                    logger.warn("[{}] Null desc in sdp config", sessionInfo.getSessionId());
-                    continue;
+            int priorityIndex = 0;
+            String peerSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
+            if (peerSessionId != null) {
+                SessionInfo peerSessionInfo = SessionManager.getInstance().getSession(peerSessionId);
+                if ((peerSessionInfo != null) && (peerSessionInfo.getSdpInfo() != null) &&
+                        (peerSessionInfo.getSdpInfo().getPriority() > 0)) {
+                    // Not 1st priority codec
+                    priorityIndex = peerSessionInfo.getSdpInfo().getPriority();
+                    logger.info("[{}] Peer codec is not the 1st priority one [{}]", sessionInfo.getSessionId(), priorityIndex);
                 }
+            }
 
-                attr = SdpUtil.parseAttribute(desc);
-                if (attr == null) {
-                    logger.warn("[{}] Null attr in sdp config desc [{}]", sessionInfo.getSessionId(), desc);
-                    continue;
-                }
+            List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
 
-                logger.warn("[{}] Build sdp. payload [{}] desc [{}]", sessionInfo.getSessionId(), attr.getPayloadId(), attr.getDescription());
-                if (attr.getPayloadId() != SdpAttribute.PAYLOADID_NONE) {
-                    builder.addRtpAttribute(attr.getPayloadId(), attr.getDescription());
+            if (mediaPriorities != null && mediaPriorities.size() > 0) {
+                for (int i = priorityIndex; i < mediaPriorities.size(); i++) {
+                    String priorityCodec = mediaPriorities.get(i);
+
+                    if (priorityCodec == null) {
+                        continue;
+                    }
+
+                    List<String> codecAttributes = sdpConfig.getCodecAttribute(priorityCodec);
+                    if (codecAttributes == null) {
+                        logger.info("[{}] Build codec [{}] has no attribute", sessionInfo.getSessionId(), priorityCodec);
+
+                        int payloadId = SdpCodec.getPayloadId(SdpCodec.getCodecId(priorityCodec));
+                        builder.addRtpAttribute(payloadId, null);
+                        continue;
+                    }
+
+                    for(String desc: codecAttributes) {
+                        if (desc == null) {
+                            logger.warn("[{}] Null desc in sdp config", sessionInfo.getSessionId());
+                            continue;
+                        }
+
+                        attr = SdpUtil.parseAttribute(desc);
+                        if (attr == null) {
+                            logger.warn("[{}] Null attr in sdp config desc [{}]", sessionInfo.getSessionId(), desc);
+                            continue;
+                        }
+
+                        logger.warn("[{}] Build codec [{}] sdp. payload [{}] desc [{}]", sessionInfo.getSessionId(), priorityCodec, attr.getPayloadId(), attr.getDescription());
+                        if (attr.getPayloadId() != SdpAttribute.PAYLOADID_NONE) {
+                            builder.addRtpAttribute(attr.getPayloadId(), attr.getDescription());
+                        }
+                        else {
+                            builder.addGeneralAttribute(attr.getDescription());
+                        }
+                    }
                 }
-                else {
-                    builder.addGeneralAttribute(attr.getDescription());
+            }
+
+            if (sdpConfig.getAttributes() != null) {
+                for (String desc: sdpConfig.getAttributes()) {
+                    if (desc == null) {
+                        logger.warn("[{}] Null desc in sdp config", sessionInfo.getSessionId());
+                        continue;
+                    }
+
+                    attr = SdpUtil.parseAttribute(desc);
+                    if (attr == null) {
+                        logger.warn("[{}] Null attr in sdp config desc [{}]", sessionInfo.getSessionId(), desc);
+                        continue;
+                    }
+
+                    logger.warn("[{}] Build sdp. payload [{}] desc [{}]", sessionInfo.getSessionId(), attr.getPayloadId(), attr.getDescription());
+                    if (attr.getPayloadId() != SdpAttribute.PAYLOADID_NONE) {
+                        builder.addRtpAttribute(attr.getPayloadId(), attr.getDescription());
+                    } else {
+                        builder.addGeneralAttribute(attr.getDescription());
+                    }
                 }
             }
         }

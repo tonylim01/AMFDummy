@@ -66,13 +66,25 @@ public class EngineProcAudioCreateReq extends EngineOutgoingMessage {
         String codec = null;
         String packing = null;
         String rate = null;
-        if (sessionInfo.getSdpDeviceInfo().getCodecStr() != null) {
-            if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-WB")) {
+        SdpInfo sdpInfo;
+        if (sessionInfo.getSdpDeviceInfo() != null) {
+            sdpInfo = sessionInfo.getSdpDeviceInfo();
+        }
+        else if (sessionInfo.getSdpInfo() != null) {
+            sdpInfo = sessionInfo.getSdpInfo();
+        }
+        else {
+            logger.error("[{}] No sdpInfo found", sessionInfo.getSessionId());
+            return;
+        }
+
+        if (sdpInfo.getCodecStr() != null) {
+            if (sdpInfo.getCodecStr().equals("AMR-WB")) {
                 codec = "AMR_WB";
                 packing = "OA";
                 rate = "23.85";
             }
-            else if (sessionInfo.getSdpDeviceInfo().getCodecStr().equals("AMR-NB")) {
+            else if (sdpInfo.getCodecStr().equals("AMR-NB")) {
                 codec = "AMR_NB";
                 packing = "OA";
                 rate = "12.2";
@@ -81,8 +93,8 @@ public class EngineProcAudioCreateReq extends EngineOutgoingMessage {
                 codec = sessionInfo.getSdpDeviceInfo().getCodecStr();
             }
         }
-        else if (sessionInfo.getSdpDeviceInfo().getCodecStr() == null) {
-            if (sessionInfo.getSdpDeviceInfo().getPayloadId() == 0) {
+        else if (sdpInfo.getCodecStr() == null) {
+            if (sdpInfo.getPayloadId() == 0) {
                 codec = "ulaw";
             }
             else {
