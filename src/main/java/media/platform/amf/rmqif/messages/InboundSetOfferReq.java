@@ -22,7 +22,7 @@ public class InboundSetOfferReq {
     @SerializedName("sdp")
     private String sdp;
     // 0 - inbound, 1 - outbound, 2 - inbound_only(not used)
-    @SerializedName("outbound")
+    @SerializedName("in_out_flag")
     private int outbound;
 
     public String getFromNo() {

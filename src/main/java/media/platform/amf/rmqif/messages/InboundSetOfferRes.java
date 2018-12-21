@@ -9,8 +9,11 @@
 
 package media.platform.amf.rmqif.messages;
 
+import com.google.gson.annotations.SerializedName;
+
 public class InboundSetOfferRes {
     private String sdp;
+    @SerializedName("in_out_flag")
     private int outbound;
 
     public String getSdp() {
