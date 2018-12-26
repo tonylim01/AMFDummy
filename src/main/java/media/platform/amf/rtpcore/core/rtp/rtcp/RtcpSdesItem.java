@@ -1,5 +1,7 @@
 package media.platform.amf.rtpcore.core.rtp.rtcp;
 
+import java.nio.charset.Charset;
+
 public class RtcpSdesItem {
 
 	public static final short RTCP_SDES_END = 0;
@@ -51,7 +53,7 @@ public class RtcpSdesItem {
 
 		byte[] chunkData = new byte[length];
 		System.arraycopy(rawData, offSet, chunkData, 0, length);
-		this.text = new String(chunkData);
+		this.text = new String(chunkData, Charset.defaultCharset());
 
 		offSet += length;
 
@@ -60,7 +62,7 @@ public class RtcpSdesItem {
 	}
 
 	public int encode(byte[] rawData, int offSet) {
-		byte[] textData = this.text.getBytes();
+		byte[] textData = this.text.getBytes(Charset.defaultCharset());
 		this.length = (short) textData.length;
 		rawData[offSet++] = ((byte) ((this.type & 0x000000FF)));
 		rawData[offSet++] = ((byte) ((this.length & 0x000000FF)));

@@ -79,9 +79,15 @@ public class Format implements Cloneable {
     public void setSendPTime(Boolean newValue) {
         sendPTime=newValue;
     }
-    
+
     @Override
     public Format clone() {
-        return null;
+        Format format = null;
+        try {
+            format = (Format)super.clone();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return format;
     }
 }

@@ -31,7 +31,7 @@ public class RmqConsumer implements Runnable {
 
     @Override
     public void run() {
-        logger.debug("RmqConsumer start");
+        logger.debug("RmqConsumer startScheduler");
 
         while (!isQuit) {
             try {

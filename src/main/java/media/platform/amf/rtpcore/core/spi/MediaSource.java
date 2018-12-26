@@ -3,11 +3,11 @@ package media.platform.amf.rtpcore.core.spi;
 public interface MediaSource extends Component {
 
     /**
-     * Defines the delay between <code>start()</code> call and actual media 
+     * Defines the delay between <code>startScheduler()</code> call and actual media
      * streaming beginning.
      * 
-     * After successful start this value will be changed to zero. The new value 
-     * must be assigned before each start.
+     * After successful startScheduler this value will be changed to zero. The new value
+     * must be assigned before each startScheduler.
      * 
      * @param initialDelay the value of delay measured in nanoseconds.
      */
@@ -31,7 +31,7 @@ public interface MediaSource extends Component {
     public long getMediaTime();
     
     /**
-     * Assigns media time from which this component should start media data.
+     * Assigns media time from which this component should startScheduler media data.
      * 
      * @param time the value measured in nanoseconds.
      */
@@ -67,14 +67,14 @@ public interface MediaSource extends Component {
     public boolean isStarted();
     
     /**
-     * Shows the number of packets received by this medis sink since last start.
+     * Shows the number of packets received by this medis sink since last startScheduler.
      * 
      * @return the number of packets.
      */
     public long getPacketsTransmitted();
     
     /**
-     * Shows the number of bytes received by this sink since last start;
+     * Shows the number of bytes received by this sink since last startScheduler;
      * 
      * @return the number of bytes.
      */

@@ -35,7 +35,7 @@ public class RmqServer {
     public void start() {
         AmfConfig config = AppInstance.getInstance().getConfig();
 
-        logger.info("{} start", getClass().getSimpleName());
+        logger.info("{} startScheduler", getClass().getSimpleName());
 
         int queueSize = config.getRmqBufferCount();
         if (queueSize == 0) {
@@ -59,7 +59,7 @@ public class RmqServer {
         }
 
         result = receiver.start();
-        logger.info("{} [{}] start ... [{}]", getClass().getSimpleName(), config.getLocalName(), StringUtil.getOkFail(result));
+        logger.info("{} [{}] startScheduler ... [{}]", getClass().getSimpleName(), config.getLocalName(), StringUtil.getOkFail(result));
     }
 
     public void stop() {

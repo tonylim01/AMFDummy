@@ -43,7 +43,7 @@ public class TaskChain implements TaskListener {
      */
     public void add(Task task) {
     	synchronized(LOCK) {
-    		//terminated task will be selected immediately before start
+    		//terminated task will be selected immediately before startScheduler
     		task.setListener(this);
         
     		this.task[wi] = task;        

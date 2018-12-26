@@ -120,7 +120,7 @@ public class UdpSocket {
         @Override
         public void run() {
 
-            logger.info("UdpSocket server ({}) start", localPort);
+            logger.info("UdpSocket server ({}) startScheduler", localPort);
             while (!isQuit) {
                 try {
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);

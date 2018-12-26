@@ -26,7 +26,7 @@ public class AmfMain
             }
         }
 
-        logger.info("MRUD [{}] start", instanceId);
+        logger.info("MRUD [{}] startScheduler", instanceId);
 
         AppInstance.getInstance().setInstanceId(instanceId);
 

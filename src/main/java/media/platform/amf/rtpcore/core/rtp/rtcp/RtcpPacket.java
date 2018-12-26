@@ -6,8 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
-public class RtcpPacket implements Serializable {
-	
+//public class RtcpPacket implements Serializable {
+public class RtcpPacket {
+
 	private static final long serialVersionUID = -7175947723683038337L;
 
 	private static final Logger logger = LoggerFactory.getLogger( RtcpPacket.class);

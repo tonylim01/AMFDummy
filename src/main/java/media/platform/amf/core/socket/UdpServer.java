@@ -70,7 +70,7 @@ public class UdpServer {
         @Override
         public void run() {
 
-            logger.info("UdpServer ({}) start", serverPort);
+            logger.info("UdpServer ({}) startScheduler", serverPort);
             while (!isQuit) {
                 try {
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);

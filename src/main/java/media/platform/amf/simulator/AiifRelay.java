@@ -63,7 +63,7 @@ public class AiifRelay {
         ffmpegThread.start();
 
         try {
-            logger.debug("AiifRelay start {} codec {}", inputPipeName, inputCodec);
+            logger.debug("AiifRelay startScheduler {} codec {}", inputPipeName, inputCodec);
             inputPipeFile = new RandomAccessFile(inputPipeName, "rw");
 
             outputPipeFile = new RandomAccessFile(outputPipeName, "r");
@@ -329,7 +329,7 @@ public class AiifRelay {
         @Override
         public void run() {
 
-            logger.info("Ffmpeg proc ({}) start", inputPipeName);
+            logger.info("Ffmpeg proc ({}) startScheduler", inputPipeName);
 
             transcodingProcess = ShellUtil.startAlawTranscoding(inputPipeName, outputPipeName);
 
@@ -344,7 +344,7 @@ public class AiifRelay {
     class RmqRelayRunnable implements Runnable {
         @Override
         public void run() {
-            logger.info("Rmq relay proc ({}) start. queue [{}]", outputPipeName, (rmqClient != null) ? "yes" : "no");
+            logger.info("Rmq relay proc ({}) startScheduler. queue [{}]", outputPipeName, (rmqClient != null) ? "yes" : "no");
 
             byte[] pipeBuf = new byte[LINEAR_PAYLOAD_SIZE];
             try {

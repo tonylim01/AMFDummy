@@ -12,14 +12,14 @@ public interface MediaSink extends Component {
     public boolean isStarted();
     
     /**
-     * Shows the number of packets received by this medis sink since last start.
+     * Shows the number of packets received by this medis sink since last startScheduler.
      * 
      * @return the number of packets.
      */
     public long getPacketsReceived();
     
     /**
-     * Shows the number of bytes received by this sink since last start;
+     * Shows the number of bytes received by this sink since last startScheduler;
      * 
      * @return the number of bytes.
      */    

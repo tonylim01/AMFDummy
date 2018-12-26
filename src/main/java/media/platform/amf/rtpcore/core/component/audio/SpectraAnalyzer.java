@@ -50,7 +50,7 @@ public class SpectraAnalyzer extends AbstractSink {
     public void activate()
     {
     	this.len = 0;
-        System.out.println("start, len=" + len);
+        System.out.println("startScheduler, len=" + len);
         output.start();
     }
     

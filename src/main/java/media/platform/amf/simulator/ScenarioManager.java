@@ -22,6 +22,7 @@ public class ScenarioManager {
     }
 
     public boolean startScenario(String filename) {
+        /*
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
             String line;
@@ -52,7 +53,7 @@ public class ScenarioManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        */
 
         rmqSender.close();
 

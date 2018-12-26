@@ -140,7 +140,7 @@ public class PriorityQueueScheduler {
     /**
      * Starts scheduler.
      */
-    public void start() {
+    public void startScheduler() {
     	if(this.isActive)
     		return;
     	
@@ -224,7 +224,7 @@ public class PriorityQueueScheduler {
         
         public void activate() {        	        	
         	this.active = true;
-        	this.start();
+        	start();
         }
         
         public void notifyCompletion() {
@@ -273,7 +273,7 @@ public class PriorityQueueScheduler {
                 		//lets continue
                 	}
         		
-        		//new cycle starts , updating cycle start time by 4ms
+        		//new cycle starts , updating cycle startScheduler time by 4ms
                 cycleStart = cycleStart + 20000000L;                                              
         	}
         }
@@ -317,7 +317,7 @@ public class PriorityQueueScheduler {
         public void activate() {        	        	
         	this.active = true;
         	cycleStart = clock.getTime();
-        	this.start();
+        	start();
         }
         
         public void notifyCompletion() {
@@ -349,7 +349,7 @@ public class PriorityQueueScheduler {
                 		//lets continue
                 	}
         		
-        		//new cycle starts , updating cycle start time by 4ms
+        		//new cycle starts , updating cycle startScheduler time by 4ms
                 cycleStart = cycleStart + 4000000L;                                              
         	}
         }
@@ -407,7 +407,7 @@ public class PriorityQueueScheduler {
     	
     	public void activate() {        	        	
         	this.active = true;
-        	this.start();
+        	start();
         }
     	
     	/**
@@ -449,7 +449,7 @@ public class PriorityQueueScheduler {
     	
     	public void activate() {        	        	
         	this.active = true;
-        	this.start();
+        	start();
         }
     	
     	/**

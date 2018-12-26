@@ -41,7 +41,7 @@ public interface PacketHandler extends Comparable<PacketHandler> {
 	 * @param dataLength
 	 *            The length of the data to be read.
 	 * @param offset
-	 *            The initial position to start reading data from.
+	 *            The initial position to startScheduler reading data from.
 	 * @param localPeer
 	 *            The local peer who received the packet
 	 * @param remotePeer

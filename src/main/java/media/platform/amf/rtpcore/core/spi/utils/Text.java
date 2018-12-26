@@ -1,6 +1,7 @@
 package media.platform.amf.rtpcore.core.spi.utils;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,7 +10,7 @@ public class Text implements CharSequence {
     //reference on the local buffer
     protected byte[] chars;
 
-    //the start position
+    //the startScheduler position
     protected int pos;
 
     //the length of the string
@@ -53,7 +54,7 @@ public class Text implements CharSequence {
      * @param s the text value.
      */
     public Text(String s) {
-        this.chars = s.getBytes();
+        this.chars = s.getBytes(Charset.defaultCharset());
         this.pos = 0;
         this.len = chars.length;
     }
@@ -463,7 +464,7 @@ public class Text implements CharSequence {
 
     @Override
     public String toString() {
-        return new String(chars, pos, len).trim();
+        return new String(chars, pos, len, Charset.defaultCharset()).trim();
     }
 
     /**

@@ -74,7 +74,7 @@ public class RedundantServer {
         @Override
         public void run() {
 
-            logger.info("RedundantServer ({}) start", serverPort);
+            logger.info("RedundantServer ({}) startScheduler", serverPort);
             while (!isQuit) {
                 try {
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);

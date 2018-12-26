@@ -105,7 +105,7 @@ public class RTPInput extends AbstractSource implements BufferListener {
     /**
      * RX buffer's call back method.
      * 
-     * This method is called when rxBuffer is full and it is time to start
+     * This method is called when rxBuffer is full and it is time to startScheduler
      * transmission to the consumer.
      */
     public void onFill() {

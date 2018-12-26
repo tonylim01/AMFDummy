@@ -89,7 +89,7 @@ public class SoundCard extends AbstractSink {
             // FIXME : Need a configuration to select the specific hardware
             DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
 
-            // TODO : Should getting the SourceDataLine go in start() In which case its configurable to know the Formats
+            // TODO : Should getting the SourceDataLine go in startScheduler() In which case its configurable to know the Formats
             // beforehand.
             try {
                 sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);

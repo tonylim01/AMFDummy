@@ -23,7 +23,7 @@ public class PlayStartStateFunction extends PlayStateFunction implements StateFu
             return;
         }
 
-        logger.debug("{} PLAY start state", sessionInfo.getSessionId());
+        logger.debug("{} PLAY startScheduler state", sessionInfo.getSessionId());
 
         if (sessionInfo.getServiceState() != SessionState.PLAY_START) {
             sessionInfo.setServiceState(SessionState.PLAY_START);

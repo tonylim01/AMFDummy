@@ -1,6 +1,8 @@
 
 package media.platform.amf.rtpcore.core.rtp.rtcp;
 
+import java.nio.charset.Charset;
+
 public class RtcpAppDefined extends RtcpHeader {
 
 	private byte[] data;
@@ -38,7 +40,7 @@ public class RtcpAppDefined extends RtcpHeader {
 		System.arraycopy(rawData, offSet, nameBytes, 0, 4);
 		offSet+=4;
 
-		this.name = new String(nameBytes);
+		this.name = new String(nameBytes, Charset.defaultCharset());
 
 		this.data = new byte[(this.length - 12)];
 		System.arraycopy(rawData, offSet, this.data, 0, this.data.length);
@@ -58,7 +60,7 @@ public class RtcpAppDefined extends RtcpHeader {
 		rawData[offSet++] = ((byte) ((this.ssrc & 0x0000FF00) >> 8));
 		rawData[offSet++] = ((byte) ((this.ssrc & 0x000000FF)));
 
-		byte[] nameBytes = this.name.getBytes();
+		byte[] nameBytes = this.name.getBytes(Charset.defaultCharset());
 
 		for (int i = 0; i < 4; i++) {
 			rawData[offSet++] = nameBytes[i];

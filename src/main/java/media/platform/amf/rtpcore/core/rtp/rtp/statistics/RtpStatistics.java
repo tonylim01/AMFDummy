@@ -47,9 +47,9 @@ public class RtpStatistics {
 
 	/* Global RTP statistics */
 	private long rtpLastHeartbeat;
-	private volatile long rtpRxPackets;
+	private long rtpRxPackets;
 	private volatile long rtpRxOctets;
-	private volatile long rtpTxPackets;
+	private long rtpTxPackets;
 	private volatile long rtpTxOctets;
 	private volatile long rtpReceivedOn;
 	private volatile long rtpSentOn;
@@ -61,7 +61,7 @@ public class RtpStatistics {
 	private double rtcpAvgSize;
 	private boolean weSent;
 	
-	private volatile long rtcpTxPackets;
+	private long rtcpTxPackets;
 	private volatile long rtcpTxOctets;
 
 	/**

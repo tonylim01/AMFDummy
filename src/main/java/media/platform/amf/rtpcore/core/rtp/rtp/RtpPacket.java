@@ -248,7 +248,7 @@ public class RtpPacket implements Serializable {
     /**
      * Read an unsigned integer as long at specified offset
      *
-     * @param off start offset of this unsigned integer
+     * @param off startScheduler offset of this unsigned integer
      * @return unsigned integer as long at offset
      */
     public long readUnsignedIntAsLong(int off)
@@ -510,7 +510,7 @@ public class RtpPacket implements Serializable {
      * Read a byte region from specified offset in the RTP packet 
      * and with specified length into a given buffer
      *
-     * @param off start offset in the RTP packet of the region to be read
+     * @param off startScheduler offset in the RTP packet of the region to be read
      * @param len length of the region to be read
      * @param outBuff output buffer
      */

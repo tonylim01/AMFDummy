@@ -31,7 +31,7 @@ public class EngineConsumer implements Runnable {
 
     @Override
     public void run() {
-        logger.debug("RedundantConsumer start");
+        logger.debug("RedundantConsumer startScheduler");
 
         while (!isQuit) {
             try {

@@ -152,7 +152,7 @@ public class JitterSender {
         @Override
         public void run() {
 
-            logger.info("LoopProc start");
+            logger.info("LoopProc startScheduler");
             int tick = 0;
             int beforeRemaining = 0;
 

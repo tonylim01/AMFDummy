@@ -45,7 +45,7 @@ public class RtpTransfer {
 
         mediaScheduler = new PriorityQueueScheduler();
         mediaScheduler.setClock(clock);
-        mediaScheduler.start();
+        mediaScheduler.startScheduler();
 
         scheduler = new ServiceScheduler();
 

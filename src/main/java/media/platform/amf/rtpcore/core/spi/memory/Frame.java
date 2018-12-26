@@ -105,7 +105,7 @@ public class Frame {
         partition.recycle(this);
     }
 
-    @Override
+//    @Override
     public Frame clone() {
         Frame frame = Memory.allocate(data.length);
         System.arraycopy(data, offset, frame.data, offset, length);

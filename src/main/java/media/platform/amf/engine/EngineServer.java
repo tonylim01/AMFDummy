@@ -79,7 +79,7 @@ public class EngineServer {
         @Override
         public void run() {
 
-            logger.info("EngineServer ({}) start", serverPort);
+            logger.info("EngineServer ({}) startScheduler", serverPort);
             while (!isQuit) {
                 try {
                     Arrays.fill(buf, (byte)0);
