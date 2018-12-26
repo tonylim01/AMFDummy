@@ -7,10 +7,7 @@ import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.AudioCreateReq;
 import media.platform.amf.engine.messages.FilePlayReq;
-import media.platform.amf.engine.messages.common.CodecInfo;
-import media.platform.amf.engine.messages.common.FileInfos;
-import media.platform.amf.engine.messages.common.NetIP4Address;
-import media.platform.amf.engine.messages.common.SendVocoderInfo;
+import media.platform.amf.engine.messages.common.*;
 import media.platform.amf.session.SessionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +24,7 @@ public class EngineProcFilePlayReq extends EngineOutgoingMessage {
         this.appId = appId;
     }
 
-    public void setData(SessionInfo sessionInfo, int toolId, int[] dstIds, boolean hasContainer, String[] filenames) {
+    public void setData(SessionInfo sessionInfo, int toolId, int mediaType, int[] dstIds, boolean hasContainer, String[] filenames, int defVolume, int lowVolume) {
 
         if (sessionInfo == null) {
             logger.error("Null sessionInfo");
@@ -50,6 +47,8 @@ public class EngineProcFilePlayReq extends EngineOutgoingMessage {
 
         data = new FilePlayReq();
         data.setId(toolId);
+        data.setType(mediaType);
+        data.setDstIds(dstIds);
 
         FileInfos fileInfos = new FileInfos();
         fileInfos.setContainer(hasContainer);
@@ -59,9 +58,12 @@ public class EngineProcFilePlayReq extends EngineOutgoingMessage {
 
         SendVocoderInfo vocoder = new SendVocoderInfo();
         vocoder.setEnabled(true);
-        vocoder.setDstIds(dstIds);
 
         data.setAudio(vocoder);
+
+        VolumeInfo volume = new VolumeInfo();
+        volume.setDef(defVolume);
+        volume.setLow(lowVolume);
 
         setBody(data, FilePlayReq.class);
     }

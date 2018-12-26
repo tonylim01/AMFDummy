@@ -3,7 +3,6 @@ package media.platform.amf.engine.messages.common;
 public class SendVocoderInfo {
     private boolean enabled;
     private CodecInfo vocoder;
-    private int[] dstIds;
 
     public boolean isEnabled() {
         return enabled;
@@ -19,13 +18,5 @@ public class SendVocoderInfo {
 
     public void setVocoder(CodecInfo vocoder) {
         this.vocoder = vocoder;
-    }
-
-    public int[] getDstIds() {
-        return dstIds;
-    }
-
-    public void setDstIds(int[] dstIds) {
-        this.dstIds = dstIds;
     }
 }

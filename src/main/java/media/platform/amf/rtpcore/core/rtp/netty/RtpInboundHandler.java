@@ -340,7 +340,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             filenames[0] = "/home/amf/prompts/music.pcm";
             int [] dstIds =  new int[1];
             dstIds[0] = sessionInfo.getEngineToolId();
-            filePlayReq.setData(sessionInfo, sessionInfo.getEngineToolId(), dstIds, false, filenames);
+            filePlayReq.setData(sessionInfo, sessionInfo.getEngineToolId(), 0, dstIds, false, filenames, 100, 20);
             filePlayReq.send();
         }
         else if ((dtmf == 2) || (dtmf == 3) || (dtmf == 4)) {
@@ -366,22 +366,26 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
             String[] filenames = new String[1];
             filenames[0] = "/home/amf/prompts/music.pcm";
+            int mediaType = 0;
             int [] dstIds =  null;
             if (dtmf == 2) {
                 dstIds = new int[2];
                 dstIds[0] = sessionInfo.getEngineToolId();
                 dstIds[1] = otherToolId;
+                mediaType = 1;
             }
             else if (dtmf == 3) {
                 dstIds = new int[1];
                 dstIds[0] = sessionInfo.getEngineToolId();
+                mediaType = 0;
             }
             else if (dtmf == 4) {
                 dstIds = new int[1];
                 dstIds[0] = otherToolId;
+                mediaType = 0;
             }
 
-            filePlayReq.setData(sessionInfo, mixerId, dstIds, false, filenames);
+            filePlayReq.setData(sessionInfo, mixerId, mediaType, dstIds, false, filenames, 100, 20);
             filePlayReq.send();
 
         }
