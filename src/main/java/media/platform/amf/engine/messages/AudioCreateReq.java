@@ -29,11 +29,12 @@ public class AudioCreateReq {
     }
 
     public Integer[] getDstIds() {
-        return dstIds;
+        Integer[] ret = (dstIds != null) ? Arrays.copyOf(dstIds, dstIds.length) : null;
+        return ret;
     }
 
     public void setDstIds(Integer[] dstIds) {
-        this.dstIds = dstIds;
+        this.dstIds = (dstIds != null) ? Arrays.copyOf(dstIds, dstIds.length) : null;
     }
 
     public String getFrom() {

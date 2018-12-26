@@ -273,7 +273,7 @@ public class SessionManager {
     /**
      * Calls checkSessionValidity() periodically
      */
-    private class SessionMonitorRunnable implements Runnable {
+    private static class SessionMonitorRunnable implements Runnable {
         @Override
         public void run() {
             SessionManager manager = SessionManager.getInstance();

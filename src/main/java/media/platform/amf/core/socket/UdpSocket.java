@@ -96,7 +96,7 @@ public class UdpSocket {
             return false;
         }
 
-        if (buf == null || (buf != null && buf.length == 0)) {
+        if (buf == null || buf.length == 0) {
             return false;
         }
 

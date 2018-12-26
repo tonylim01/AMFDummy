@@ -20,10 +20,6 @@ public class AudioFileReader {
     public boolean load() {
         File file = new File(filename);
 
-        if (file == null) {
-            return false;
-        }
-
         buffer = new byte[(int)file.length()];
         int totalRead = 0;
         int bytesRemaining = 0;

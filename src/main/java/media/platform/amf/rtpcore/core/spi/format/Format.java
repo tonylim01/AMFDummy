@@ -87,7 +87,12 @@ public class Format implements Cloneable {
             format = (Format)super.clone();
         } catch (Exception e) {
             e.printStackTrace();
+
+            format = new Format(this.name);
+            format.setOptions(this.options);
+            format.setSendPTime(this.sendPTime);
         }
+
         return format;
     }
 }

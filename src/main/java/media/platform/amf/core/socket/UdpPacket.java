@@ -33,7 +33,8 @@ public class UdpPacket {
     }
 
     public byte[] getData() {
-        return data;
+        byte[] ret = (data != null) ? Arrays.copyOf(data, data.length) : null;
+        return ret;
     }
 
     public void clear() {

@@ -91,7 +91,7 @@ public class RTPFormat implements Cloneable {
 
     @Override
     public RTPFormat clone() {
-        Format f = (Format) format.clone();
+        Format f = format.clone();
         return new RTPFormat(id, f, clockRate);
     }
     

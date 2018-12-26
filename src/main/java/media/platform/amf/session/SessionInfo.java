@@ -9,6 +9,7 @@ import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import media.platform.amf.service.AudioFileReader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SessionInfo {
@@ -385,7 +386,8 @@ public class SessionInfo {
 
 
     public byte[] getLastPacket() {
-        return lastPacket;
+        byte[] packet = (lastPacket != null ) ? Arrays.copyOf(lastPacket, lastPacket.length) : null;
+        return packet;
     }
 
     public void setLastPacket(byte[] srcPacket) {
@@ -502,9 +504,10 @@ public class SessionInfo {
 
     public boolean waitAudioCreated(int millisec) {
         boolean result = false;
-        isSyncWait = true;
 
         synchronized (syncObj) {
+            isSyncWait = true;
+
             try {
                 if (millisec > 0) {
                     syncObj.wait(millisec);

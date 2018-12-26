@@ -4,7 +4,7 @@ import media.platform.amf.rtpcore.core.spi.format.Format;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Frame {
+public class Frame implements Cloneable {
     private Partition partition;
     private byte[] data;
 
@@ -105,18 +105,26 @@ public class Frame {
         partition.recycle(this);
     }
 
-//    @Override
+    @Override
     public Frame clone() {
-        Frame frame = Memory.allocate(data.length);
-        System.arraycopy(data, offset, frame.data, offset, length);
-        frame.offset = offset;
-        frame.length = length;
-        frame.duration = duration;
-        frame.sn = sn;
-        frame.eom = eom;
-        frame.format = format;
-        frame.timestamp = timestamp;
-        frame.header = header;
+        Frame frame = null;
+        try {
+            frame = (Frame)super.clone();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            frame = Memory.allocate(data.length);
+            System.arraycopy(data, offset, frame.data, offset, length);
+            frame.offset = offset;
+            frame.length = length;
+            frame.duration = duration;
+            frame.sn = sn;
+            frame.eom = eom;
+            frame.format = format;
+            frame.timestamp = timestamp;
+            frame.header = header;
+        }
+
         return frame;
     }
 }
