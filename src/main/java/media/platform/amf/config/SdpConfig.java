@@ -20,6 +20,10 @@ public class SdpConfig {
     private List<String> attributes = null;
     private Map<String, List<String>> codecAttributes = null;
 
+    public SdpConfig() {
+        attributes = new ArrayList<>();
+    }
+
     public String getLocalHost() {
         return localHost;
     }
@@ -41,9 +45,6 @@ public class SdpConfig {
     }
 
     public void addAttribute(String attribute) {
-        if (attributes == null) {
-            attributes = new ArrayList<>();
-        }
         attributes.add(attribute);
     }
 

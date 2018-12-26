@@ -16,7 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class FixedJitterBuffer implements JitterBuffer, Serializable {
+//public class FixedJitterBuffer implements JitterBuffer, Serializable {
+public class FixedJitterBuffer implements JitterBuffer {
 
     private static final long serialVersionUID = -389930569631795779L;
     private static final Logger logger = LoggerFactory.getLogger( FixedJitterBuffer.class);
