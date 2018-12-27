@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 
 public class UdpInboundHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
@@ -105,6 +106,10 @@ public class UdpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
         ByteBuf buf = msg.content();
 
         int rcvPktLength = buf.readableBytes();
+        if (rcvPktLength < Long.BYTES) {
+            return;
+        }
+
         byte[] rcvPktBuf = new byte[rcvPktLength];
         buf.readBytes(rcvPktBuf);
 
@@ -150,7 +155,20 @@ public class UdpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
 
         if (sessionInfo.getRtpSender() != null) {
 //            logger.debug("push udp packet {}", rcvPktBuf.length);
-            sessionInfo.getRtpSender().put(-1, rcvPktBuf);
+
+            byte[] body = new byte[rcvPktLength - Long.BYTES];
+
+            ByteBuffer buffer = ByteBuffer.wrap(rcvPktBuf);
+
+            long engineSeq = buffer.getLong();
+            buffer.get(body, Long.BYTES, body.length);
+
+            //
+            // TODO: with engineSeq
+            //
+
+            //sessionInfo.getRtpSender().put(-1, body);
+            sessionInfo.getRtpSender().put((int)engineSeq, body);
         }
 
     }

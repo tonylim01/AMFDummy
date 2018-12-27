@@ -12,6 +12,7 @@ import media.platform.amf.rtpcore.core.rtp.rtp.RtpPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class JitterSender {
     private int vocoder;
     private int vocoderMode;
     private int payloadType;
+    private long engineSeq;
 
     //private Queue<UdpPacket> buffer;
     private List<UdpPacket> buffer;
@@ -66,6 +68,8 @@ public class JitterSender {
 
         //buffer = new ConcurrentLinkedQueue<>();
         buffer = new ArrayList<>();
+
+        engineSeq = 0;
     }
 
     public void setUdpClient(UdpClient udpClient) {
@@ -121,13 +125,22 @@ public class JitterSender {
                         if (buffer.size() > 0) {
                             int i;
                             for (i = buffer.size() - 1; i <= 0; --i) {
-                                if (buffer.get(i).getSeqNo() < seqNo) {
+                                if (buffer.get(i).getSeqNo() == seqNo) {
+                                    logger.info("[{}] Dupplicated seqNo [{}] count [{}]", sessionId, seqNo, buffer.size());
+                                    // Ignore
+                                    break;
+                                }
+                                else if (buffer.get(i).getSeqNo() < seqNo) {
+                                    buffer.add(i + 1, udpPacket);
+                                    buffered = true;
                                     break;
                                 }
                             }
 
-                            buffer.add(i + 1, udpPacket);
-                            buffered = true;
+                            if (i < 0) {
+                                buffer.add(0, udpPacket);
+                                buffered = true;
+                            }
                         }
                     }
                 }
@@ -335,7 +348,19 @@ public class JitterSender {
         try {
             if (udpPacket != null && udpPacket.getData() != null) {
 
-                udpClient.send(udpPacket.getData());
+                byte[] body = udpPacket.getData();
+
+                if (body.length > 0) {
+
+                    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES + body.length);
+
+                    engineSeq++;
+                    //buffer.putLong(engineSeq);
+                    buffer.putLong((long)udpPacket.getSeqNo());
+                    buffer.put(body);
+
+                    udpClient.send(buffer.array());
+                }
 
                 udpPacket.clear();
                 udpPacket = null;
