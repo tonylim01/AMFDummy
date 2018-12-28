@@ -30,7 +30,7 @@ public class SdpParser {
             return null;
         }
 
-        List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+        List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
 
         if (mediaPriorities != null && mediaPriorities.size() > 0) {
             for (String priorityCodec : mediaPriorities) {
@@ -96,7 +96,7 @@ public class SdpParser {
             sdpInfo = sdpParser.parse(sdp);
 
             if (sdpInfo.getAttributes() != null) {
-                List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+                List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
 
                 if (mediaPriorities != null && mediaPriorities.size() > 0) {
                     for (int i = startPriorityIndex; i < mediaPriorities.size(); i++) {

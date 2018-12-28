@@ -271,7 +271,7 @@ public class PrepareStateFunction implements StateFunction {
     }
 
     private boolean openCallerResource(SessionInfo sessionInfo, RoomInfo roomInfo) {
-        //SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
+        //SdpConfig sdpConfig = AppInstance.getInstance().getMediaConfig().getSdpConfig();
 
         if (sessionInfo == null) {
             return false;

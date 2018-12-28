@@ -3,6 +3,7 @@ package media.platform.amf.service;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.MediaConfig;
 import media.platform.amf.engine.EngineServer;
 import media.platform.amf.redundant.RedundantServer;
 import media.platform.amf.rmqif.handler.RmqProcLogInReq;
@@ -48,7 +49,11 @@ public class ServiceManager {
      */
     public ServiceManager() {
         AppInstance instance = AppInstance.getInstance();
-        instance.setConfig(new AmfConfig( instance.getInstanceId(), instance.getConfigFile()));
+
+        AmfConfig amfConfig = new AmfConfig(instance.getInstanceId(), instance.getConfigFile());
+        instance.setConfig(amfConfig);
+        instance.setMediaConfig(new MediaConfig(amfConfig.getMediaConfPath()));
+
         instance.loadPromptConfig();
 
         AmfConfig config = instance.getConfig();

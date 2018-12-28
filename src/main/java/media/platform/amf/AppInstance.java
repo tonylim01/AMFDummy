@@ -1,6 +1,7 @@
 package media.platform.amf;
 
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.MediaConfig;
 import media.platform.amf.config.PromptConfig;
 import media.platform.amf.config.RedundantConfig;
 import media.platform.amf.rtpcore.Process.NettyRTPServer;
@@ -22,6 +23,7 @@ public class AppInstance {
     private int instanceId = 0;
     private String configFile = null;
     private AmfConfig amfConfig = null;
+    private MediaConfig mediaConfig = null;
     private PromptConfig promptConfig = null;
     //private RedundantConfig redundantConfig = null;
 
@@ -35,6 +37,10 @@ public class AppInstance {
 
     public AmfConfig getConfig() {
         return amfConfig;
+    }
+
+    public MediaConfig getMediaConfig() {
+        return mediaConfig;
     }
 
     private NettyRTPServer nettyRTPServer;
@@ -59,6 +65,10 @@ public class AppInstance {
 
     public void setConfig(AmfConfig config) {
         this.amfConfig = config;
+    }
+
+    public void setMediaConfig(MediaConfig config) {
+        this.mediaConfig = mediaConfig;
     }
 
     public String getConfigFile() {

@@ -3,8 +3,6 @@ package media.platform.amf.session;
 import media.platform.amf.session.StateHandler.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import media.platform.amf.session.StateHandler.*;
-import sun.nio.ch.ThreadPool;
 
 import java.net.SocketException;
 import java.util.AbstractMap;

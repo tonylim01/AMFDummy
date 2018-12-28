@@ -83,7 +83,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
         }
 
         //AmfConfig config = AppInstance.getInstance().getConfig();
-        SdpConfig sdpConfig = AppInstance.getInstance().getConfig().getSdpConfig();
+        SdpConfig sdpConfig = AppInstance.getInstance().getMediaConfig().getSdpConfig();
 
         SdpBuilder builder = new SdpBuilder();
         builder.setHost(sdpConfig.getLocalHost());
@@ -182,7 +182,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
                 }
             }
 
-            List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+            List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
                 for (int i = priorityIndex; i < mediaPriorities.size(); i++) {
@@ -269,7 +269,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
 //        SdpParser.selectAttribute(sdpInfo);
 
         if (sdpInfo.getAttributes() != null) {
-            List<String> mediaPriorities = AppInstance.getInstance().getConfig().getMediaPriorities();
+            List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
                 for (String priorityCodec : mediaPriorities) {

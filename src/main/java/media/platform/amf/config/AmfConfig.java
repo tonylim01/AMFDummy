@@ -32,8 +32,8 @@ public class AmfConfig extends DefaultConfig {
     private String rmqMcud;
     private String rmqAcswf;
     private String rmqUser, rmqPass;
-    private String rmqAiifs[];
-    private String rmqAiifFmt;
+    private String rmqAiifs[];  // Not used
+    private String rmqAiifFmt;  // Not used
 
     private int sessionMaxSize;
     private int sessionTimeout;
@@ -46,20 +46,16 @@ public class AmfConfig extends DefaultConfig {
 
     private RedundantConfig redundantConfig;
 
-    private List<String> mediaPriorities;
-
-    private SdpConfig sdpConfig;
-
     private int localUdpPortMin;
     private int localUdpPortMax;
     private String localNetInterface;
     private String localIpAddress;
 
     private String localBasePath;
-    private long audioEnergyLevel;
-    private long silenceEnergyLevel;
-    private long silenceDetectDuration;
-    private long energyDetectDuration;
+    private long audioEnergyLevel;      // Not used
+    private long silenceEnergyLevel;    // Not used
+    private long silenceDetectDuration; // Not used
+    private long energyDetectDuration;  // Not used
 
     private String engineIp;
     private int engineLocalPort;
@@ -67,6 +63,10 @@ public class AmfConfig extends DefaultConfig {
 
     private String promptConfPath;
     private int instanceId;
+
+    private String mediaConfPath;
+//    private List<String> mediaPriorities;
+//    private SdpConfig sdpConfig;
 
     public AmfConfig(int instanceId, String configPath) {
 
@@ -76,8 +76,8 @@ public class AmfConfig extends DefaultConfig {
         logger.info("Load config ... [{}]", StringUtil.getOkFail(result));
 
         this.instanceId =instanceId;
-        mediaPriorities = new ArrayList<>();
-        sdpConfig = new SdpConfig();
+//        mediaPriorities = new ArrayList<>();
+//        sdpConfig = new SdpConfig();
         redundantConfig = new RedundantConfig(configPath);
 
         setConfigChangedListener(new ConfigChangedListener() {
@@ -91,6 +91,7 @@ public class AmfConfig extends DefaultConfig {
         if (result == true) {
             loadConfig(instanceId);
         }
+
     }
 
     @Override
@@ -113,6 +114,7 @@ public class AmfConfig extends DefaultConfig {
 
     private void loadCommonConfig() {
         try {
+            mediaConfPath = getStrValue("COMMON", "MEDIA_CONF_PATH", null);
             promptConfPath = getStrValue("COMMON", "PROMPT_CONF_PATH", null);
             amfId = getIntValue("COMMON", "AMF_ID", 0);
             heartbeat = getStrValue("COMMON", "HEARTBEAT", "felse");
@@ -145,18 +147,18 @@ public class AmfConfig extends DefaultConfig {
 
             rmqLocal = getStrValue(instanceSection, "RMQ_LOCAL", "localhost");
 
-            String rmqAiif = getStrValue("RMQ", "RMQ_AIIF", null);
-            if (rmqAiif != null && rmqAiif.contains(",")) {
-                String[] aiifs = rmqAiif.split(",");
-                if (aiifs != null) {
-                    rmqAiifs = new String[aiifs.length];
-                    for (int i = 0; i < aiifs.length; i++) {
-                        rmqAiifs[i] = aiifs[i].trim();
-                    }
-                }
-            }
-
-            rmqAiifFmt = getStrValue("RMQ", "RMQ_AIIF_FMT", null);
+//            String rmqAiif = getStrValue("RMQ", "RMQ_AIIF", null);
+//            if (rmqAiif != null && rmqAiif.contains(",")) {
+//                String[] aiifs = rmqAiif.split(",");
+//                if (aiifs != null) {
+//                    rmqAiifs = new String[aiifs.length];
+//                    for (int i = 0; i < aiifs.length; i++) {
+//                        rmqAiifs[i] = aiifs[i].trim();
+//                    }
+//                }
+//            }
+//
+//            rmqAiifFmt = getStrValue("RMQ", "RMQ_AIIF_FMT", null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,47 +167,8 @@ public class AmfConfig extends DefaultConfig {
 
 
     private void loadMediaConfig(String instanceSection) {
+
         try {
-            String mediaPriority = getStrValue("MEDIA", "MEDIA_PRIORITY", null);
-            if (mediaPriority != null) {
-                setMediaPriority(mediaPriority);
-            }
-
-            String localHost = getStrValue("MEDIA", "SDP_LOCAL_HOST", null);
-            String localIp = getStrValue("MEDIA", "SDP_LOCAL_IP", null);
-
-            sdpConfig.setLocalHost(localHost);
-            sdpConfig.setLocalIpAddress(localIp);
-
-            for (String codec: mediaPriorities) {
-
-                if (codec == null) {
-                    continue;
-                }
-
-                String codecSession = String.format("SDP-ATTR-%s", codec);
-
-                for (int i = 0; ; i++) {
-                    String key = String.format("SDP_LOCAL_ATTR_%d", i);
-                    String attr = getStrValue(codecSession, key, null);
-                    logger.debug("SDP [{}] attr config: key [{}] attr [{}]", codec, key, attr);
-                    if (attr == null) {
-                        break;
-                    }
-                    sdpConfig.addCodecAttribute(codec, attr);
-                }
-            }
-
-            for (int i = 0; ; i++) {
-                String key = String.format("SDP_LOCAL_ATTR_%d", i);
-                String attr = getStrValue("SDP-ATTR", key, null);
-                logger.debug("SDP config: key [{}] attr [{}]", key, attr);
-                if (attr == null) {
-                    break;
-                }
-                sdpConfig.addAttribute(attr);
-            }
-
             localUdpPortMin = getIntValue(instanceSection, "LOCAL_UDP_PORT_MIN", 0);
             localUdpPortMax = getIntValue(instanceSection, "LOCAL_UDP_PORT_MAX", 0);
 
@@ -213,7 +176,7 @@ public class AmfConfig extends DefaultConfig {
             engineLocalPort = getIntValue(instanceSection, "ENGINE_LOCAL_PORT", 0);
             engineRemotePort = getIntValue(instanceSection, "ENGINE_REMOTE_PORT", 0);
 
-            localNetInterface = getStrValue("MEDIA", "LOCAL_NET_INTERFACE", null);
+            localNetInterface = getStrValue("COMMON", "LOCAL_NET_INTERFACE", null);
 
             if (localNetInterface != null) {
                 localIpAddress = NetUtil.getLocalIP(localNetInterface);
@@ -222,16 +185,12 @@ public class AmfConfig extends DefaultConfig {
                 logger.error("Local IP not found for [{}]", localNetInterface);
             }
 
-            if (localIpAddress != null && (localIp == null || localIp.startsWith("xxx"))) {
-                sdpConfig.setLocalIpAddress(localIpAddress);
-            }
+            localBasePath = getStrValue("COMMON", "LOCAL_BASE_PATH", null);
 
-            localBasePath = getStrValue("MEDIA", "LOCAL_BASE_PATH", null);
-
-            audioEnergyLevel = (long)getIntValue("MEDIA", "AUDIO_ENERGY_LEVEL", 0);
-            silenceEnergyLevel = (long)getIntValue("MEDIA", "SILENCE_ENERGY_LEVEL", 0);
-            silenceDetectDuration = (long)getIntValue("MEDIA", "SILENCE_DETECT_DURATION", 0);
-            energyDetectDuration = (long)getIntValue("MEDIA", "ENERGY_DETECT_DURATION", 0);
+//            audioEnergyLevel = (long)getIntValue("MEDIA", "AUDIO_ENERGY_LEVEL", 0);
+//            silenceEnergyLevel = (long)getIntValue("MEDIA", "SILENCE_ENERGY_LEVEL", 0);
+//            silenceDetectDuration = (long)getIntValue("MEDIA", "SILENCE_DETECT_DURATION", 0);
+//            energyDetectDuration = (long)getIntValue("MEDIA", "ENERGY_DETECT_DURATION", 0);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -266,9 +225,9 @@ public class AmfConfig extends DefaultConfig {
         return rmqPass;
     }
 
-    public SdpConfig getSdpConfig() {
-        return sdpConfig;
-    }
+//    public SdpConfig getSdpConfig() {
+//        return sdpConfig;
+//    }
 
     public int getSessionMaxSize() {
         return sessionMaxSize;
@@ -290,34 +249,34 @@ public class AmfConfig extends DefaultConfig {
         return heartbeat;
     }
 
-    private void setMediaPriority(String priorityStr) {
-        if (priorityStr == null) {
-            return;
-        }
+//    private void setMediaPriority(String priorityStr) {
+//        if (priorityStr == null) {
+//            return;
+//        }
+//
+//        String[] priorities = priorityStr.split("\\s");
+//        if (priorities != null) {
+//            for (String priority: priorities) {
+//                try {
+//                    mediaPriorities.add(priority.trim());
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
-        String[] priorities = priorityStr.split("\\s");
-        if (priorities != null) {
-            for (String priority: priorities) {
-                try {
-                    mediaPriorities.add(priority.trim());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    public List<String> getMediaPriorities() {
+//        return mediaPriorities;
+//    }
 
-    public List<String> getMediaPriorities() {
-        return mediaPriorities;
-    }
-
-    public String getMediaPriority(int index) {
-        if (index < 0 || index >= mediaPriorities.size()) {
-            return null;
-        }
-
-        return mediaPriorities.get(index);
-    }
+//    public String getMediaPriority(int index) {
+//        if (index < 0 || index >= mediaPriorities.size()) {
+//            return null;
+//        }
+//
+//        return mediaPriorities.get(index);
+//    }
 
     public String getLocalNetInterface() {
         return localNetInterface;
@@ -325,6 +284,10 @@ public class AmfConfig extends DefaultConfig {
 
     public String getLocalIpAddress() {
         return localIpAddress;
+    }
+
+    public String getLocalBasePath() {
+        return localBasePath;
     }
 
     public String getRmqAiif(int index) {
@@ -337,10 +300,6 @@ public class AmfConfig extends DefaultConfig {
 
     public String getRmqAiifFmt() {
         return this.rmqAiifFmt;
-    }
-
-    public String getLocalBasePath() {
-        return localBasePath;
     }
 
     public long getAudioEnergyLevel() {
@@ -397,5 +356,9 @@ public class AmfConfig extends DefaultConfig {
 
     public boolean isRelayMode() {
         return relayMode;
+    }
+
+    public String getMediaConfPath() {
+        return mediaConfPath;
     }
 }

@@ -89,7 +89,7 @@ public class RmqProcInboundGetAnswerReq extends RmqIncomingMessageHandler {
          * Local relay demo
          */
         /*
-        SdpConfig config = AppInstance.getInstance().getConfig().getSdpConfig();
+        SdpConfig config = AppInstance.getInstance().getMediaConfig().getSdpConfig();
         sessionInfo.setLocalIpAddress(config.getLocalIpAddress());
 
         UdpRelayManager udpRelayManager = UdpRelayManager.getInstance();
