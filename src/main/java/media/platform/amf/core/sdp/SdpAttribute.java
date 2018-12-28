@@ -29,7 +29,7 @@ public class SdpAttribute {
 
     public SdpAttribute(int payloadId, String description) {
         this.payloadId = payloadId;
-        this.description = description;
+        setDescription(description);
 
         if (payloadId != PAYLOADID_NONE) {
             name = NAME_RTPMAP;
@@ -39,7 +39,7 @@ public class SdpAttribute {
     public SdpAttribute(String name, String description) {
         this.name = name;
         this.payloadId = PAYLOADID_NONE;
-        this.description = description;
+        setDescription(description);
     }
 
     public String getName() {
@@ -63,8 +63,32 @@ public class SdpAttribute {
         return description;
     }
 
+    private String codec;
+    private int sampleRate;
+
     public void setDescription(String description) {
         this.description = description;
+
+        if (description != null && description.contains("/")) {
+            codec = description.substring(0, description.indexOf('/')).trim();
+            String sampleRateStr = description.substring(description.indexOf('/') + 1).trim();
+
+            if (sampleRateStr != null) {
+                if (sampleRateStr.contains("/")) {
+                    sampleRate = Integer.parseInt(sampleRateStr.substring(0, sampleRateStr.indexOf('/')).trim());
+                }
+                else {
+                    sampleRate = Integer.parseInt(sampleRateStr);
+                }
+            }
+        }
     }
 
+    public String getCodec() {
+        return codec;
+    }
+
+    public int getSampleRate() {
+        return sampleRate;
+    }
 }

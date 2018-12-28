@@ -118,8 +118,20 @@ public class SdpInfo {
         return (getAttribute(payloadId) != null);
     }
 
-    public SdpAttribute getAttribute(int payloadId) {
+    public SdpAttribute getAttributeByIndex(int index) {
         if (attributes == null) {
+            return null;
+        }
+
+        if (index >= attributes.size()) {
+            return null;
+        }
+
+        return attributes.get(index);
+    }
+
+    public SdpAttribute getAttribute(int payloadId) {
+        if (attributes == null || payloadId == -1) {
             return null;
         }
 

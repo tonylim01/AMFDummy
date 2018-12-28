@@ -92,7 +92,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
         builder.setLocalIpAddress(sdpConfig.getLocalIpAddress());
         builder.setSessionName("-");      // TODO
 
-        SdpAttribute attr = selectSdp( sessionInfo);
+        SdpAttribute attr = selectSdp(sessionInfo);
         if (attr != null) {
 
             int localPort = sessionInfo.getSrcLocalPort();
@@ -268,7 +268,10 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
 
 //        SdpParser.selectAttribute(sdpInfo);
 
+        boolean isFound = false;
+
         if (sdpInfo.getAttributes() != null) {
+
             List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
@@ -280,27 +283,18 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
                     }
 
                     attr = sdpInfo.getAttributeByCodec(codecId);
+//                    logger.debug("[{}] Priority codec [{}] id [{}] attr [{}]", sessionInfo.getSessionId(), priorityCodec, codecId,
+//                            (attr != null) ? "found" : "not found");
+
                     if (attr == null) {
                         attr = sdpInfo.getAttribute(SdpCodec.getPayloadId(codecId));
+//                        logger.debug("[{}] Priority codec [{}] id [{}] attr [{}] payloadId [{}]", sessionInfo.getSessionId(), priorityCodec, codecId,
+//                                (attr != null) ? "found" : "not found", SdpCodec.getPayloadId(codecId));
                     }
 
                     if (attr != null) {
-                        String desc = attr.getDescription();
-                        if (desc != null && desc.contains("/")) {
-                            String codec = desc.substring(0, desc.indexOf('/')).trim();
-                            String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
-
-                            logger.debug("priority [{}] codec [{}] samplerate [{}]", priorityCodec, codec, sampleRate);
-                            sdpInfo.setCodecStr(codec);
-                            if (sampleRate != null) {
-                                if (sampleRate.contains("/")) {
-                                    sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
-                                }
-                                sdpInfo.setSampleRate(Integer.parseInt(sampleRate));
-                            }
-                        }
-
-                        sdpInfo.setPayloadId(attr.getPayloadId());
+                        logger.debug("[{}] Priority codec [{}] found", sessionInfo.getSessionId(), attr.getPayloadId());
+                        isFound = true;
                         break;
                     }
                 }
@@ -309,6 +303,22 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
                 logger.warn("No media priority defined");
             }
 
+        }
+
+        if (!isFound) {
+            // Select the 1st codec in the received sdp
+            attr = sdpInfo.getAttributeByIndex(0);
+            logger.debug("[{}] Priority codec not found. Get 1st codec [{}]", sessionInfo.getSessionId(),
+                    (attr != null) ? attr.getPayloadId() : -1);
+        }
+
+        if (attr != null) {
+            logger.debug("[{}] Select payload [{}] codec [{}] samplerate [{}]", sessionInfo.getSessionId(),
+                    attr.getPayloadId(), attr.getCodec(), attr.getSampleRate());
+
+            sdpInfo.setCodecStr(attr.getCodec());
+            sdpInfo.setSampleRate(attr.getSampleRate());
+            sdpInfo.setPayloadId(attr.getPayloadId());
         }
 
         return attr;

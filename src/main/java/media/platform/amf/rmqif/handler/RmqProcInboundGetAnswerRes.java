@@ -207,7 +207,10 @@ public class RmqProcInboundGetAnswerRes extends RmqOutgoingMessage {
 
 //        SdpParser.selectAttribute(sdpInfo);
 
+        boolean isFound = false;
+
         if (sdpInfo.getAttributes() != null) {
+
             List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
@@ -224,22 +227,7 @@ public class RmqProcInboundGetAnswerRes extends RmqOutgoingMessage {
                     }
 
                     if (attr != null) {
-                        String desc = attr.getDescription();
-                        if (desc != null && desc.contains("/")) {
-                            String codec = desc.substring(0, desc.indexOf('/')).trim();
-                            String sampleRate = desc.substring(desc.indexOf('/') + 1).trim();
-
-                            logger.debug("priority [{}] codec [{}] samplerate [{}]", priorityCodec, codec, sampleRate);
-                            sdpInfo.setCodecStr(codec);
-                            if (sampleRate != null) {
-                                if (sampleRate.contains("/")) {
-                                    sampleRate = sampleRate.substring(0, sampleRate.indexOf('/')).trim();
-                                }
-                                sdpInfo.setSampleRate(Integer.parseInt(sampleRate));
-                            }
-                        }
-
-                        sdpInfo.setPayloadId(attr.getPayloadId());
+                        isFound = true;
                         break;
                     }
                 }
@@ -248,6 +236,19 @@ public class RmqProcInboundGetAnswerRes extends RmqOutgoingMessage {
                 logger.warn("No media priority defined");
             }
 
+        }
+
+        if (!isFound) {
+            // Select the 1st codec in the received sdp
+            attr = sdpInfo.getAttributeByIndex(0);
+        }
+
+        if (attr != null) {
+            logger.debug("Select codec [{}] samplerate [{}]", attr.getCodec(), attr.getSampleRate());
+
+            sdpInfo.setCodecStr(attr.getCodec());
+            sdpInfo.setSampleRate(attr.getSampleRate());
+            sdpInfo.setPayloadId(attr.getPayloadId());
         }
 
         return attr;

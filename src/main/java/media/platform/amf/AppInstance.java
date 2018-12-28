@@ -68,7 +68,7 @@ public class AppInstance {
     }
 
     public void setMediaConfig(MediaConfig config) {
-        this.mediaConfig = mediaConfig;
+        this.mediaConfig = config;
     }
 
     public String getConfigFile() {

@@ -247,7 +247,8 @@ public class SdpParser {
             }
         }
 
-        for (Integer mediaOnlyPayloadId: mediaFormats) {
+        for (int i = mediaFormats.size() - 1; i >= 0; --i) {
+            Integer mediaOnlyPayloadId = mediaFormats.elementAt(i);
             logger.debug("sdp insert media [{}]", mediaOnlyPayloadId);
             sdpInfo.addFirstAttribute(mediaOnlyPayloadId, null);
         }

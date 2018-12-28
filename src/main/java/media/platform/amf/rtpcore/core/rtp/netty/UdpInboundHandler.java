@@ -161,11 +161,8 @@ public class UdpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             ByteBuffer buffer = ByteBuffer.wrap(rcvPktBuf);
 
             long engineSeq = buffer.getLong();
-            buffer.get(body, Long.BYTES, body.length);
-
-            //
-            // TODO: with engineSeq
-            //
+            buffer.slice();
+            buffer.get(body);
 
             //sessionInfo.getRtpSender().put(-1, body);
             sessionInfo.getRtpSender().put((int)engineSeq, body);

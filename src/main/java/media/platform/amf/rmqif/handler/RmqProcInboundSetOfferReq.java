@@ -70,7 +70,7 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
         }
 
         // sdpInfo can be null for a no-sdp case
-        SdpInfo sdpInfo = SdpParser.parseSdp( req.getSdp());
+        SdpInfo sdpInfo = SdpParser.parseSdp(req.getSdp());
 
         int parCount;
         parCount = setRoomInfo(req.getConferenceId(), msg.getSessionId());

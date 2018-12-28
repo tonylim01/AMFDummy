@@ -551,4 +551,50 @@ public class SessionInfo {
     public void setOutbound(int outbound) {
         this.outbound = outbound;
     }
+
+    private String a2sName;
+    private boolean callerWakeupStatus;
+    private boolean calleeWakeupStatus;
+    private MediaFileInfo successMedia;
+    private MediaFileInfo failureMedia;
+
+    public String getA2sName() {
+        return a2sName;
+    }
+
+    public void setA2sName(String a2sName) {
+        this.a2sName = a2sName;
+    }
+
+    public boolean isCallerWakeupStatus() {
+        return callerWakeupStatus;
+    }
+
+    public void setCallerWakeupStatus(boolean callerWakeupStatus) {
+        this.callerWakeupStatus = callerWakeupStatus;
+    }
+
+    public boolean isCalleeWakeupStatus() {
+        return calleeWakeupStatus;
+    }
+
+    public void setCalleeWakeupStatus(boolean calleeWakeupStatus) {
+        this.calleeWakeupStatus = calleeWakeupStatus;
+    }
+
+    public MediaFileInfo getSuccessMedia() {
+        return successMedia;
+    }
+
+    public void setSuccessMedia(MediaFileInfo successMedia) {
+        this.successMedia = successMedia;
+    }
+
+    public MediaFileInfo getFailureMedia() {
+        return failureMedia;
+    }
+
+    public void setFailureMedia(MediaFileInfo failureMedia) {
+        this.failureMedia = failureMedia;
+    }
 }

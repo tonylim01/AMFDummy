@@ -354,7 +354,7 @@ public class JitterSender {
 
                     ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES + body.length);
 
-                    engineSeq++;
+                    //engineSeq++;
                     //buffer.putLong(engineSeq);
                     buffer.putLong((long)udpPacket.getSeqNo());
                     buffer.put(body);
@@ -371,11 +371,18 @@ public class JitterSender {
                     }
                 }
             }
+            /*  Not send the silence packet
             else {
                 byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
 
-                udpClient.send(silenceBuf);
+                ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES + silenceBuf.length);
+
+                buffer.putLong((long)0);
+                buffer.put(silenceBuf);
+
+                udpClient.send(buffer.array());
             }
+            */
 
         } catch (Exception e) {
             e.printStackTrace();
