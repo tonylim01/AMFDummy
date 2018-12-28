@@ -2,6 +2,7 @@ package media.platform.amf.engine.handler;
 
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.SysConnectReq;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class EngineProcSysConnectReq extends EngineOutgoingMessage {
 
     public void setData() {
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         if (config == null) {
             return;
         }

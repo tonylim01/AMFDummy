@@ -2,6 +2,7 @@ package media.platform.amf.engine;
 
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.engine.handler.EngineProcSysConnectReq;
 import media.platform.amf.engine.handler.EngineProcSysHeartbeatReq;
 import media.platform.amf.engine.messages.SysConnectReq;
@@ -34,7 +35,7 @@ public class EngineClient {
 
     public static EngineClient getInstance() {
         if (engineClient == null) {
-            AmfConfig config = AppInstance.getInstance().getConfig();
+            UserConfig config = AppInstance.getInstance().getUserConfig();
             if (config.getEngineIp() != null && config.getEngineRemotePort() > 0) {
                 engineClient = new EngineClient(config.getEngineIp(), config.getEngineRemotePort());
             }

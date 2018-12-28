@@ -14,59 +14,22 @@ import media.platform.amf.common.NetUtil;
 import media.platform.amf.common.StringUtil;
 import media.platform.amf.core.config.ConfigChangedListener;
 import media.platform.amf.core.config.DefaultConfig;
-import media.platform.amf.redundant.RedundantClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AmfConfig extends DefaultConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(AmfConfig.class);
 
     private int amfId;
-    private int rmqBufferCount;
-    private String rmqHost;
-    private String rmqLocal;
-    private String rmqMcud;
-    private String rmqAcswf;
-    private String rmqUser, rmqPass;
-    private String rmqAiifs[];  // Not used
-    private String rmqAiifFmt;  // Not used
 
-    private int sessionMaxSize;
-    private int sessionTimeout;
-
-    private String heartbeat;
+    private boolean heartbeat;
     private boolean isTest;
     private boolean relayMode;
-    private String logPath;
-    private int logTime;
 
-    private RedundantConfig redundantConfig;
-
-    private int localUdpPortMin;
-    private int localUdpPortMax;
-    private String localNetInterface;
-    private String localIpAddress;
-
-    private String localBasePath;
-    private long audioEnergyLevel;      // Not used
-    private long silenceEnergyLevel;    // Not used
-    private long silenceDetectDuration; // Not used
-    private long energyDetectDuration;  // Not used
-
-    private String engineIp;
-    private int engineLocalPort;
-    private int engineRemotePort;
-
-    private String promptConfPath;
-    private int instanceId;
+    private int rmqBufferCount;
 
     private String mediaConfPath;
-//    private List<String> mediaPriorities;
-//    private SdpConfig sdpConfig;
 
     public AmfConfig(int instanceId, String configPath) {
 
@@ -74,11 +37,6 @@ public class AmfConfig extends DefaultConfig {
 
         boolean result = load();
         logger.info("Load config ... [{}]", StringUtil.getOkFail(result));
-
-        this.instanceId =instanceId;
-//        mediaPriorities = new ArrayList<>();
-//        sdpConfig = new SdpConfig();
-        redundantConfig = new RedundantConfig(configPath);
 
         setConfigChangedListener(new ConfigChangedListener() {
             @Override
@@ -91,7 +49,6 @@ public class AmfConfig extends DefaultConfig {
         if (result == true) {
             loadConfig(instanceId);
         }
-
     }
 
     @Override
@@ -107,30 +64,16 @@ public class AmfConfig extends DefaultConfig {
         String instanceSection = String.format("INSTANCE-%d", instanceId);
 
         loadCommonConfig();
-        loadSessionConfig();
         loadRmqConfig(instanceSection);
-        loadMediaConfig(instanceSection);
     }
 
     private void loadCommonConfig() {
         try {
             mediaConfPath = getStrValue("COMMON", "MEDIA_CONF_PATH", null);
-            promptConfPath = getStrValue("COMMON", "PROMPT_CONF_PATH", null);
             amfId = getIntValue("COMMON", "AMF_ID", 0);
-            heartbeat = getStrValue("COMMON", "HEARTBEAT", "felse");
+            heartbeat = getBooleanValue("COMMON", "HEARTBEAT", false);
             isTest = getBooleanValue("COMMON", "TEST", true);
             relayMode = getBooleanValue("COMMON", "RELAY_MODE", true);
-            logPath = getStrValue("COMMON", "LOG_PATH", null);
-            logTime = getIntValue("COMMON", "LOG_TIME", 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadSessionConfig() {
-        try {
-            sessionMaxSize = getIntValue("SESSION", "SESSION_MAX_SIZE", 0);
-            sessionTimeout = getIntValue("SESSION", "SESSION_TIMEOUT_SEC", 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,59 +82,6 @@ public class AmfConfig extends DefaultConfig {
     private void loadRmqConfig(String instanceSection) {
         try {
             rmqBufferCount = getIntValue("RMQ", "RMQ_BUFFER_COUNT", 0);
-            rmqHost = getStrValue("RMQ", "RMQ_HOST", "localhost");
-            rmqMcud = getStrValue("RMQ", "RMQ_MCUD", null);
-            rmqAcswf = getStrValue("RMQ", "RMQ_ACSWF", null);
-            rmqUser = getStrValue("RMQ", "RMQ_USER", null);
-            rmqPass = getStrValue("RMQ", "RMQ_PASS", null);
-
-            rmqLocal = getStrValue(instanceSection, "RMQ_LOCAL", "localhost");
-
-//            String rmqAiif = getStrValue("RMQ", "RMQ_AIIF", null);
-//            if (rmqAiif != null && rmqAiif.contains(",")) {
-//                String[] aiifs = rmqAiif.split(",");
-//                if (aiifs != null) {
-//                    rmqAiifs = new String[aiifs.length];
-//                    for (int i = 0; i < aiifs.length; i++) {
-//                        rmqAiifs[i] = aiifs[i].trim();
-//                    }
-//                }
-//            }
-//
-//            rmqAiifFmt = getStrValue("RMQ", "RMQ_AIIF_FMT", null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void loadMediaConfig(String instanceSection) {
-
-        try {
-            localUdpPortMin = getIntValue(instanceSection, "LOCAL_UDP_PORT_MIN", 0);
-            localUdpPortMax = getIntValue(instanceSection, "LOCAL_UDP_PORT_MAX", 0);
-
-            engineIp = getStrValue(instanceSection, "ENGINE_IP", null);
-            engineLocalPort = getIntValue(instanceSection, "ENGINE_LOCAL_PORT", 0);
-            engineRemotePort = getIntValue(instanceSection, "ENGINE_REMOTE_PORT", 0);
-
-            localNetInterface = getStrValue("COMMON", "LOCAL_NET_INTERFACE", null);
-
-            if (localNetInterface != null) {
-                localIpAddress = NetUtil.getLocalIP(localNetInterface);
-            }
-            else {
-                logger.error("Local IP not found for [{}]", localNetInterface);
-            }
-
-            localBasePath = getStrValue("COMMON", "LOCAL_BASE_PATH", null);
-
-//            audioEnergyLevel = (long)getIntValue("MEDIA", "AUDIO_ENERGY_LEVEL", 0);
-//            silenceEnergyLevel = (long)getIntValue("MEDIA", "SILENCE_ENERGY_LEVEL", 0);
-//            silenceDetectDuration = (long)getIntValue("MEDIA", "SILENCE_DETECT_DURATION", 0);
-//            energyDetectDuration = (long)getIntValue("MEDIA", "ENERGY_DETECT_DURATION", 0);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,133 +91,8 @@ public class AmfConfig extends DefaultConfig {
         return amfId;
     }
 
-    public String getRmqHost() {
-        return rmqHost;
-    }
-
-    public String getLocalName() {
-        return rmqLocal;
-    }
-
-    public String getMcudName() {
-        return rmqMcud;
-    }
-
-    public String getRmqAcswf() {
-        return rmqAcswf;
-    }
-
-    public String getRmqUser() {
-        return rmqUser;
-    }
-
-    public String getRmqPass() {
-        return rmqPass;
-    }
-
-//    public SdpConfig getSdpConfig() {
-//        return sdpConfig;
-//    }
-
-    public int getSessionMaxSize() {
-        return sessionMaxSize;
-    }
-
-    public int getSessionTimeout() {
-        return sessionTimeout;
-    }
-
-    public int getLocalUdpPortMin() {
-        return localUdpPortMin;
-    }
-
-    public int getLocalUdpPortMax() {
-        return localUdpPortMax;
-    }
-
-    public String getHeartbeat() {
+    public boolean getHeartbeat() {
         return heartbeat;
-    }
-
-//    private void setMediaPriority(String priorityStr) {
-//        if (priorityStr == null) {
-//            return;
-//        }
-//
-//        String[] priorities = priorityStr.split("\\s");
-//        if (priorities != null) {
-//            for (String priority: priorities) {
-//                try {
-//                    mediaPriorities.add(priority.trim());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
-//    public List<String> getMediaPriorities() {
-//        return mediaPriorities;
-//    }
-
-//    public String getMediaPriority(int index) {
-//        if (index < 0 || index >= mediaPriorities.size()) {
-//            return null;
-//        }
-//
-//        return mediaPriorities.get(index);
-//    }
-
-    public String getLocalNetInterface() {
-        return localNetInterface;
-    }
-
-    public String getLocalIpAddress() {
-        return localIpAddress;
-    }
-
-    public String getLocalBasePath() {
-        return localBasePath;
-    }
-
-    public String getRmqAiif(int index) {
-        if (rmqAiifs == null || index < 0 || index >= rmqAiifs.length) {
-            return null;
-        }
-
-        return rmqAiifs[index];
-    }
-
-    public String getRmqAiifFmt() {
-        return this.rmqAiifFmt;
-    }
-
-    public long getAudioEnergyLevel() {
-        return audioEnergyLevel;
-    }
-
-    public long getSilenceEnergyLevel() {
-        return silenceEnergyLevel;
-    }
-
-    public long getSilenceDetectDuration() {
-        return silenceDetectDuration;
-    }
-
-    public long getEnergyDetectDuration() {
-        return energyDetectDuration;
-    }
-
-    public String getPromptConfPath() {
-        return promptConfPath;
-    }
-
-    public String getLogPath() {
-        return logPath;
-    }
-
-    public int getLogTime() {
-        return logTime;
     }
 
     public boolean isTest() {
@@ -336,22 +101,6 @@ public class AmfConfig extends DefaultConfig {
 
     public int getRmqBufferCount() {
         return rmqBufferCount;
-    }
-
-    public RedundantConfig getRedundantConfig() {
-        return redundantConfig;
-    }
-
-    public String getEngineIp() {
-        return engineIp;
-    }
-
-    public int getEngineLocalPort() {
-        return engineLocalPort;
-    }
-
-    public int getEngineRemotePort() {
-        return engineRemotePort;
     }
 
     public boolean isRelayMode() {

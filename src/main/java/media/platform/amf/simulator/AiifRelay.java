@@ -1,5 +1,6 @@
 package media.platform.amf.simulator;
 
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.core.codec.AMRSlience;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.ShellUtil;
@@ -52,7 +53,7 @@ public class AiifRelay {
     public void start() {
         isQuit = false;
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
 
         audioDetectLevel = config.getAudioEnergyLevel();
         silenceDetectLevel = config.getSilenceEnergyLevel();

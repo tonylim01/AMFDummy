@@ -3,6 +3,7 @@ package media.platform.amf.session.StateHandler;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.ShellUtil;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.rmqif.messages.FileData;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -88,7 +89,7 @@ public class PlayStartStateFunction extends PlayStateFunction implements StateFu
             filename = amrfile;
         }
         else {
-            AmfConfig config = AppInstance.getInstance().getConfig();
+            UserConfig config = AppInstance.getInstance().getUserConfig();
             filename = String.format("%s/%s", config.getLocalBasePath(), data.getPlayFile());
 
             File file = new File(filename);

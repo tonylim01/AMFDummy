@@ -1,16 +1,15 @@
 package media.platform.amf;
 
 import media.platform.amf.config.AmfConfig;
-import media.platform.amf.config.MediaConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.config.PromptConfig;
-import media.platform.amf.config.RedundantConfig;
 import media.platform.amf.rtpcore.Process.NettyRTPServer;
 import media.platform.amf.rtpcore.Process.NettyUDPServer;
 
 public class AppInstance {
 
     private static AppInstance instance = null;
-    private static final String AMF_CONFIG_FILE = "amf.conf";
+    private static final String AMF_CONFIG_FILE = "amf_user.conf";
 
     public static AppInstance getInstance() {
         if (instance == null) {
@@ -23,7 +22,7 @@ public class AppInstance {
     private int instanceId = 0;
     private String configFile = null;
     private AmfConfig amfConfig = null;
-    private MediaConfig mediaConfig = null;
+    private UserConfig userConfig = null;
     private PromptConfig promptConfig = null;
     //private RedundantConfig redundantConfig = null;
 
@@ -39,8 +38,8 @@ public class AppInstance {
         return amfConfig;
     }
 
-    public MediaConfig getMediaConfig() {
-        return mediaConfig;
+    public UserConfig getUserConfig() {
+        return userConfig;
     }
 
     private NettyRTPServer nettyRTPServer;
@@ -67,8 +66,8 @@ public class AppInstance {
         this.amfConfig = config;
     }
 
-    public void setMediaConfig(MediaConfig config) {
-        this.mediaConfig = config;
+    public void setUserConfig(UserConfig config) {
+        this.userConfig = config;
     }
 
     public String getConfigFile() {
@@ -80,8 +79,8 @@ public class AppInstance {
     }
 
     public void loadPromptConfig() {
-        if (amfConfig != null && amfConfig.getPromptConfPath() != null) {
-            promptConfig = new PromptConfig(amfConfig.getPromptConfPath());
+        if (amfConfig != null && userConfig.getPromptConfPath() != null) {
+            promptConfig = new PromptConfig(userConfig.getPromptConfPath());
         }
     }
 

@@ -62,7 +62,7 @@ public class RmqProcServiceStartReq extends RmqIncomingMessageHandler {
             return false;
         }
         */
-        String aiifFmt = AppInstance.getInstance().getConfig().getRmqAiifFmt();
+        String aiifFmt = AppInstance.getInstance().getUserConfig().getRmqAiifFmt();
         if (aiifFmt == null) {
             aiifFmt = DEFAULT_AIIF_QUEUE_FMT;
         }

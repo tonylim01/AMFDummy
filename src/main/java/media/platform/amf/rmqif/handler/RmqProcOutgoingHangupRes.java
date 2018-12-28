@@ -40,7 +40,7 @@ public class RmqProcOutgoingHangupRes extends RmqIncomingMessageHandler {
 
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.IDLE);
 
-        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
+        if (AppInstance.getInstance().getUserConfig().getRedundantConfig().isActive()) {
             RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_HANGUP_REQ, msg.getSessionId());
         }
 

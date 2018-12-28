@@ -11,6 +11,7 @@ package media.platform.amf.rmqif.module;
 
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.AppInstance;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.core.rabbitmq.transport.RmqSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ public class RmqClient {
     }
 
     private boolean createSender(String queueName) {
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         if (config == null) {
             return false;
         }

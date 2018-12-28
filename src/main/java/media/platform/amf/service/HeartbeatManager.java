@@ -2,6 +2,7 @@ package media.platform.amf.service;
 
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.rmqif.handler.RmqProcHeartbeatReq;
 
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class HeartbeatManager {
     class SendHeartbeatRunnable implements Runnable {
         @Override
         public void run() {
-            AmfConfig config = AppInstance.getInstance().getConfig();
+            UserConfig config = AppInstance.getInstance().getUserConfig();
 
             RmqProcHeartbeatReq req = new RmqProcHeartbeatReq( thisSessionId, UUID.randomUUID().toString());
             req.send(config.getMcudName());

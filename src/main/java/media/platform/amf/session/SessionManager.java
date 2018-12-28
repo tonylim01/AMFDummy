@@ -1,6 +1,7 @@
 package media.platform.amf.session;
 
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import media.platform.amf.AppInstance;
@@ -59,7 +60,7 @@ public class SessionManager {
 
     public SessionManager() {
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         if (config == null) {
             return;
         }

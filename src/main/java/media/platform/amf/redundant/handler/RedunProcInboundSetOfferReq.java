@@ -60,7 +60,7 @@ public class RedunProcInboundSetOfferReq implements RedunProcMessageHandler {
 
         sessionInfo.setSrcLocalPort(fromSessionInfo.getSrcLocalPort());
 
-        SdpConfig sdpConfig = AppInstance.getInstance().getMediaConfig().getSdpConfig();
+        SdpConfig sdpConfig = AppInstance.getInstance().getUserConfig().getSdpConfig();
 
         try {
             sessionInfo.rtpChannel = AppInstance.getInstance().getNettyRTPServer().addBindPort(sdpConfig.getLocalIpAddress(), sessionInfo.getSrcLocalPort());

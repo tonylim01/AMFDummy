@@ -10,7 +10,6 @@
 package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.core.sdp.*;
-import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.rmqif.handler.base.RmqOutgoingMessage;
 import media.platform.amf.rmqif.messages.InboundGetAnswerRes;
@@ -81,7 +80,7 @@ public class RmqProcOutboundGetAnswerRes extends RmqOutgoingMessage {
         }
 
         //AmfConfig config = AppInstance.getInstance().getConfig();
-        SdpConfig sdpConfig = AppInstance.getInstance().getMediaConfig().getSdpConfig();
+        SdpConfig sdpConfig = AppInstance.getInstance().getUserConfig().getSdpConfig();
 
         SdpBuilder builder = new SdpBuilder();
         builder.setHost(sdpConfig.getLocalHost());
@@ -205,7 +204,7 @@ public class RmqProcOutboundGetAnswerRes extends RmqOutgoingMessage {
 
         if (sdpInfo.getAttributes() != null) {
 
-            List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
+            List<String> mediaPriorities = AppInstance.getInstance().getUserConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
                 for (String priorityCodec : mediaPriorities) {

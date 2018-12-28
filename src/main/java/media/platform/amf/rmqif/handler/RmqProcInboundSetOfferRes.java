@@ -11,11 +11,9 @@
 package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.AppInstance;
-import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.sdp.*;
 import media.platform.amf.rmqif.handler.base.RmqOutgoingMessage;
-import media.platform.amf.rmqif.messages.InboundGetAnswerRes;
 import media.platform.amf.rmqif.messages.InboundSetOfferRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
 import media.platform.amf.room.RoomInfo;
@@ -83,7 +81,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
         }
 
         //AmfConfig config = AppInstance.getInstance().getConfig();
-        SdpConfig sdpConfig = AppInstance.getInstance().getMediaConfig().getSdpConfig();
+        SdpConfig sdpConfig = AppInstance.getInstance().getUserConfig().getSdpConfig();
 
         SdpBuilder builder = new SdpBuilder();
         builder.setHost(sdpConfig.getLocalHost());
@@ -182,7 +180,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
                 }
             }
 
-            List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
+            List<String> mediaPriorities = AppInstance.getInstance().getUserConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
                 for (int i = priorityIndex; i < mediaPriorities.size(); i++) {
@@ -272,7 +270,7 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
 
         if (sdpInfo.getAttributes() != null) {
 
-            List<String> mediaPriorities = AppInstance.getInstance().getMediaConfig().getMediaPriorities();
+            List<String> mediaPriorities = AppInstance.getInstance().getUserConfig().getMediaPriorities();
 
             if (mediaPriorities != null && mediaPriorities.size() > 0) {
                 for (String priorityCodec : mediaPriorities) {

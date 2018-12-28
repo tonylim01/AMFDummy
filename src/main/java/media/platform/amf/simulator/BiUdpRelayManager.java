@@ -1,5 +1,6 @@
 package media.platform.amf.simulator;
 
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
@@ -33,7 +34,7 @@ public class BiUdpRelayManager {
     private Map<String, BiUdpRelay> udpRelayMap;
 
     public BiUdpRelayManager() {
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         localUdpPortMin = config.getLocalUdpPortMin();
         localUdpPortMax = config.getLocalUdpPortMax();
 

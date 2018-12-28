@@ -45,7 +45,7 @@ public class RmqProcInboundGetAnswerReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
+        if (AppInstance.getInstance().getUserConfig().getRedundantConfig().isActive()) {
             RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_INBOUND_GET_ANSER_REQ, msg.getSessionId());
         }
 
@@ -89,7 +89,7 @@ public class RmqProcInboundGetAnswerReq extends RmqIncomingMessageHandler {
          * Local relay demo
          */
         /*
-        SdpConfig config = AppInstance.getInstance().getMediaConfig().getSdpConfig();
+        SdpConfig config = AppInstance.getInstance().getUserConfig().getSdpConfig();
         sessionInfo.setLocalIpAddress(config.getLocalIpAddress());
 
         UdpRelayManager udpRelayManager = UdpRelayManager.getInstance();

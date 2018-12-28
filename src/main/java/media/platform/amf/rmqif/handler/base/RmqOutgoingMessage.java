@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.AppInstance;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.rmqif.module.RmqBuilder;
 import media.platform.amf.rmqif.module.RmqClient;
 import media.platform.amf.rmqif.types.RmqHeader;
@@ -101,7 +102,7 @@ public class RmqOutgoingMessage implements RmqOutgoingMessageInterface {
     public boolean sendTo(String target) {
         boolean result = false;
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         if (config == null) {
             return false;
         }

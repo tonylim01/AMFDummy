@@ -11,6 +11,7 @@
 package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.redundant.RedundantClient;
 import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqOutgoingMessage;
@@ -55,7 +56,7 @@ public class RmqProcOutgoingHangupReq extends RmqOutgoingMessage {
      * @return
      */
     public boolean sendToMcud() {
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         if (config == null) {
             logger.error("[{}] Null config", getSessionId());
             return false;

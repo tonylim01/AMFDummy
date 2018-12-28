@@ -9,52 +9,20 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedundantConfig extends DefaultConfig {
+public class RedundantConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(RedundantConfig.class);
 
-    private static final int DEFAULT_PORT = 4090;
+    public static final int DEFAULT_PORT = 4090;
 
-    private static final int MODE_ACTIVE = 1;
-    private static final int MODE_STANDBY = 2;
+    public static final int MODE_ACTIVE = 1;
+    public static final int MODE_STANDBY = 2;
 
     private boolean isRun;
     private int localPort;
     private String remoteIp;
     private int remotePort;
     private int defaultMode;
-
-    public RedundantConfig(String configPath) {
-
-        super(configPath);
-
-        boolean result = load();
-        logger.info("Load config [{}] ... [{}]", configPath, StringUtil.getOkFail(result));
-
-        if (result == true) {
-            loadConfig();
-        }
-    }
-
-    private void loadConfig() {
-        try {
-            isRun = getBooleanValue("REDUNDANT", "RUN", false);
-            localPort = getIntValue("REDUNDANT", "LOCAL_PORT", DEFAULT_PORT);
-            remoteIp = getStrValue("REDUNDANT", "REMOTE_IP", null);
-            remotePort = getIntValue("REDUNDANT", "REMOTE_PORT", DEFAULT_PORT);
-            String modeStr = getStrValue("REDUNDANT", "DEFAULT_MODE", null);
-
-            if (modeStr != null && modeStr.toUpperCase().equals("ACTIVE")) {
-                defaultMode = MODE_ACTIVE;
-            }
-            else {
-                defaultMode = MODE_STANDBY;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public int getLocalPort() {
         return localPort;
@@ -78,5 +46,25 @@ public class RedundantConfig extends DefaultConfig {
 
     public boolean isActive() {
         return (isRun & (defaultMode == MODE_ACTIVE));
+    }
+
+    public void setRun(boolean run) {
+        isRun = run;
+    }
+
+    public void setLocalPort(int localPort) {
+        this.localPort = localPort;
+    }
+
+    public void setRemoteIp(String remoteIp) {
+        this.remoteIp = remoteIp;
+    }
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
+    }
+
+    public void setDefaultMode(int defaultMode) {
+        this.defaultMode = defaultMode;
     }
 }

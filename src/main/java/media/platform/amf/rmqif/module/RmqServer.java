@@ -12,6 +12,7 @@ package media.platform.amf.rmqif.module;
 import media.platform.amf.common.StringUtil;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.AppInstance;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.core.rabbitmq.transport.RmqCallback;
 import media.platform.amf.core.rabbitmq.transport.RmqReceiver;
 import org.slf4j.Logger;
@@ -33,11 +34,11 @@ public class RmqServer {
     }
 
     public void start() {
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
 
         logger.info("{} startScheduler", getClass().getSimpleName());
 
-        int queueSize = config.getRmqBufferCount();
+        int queueSize = AppInstance.getInstance().getConfig().getRmqBufferCount();
         if (queueSize == 0) {
             queueSize = QUEUE_SIZE;
         }
@@ -47,19 +48,21 @@ public class RmqServer {
         rmqConsumerThread = new Thread(new RmqConsumer(queue));
         rmqConsumerThread.start();
 
+        logger.info("Rmq host [{}] user [{}] pass [{}] local [{}]", config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
+
         receiver = new RmqReceiver(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
 //        receiver = new RmqReceiver(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), "amf_amfd");
         receiver.setCallback(new MessageCallback());
 
         boolean result = receiver.connectServer();
-        logger.info( "{} connect ... [{}]", getClass().getSimpleName(), StringUtil.getOkFail( result));
+        logger.info("[{}] connect ... [{}]", config.getLocalName(), StringUtil.getOkFail( result));
 
         if (result == false) {
             return;
         }
 
         result = receiver.start();
-        logger.info("{} [{}] startScheduler ... [{}]", getClass().getSimpleName(), config.getLocalName(), StringUtil.getOkFail(result));
+        logger.info("[{}] startScheduler ... [{}]", config.getLocalName(), StringUtil.getOkFail(result));
     }
 
     public void stop() {

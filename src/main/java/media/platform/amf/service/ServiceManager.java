@@ -3,7 +3,7 @@ package media.platform.amf.service;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.config.AmfConfig;
-import media.platform.amf.config.MediaConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.engine.EngineServer;
 import media.platform.amf.redundant.RedundantServer;
 import media.platform.amf.rmqif.handler.RmqProcLogInReq;
@@ -51,15 +51,15 @@ public class ServiceManager {
         AppInstance instance = AppInstance.getInstance();
 
         AmfConfig amfConfig = new AmfConfig(instance.getInstanceId(), instance.getConfigFile());
+        UserConfig userConfig = new UserConfig(instance.getInstanceId(), amfConfig.getMediaConfPath());
+
         instance.setConfig(amfConfig);
-        instance.setMediaConfig(new MediaConfig(amfConfig.getMediaConfPath()));
+        instance.setUserConfig(userConfig);
 
         instance.loadPromptConfig();
 
-        AmfConfig config = instance.getConfig();
-
-        if (config.getLogPath() != null && config.getLogTime() > 0) {
-            org.apache.log4j.xml.DOMConfigurator.configureAndWatch(config.getLogPath(), config.getLogTime());
+        if (userConfig.getLogPath() != null && userConfig.getLogTime() > 0) {
+            org.apache.log4j.xml.DOMConfigurator.configureAndWatch(userConfig.getLogPath(), userConfig.getLogTime());
         }
     }
 
@@ -68,7 +68,7 @@ public class ServiceManager {
      */
     public void loop() {
 
-        if (USE_PING && !pingRmqServer(AppInstance.getInstance().getConfig().getRmqHost())) {
+        if (USE_PING && !pingRmqServer(AppInstance.getInstance().getUserConfig().getRmqHost())) {
             return;
         }
 
@@ -112,7 +112,7 @@ public class ServiceManager {
      */
     private boolean startService() {
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
 
         rmqServer = new RmqServer();
         rmqServer.start();
@@ -130,8 +130,7 @@ public class ServiceManager {
             engineServer.start();
         }
 
-        if(config.getHeartbeat().equals( "true" ))
-        {
+        if(AppInstance.getInstance().getConfig().getHeartbeat() == true) {
             heartbeatManager = heartbeatManager.getInstance();
             heartbeatManager.start();
         }
@@ -179,9 +178,9 @@ public class ServiceManager {
 //        heartbeatManager.stop();
         sessionManager.stop();
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
 
-        if (RmqClient.hasInstance( config.getMcudName())) {
+        if (RmqClient.hasInstance(config.getMcudName())) {
             RmqClient.getInstance(config.getMcudName()).closeSender();
         }
     }
@@ -242,7 +241,7 @@ public class ServiceManager {
     }
 
     private void amfLoginToA2S() {
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
 
         String thisSessionId = UUID.randomUUID().toString();
 

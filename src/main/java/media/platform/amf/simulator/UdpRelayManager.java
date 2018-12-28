@@ -2,6 +2,7 @@ package media.platform.amf.simulator;
 
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class UdpRelayManager {
     private Map<String, UdpRelay> udpRelayMap;
 
     public UdpRelayManager() {
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         localUdpPortMin = config.getLocalUdpPortMin();
         localUdpPortMax = config.getLocalUdpPortMax();
 

@@ -26,7 +26,7 @@ public class RedundantClient {
 
     public static RedundantClient getInstance() {
         if (redundantClient == null) {
-            RedundantConfig config = AppInstance.getInstance().getConfig().getRedundantConfig();
+            RedundantConfig config = AppInstance.getInstance().getUserConfig().getRedundantConfig();
             redundantClient = new RedundantClient(config.getRemoteIp(), config.getRemotePort());
         }
         return redundantClient;

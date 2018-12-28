@@ -105,7 +105,7 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
         sessionInfo.setRemoteRmqName(msg.getHeader().getMsgFrom());
 
         BiUdpRelayManager udpRelayManager = BiUdpRelayManager.getInstance();
-        SdpConfig sdpConfig = AppInstance.getInstance().getMediaConfig().getSdpConfig();
+        SdpConfig sdpConfig = AppInstance.getInstance().getUserConfig().getSdpConfig();
 
         boolean isError = false;
         int localPort = 0;
@@ -143,7 +143,7 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
-        if (AppInstance.getInstance().getConfig().getRedundantConfig().isActive()) {
+        if (AppInstance.getInstance().getUserConfig().getRedundantConfig().isActive()) {
             String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
             logger.debug("[{}] JSON: {}", msg.getSessionId(), json);
 

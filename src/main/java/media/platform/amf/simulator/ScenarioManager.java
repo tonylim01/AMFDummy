@@ -1,5 +1,6 @@
 package media.platform.amf.simulator;
 
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.core.rabbitmq.transport.RmqSender;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
@@ -15,7 +16,7 @@ public class ScenarioManager {
     private RmqSender rmqSender = null;
 
     public ScenarioManager() {
-        AmfConfig config = new AmfConfig( 0, AppInstance.getInstance().getConfigFile());
+        UserConfig config = AppInstance.getInstance().getUserConfig();
 
         rmqSender = new RmqSender(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
         rmqSender.connectClient();
