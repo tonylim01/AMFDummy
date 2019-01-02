@@ -14,10 +14,9 @@ import media.platform.amf.rmqif.messages.WakeupStatusReq;
 import media.platform.amf.rmqif.module.RmqData;
 import media.platform.amf.rmqif.types.RmqMessage;
 import media.platform.amf.rmqif.types.RmqMessageType;
-import media.platform.amf.session.MediaFileInfo;
-import media.platform.amf.session.SessionInfo;
-import media.platform.amf.session.SessionState;
-import media.platform.amf.session.SessionStateManager;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
+import media.platform.amf.session.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,9 +55,32 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
         sessionInfo.setSuccessMedia((req.getSuccess() != null) ? req.getSuccess().getMediaFileInfo() : null);
         sessionInfo.setFailureMedia((req.getFail() != null) ? req.getFail().getMediaFileInfo() : null);
 
+        if (sessionInfo.getConferenceId() != null) {
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null) {
+                roomInfo.setWakeupStatus(sessionInfo.isCaller(),
+                        (sessionInfo.isCaller() ? req.getCallerWakeupStatus() : req.getCalleeWakeupStatus())
+                                ? RoomInfo.WAKEUP_STATUS_PREPARE : RoomInfo.WAKEUP_STATUS_NONE);
+
+                SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
+                if (otherSessionInfo != null) {
+
+                    otherSessionInfo.setSuccessMedia((req.getSuccess() != null) ? req.getSuccess().getMediaFileInfo() : null);
+                    otherSessionInfo.setFailureMedia((req.getFail() != null) ? req.getFail().getMediaFileInfo() : null);
+
+                    roomInfo.setWakeupStatus(otherSessionInfo.isCaller(),
+                            (otherSessionInfo.isCaller() ? req.getCallerWakeupStatus() : req.getCalleeWakeupStatus())
+                                    ? RoomInfo.WAKEUP_STATUS_PREPARE : RoomInfo.WAKEUP_STATUS_NONE);
+                }
+
+                roomInfo.setLastTransactionId(msg.getHeader().getTransactionId());
+                roomInfo.setAwfQueueName(msg.getHeader().getMsgFrom());
+            }
+        }
+
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.START);
 
-        sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
+        //sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
         return false;
     }
@@ -71,7 +93,10 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
         res.setReasonCode(reasonCode);
         res.setReasonStr(reasonStr);
 
-        if (res.send(queueName) == false) {
+        //
+        // TODO
+        //
+        if (res.send(queueName, true, true) == false) {
             // TODO
         }
 

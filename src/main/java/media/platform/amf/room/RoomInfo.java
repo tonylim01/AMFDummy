@@ -172,4 +172,47 @@ public class RoomInfo {
 
         return result;
     }
+
+    /**
+     * wakeupStatus : [caller][callee]
+     *   0 - N/A
+     *   1 - Needs wakeup
+     *   2 - Gets wakeup response from engine
+     */
+    private int wakeupStatus;
+
+    public static final int WAKEUP_STATUS_NONE      = 0;
+    public static final int WAKEUP_STATUS_PREPARE   = 1;
+    public static final int WAKEUP_STATUS_READY     = 2;
+
+    public int setWakeupStatus(boolean isCaller, int status) {
+
+        if (isCaller) {
+            wakeupStatus = (wakeupStatus & 0x3) & ((status & 0x3) << 2);
+        }
+        else {
+            wakeupStatus = (wakeupStatus & 0xc) & (status & 0x3);
+        }
+
+        return wakeupStatus;
+    }
+
+    private String lastTransactionId;
+    private String awfQueueName;
+
+    public String getLastTransactionId() {
+        return lastTransactionId;
+    }
+
+    public void setLastTransactionId(String lastTransactionId) {
+        this.lastTransactionId = lastTransactionId;
+    }
+
+    public String getAwfQueueName() {
+        return awfQueueName;
+    }
+
+    public void setAwfQueueName(String awfQueueName) {
+        this.awfQueueName = awfQueueName;
+    }
 }

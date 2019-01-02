@@ -2,6 +2,8 @@ package media.platform.amf.session;
 
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.UserConfig;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import media.platform.amf.AppInstance;
@@ -187,6 +189,32 @@ public class SessionManager {
         }
 
         return sessionInfo;
+    }
+
+    /**
+     * Finds and returns other parties' SessionInfo
+     * @param sessionInfo
+     * @return
+     */
+    public static SessionInfo findOtherSession(SessionInfo sessionInfo) {
+        if (sessionInfo == null) {
+            return null;
+        }
+
+        SessionInfo otherSession = null;
+
+        if (sessionInfo.getConferenceId() != null) {
+
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null) {
+                String otherSessionId = roomInfo.getOtherSession(sessionInfo.getSessionId());
+                if (otherSessionId != null) {
+                    otherSession = SessionManager.findSession(otherSessionId);
+                }
+            }
+        }
+
+        return otherSession;
     }
 
     /**

@@ -21,5 +21,7 @@ public class OfferStateFunction implements StateFunction {
         //
         // TODO
         //
+
+        sessionInfo.setEndOfState(SessionState.OFFER);
     }
 }

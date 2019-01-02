@@ -21,5 +21,7 @@ public class AnswerStateFunction implements StateFunction {
         //
         // TODO
         //
+
+        sessionInfo.setEndOfState(SessionState.ANSWER);
     }
 }

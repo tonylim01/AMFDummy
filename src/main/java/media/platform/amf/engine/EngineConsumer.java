@@ -1,14 +1,13 @@
 package media.platform.amf.engine;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import media.platform.amf.common.AppId;
+import media.platform.amf.engine.handler.EngineMessageHandlerAudio;
+import media.platform.amf.engine.handler.EngineMessageHandlerMixer;
+import media.platform.amf.engine.handler.EngineMessageHandlerWakeup;
 import media.platform.amf.engine.messages.SysHeartbeatRes;
+import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.room.RoomInfo;
-import media.platform.amf.room.RoomManager;
-import media.platform.amf.session.SessionInfo;
-import media.platform.amf.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +49,22 @@ public class EngineConsumer implements Runnable {
         logger.debug("EngineConsumer end");
     }
 
+    private String getJsonType(String json) {
+        if (json == null) {
+            return null;
+        }
+
+        int st = json.indexOf("\"");
+        int et = json.indexOf("\"", st + 1);
+
+        String key = null;
+        if (st > 0 && et > 0) {
+            key = json.substring(st + 1, et - 1);
+        }
+
+        return key;
+    }
+
     private void handleMessage(byte[] data) {
         if (data == null || data.length == 0) {
             return;
@@ -58,36 +73,72 @@ public class EngineConsumer implements Runnable {
         String json = new String(data, Charset.defaultCharset());
         json = json.trim();
 
-        //
-        // TODO
-        //
-
-        EngineResponseMessage msg = gson.fromJson(json, EngineResponseMessage.class);
-
-        if (msg == null || msg.getHeader() == null) {
-            logger.debug("<- Engine: json {}", json);
+        String typeStr = getJsonType(json);
+        if (typeStr == null) {
             return;
         }
 
-        if (msg.getHeader().getAppId() == null) {
-            logger.debug("<- Engine: json {}", json);
-            logger.warn("No appId in engine message");
-            return;
-        }
+        if (compareString(typeStr, "response")) {
 
-        if (compareString(msg.getHeader().getType(), "sys")) {
-            handleSysResponse(msg);
+            EngineResponseMessage msg = gson.fromJson(json, EngineResponseMessage.class);
+
+            if (msg == null || msg.getHeader() == null) {
+                logger.debug("<- Engine: json {}", json);
+                return;
+            }
+
+            if (msg.getHeader().getAppId() == null) {
+                logger.debug("<- Engine: json {}", json);
+                logger.warn("No appId in engine message");
+                return;
+            }
+
+            if (compareString(msg.getHeader().getType(), "sys")) {
+                handleSysResponse(msg);
+            }
+            else if (compareString(msg.getHeader().getType(), "audio")) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerAudio mixer = new EngineMessageHandlerAudio();
+                mixer.handle(msg);
+            }
+            else if (compareString(msg.getHeader().getType(), "mixer")) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerMixer mixer = new EngineMessageHandlerMixer();
+                mixer.handle(msg);
+            }
+            else if (compareString(msg.getHeader().getType(), "wakeup")) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerWakeup wakeup = new EngineMessageHandlerWakeup();
+                wakeup.handle(msg);
+            }
+            else {
+                logger.debug("<- Engine: json {}", json);
+            }
         }
-        else if (compareString(msg.getHeader().getType(), "audio")) {
-            logger.debug("<- Engine: json {}", json);
-            handleAudioResponse(msg);
-        }
-        else if (compareString(msg.getHeader().getType(), "mixer")) {
-            logger.debug("<- Engine: json {}", json);
-            handleMixerResponse(msg);
-        }
-        else {
-            logger.debug("<- Engine: json {}", json);
+        else if (compareString(typeStr, "report")) {
+
+            EngineReportMessage msg = gson.fromJson(json, EngineReportMessage.class);
+
+            if (msg == null || msg.getHeader() == null) {
+                logger.debug("<- Engine: json {}", json);
+                return;
+            }
+
+            if (msg.getHeader().getAppId() == null) {
+                logger.debug("<- Engine: json {}", json);
+                logger.warn("No appId in engine message");
+                return;
+            }
+
+            if (compareString(msg.getHeader().getType(), "wakeup")) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerWakeup wakeup = new EngineMessageHandlerWakeup();
+                wakeup.handle(msg);
+            }
+            else {
+                logger.debug("<- Engine: json {}", json);
+            }
+
         }
     }
 
@@ -127,94 +178,5 @@ public class EngineConsumer implements Runnable {
         }
     }
 
-    private void handleAudioResponse(EngineResponseMessage msg) {
-
-        if (msg == null || msg.getHeader() == null) {
-            logger.warn("Null response message");
-            return;
-        }
-
-        if (compareString(msg.getHeader().getCmd(), "create")) {
-
-            if (compareString(msg.getHeader().getResult(), "ok") ||
-                    compareString(msg.getHeader().getResult(), "success")) {
-                // Success
-                if (msg.getHeader().getAppId() == null) {
-                    logger.warn("Null appId in response message");
-                    return;
-                }
-
-                String sessionId = AppId.getInstance().get(msg.getHeader().getAppId());
-                if (sessionId == null) {
-                    logger.warn("No sessionId for appId=[{}]", msg.getHeader().getAppId());
-                    return;
-                }
-
-                SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
-                if (sessionInfo == null) {
-                    logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
-                    return;
-                }
-
-                sessionInfo.setAudioCreated(true);
-
-                //
-                // TODO
-                //
-            }
-            else {
-                logger.warn("Undefined result [{}]", msg.getHeader().getResult());
-            }
-        }
-        else {
-            logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
-        }
-
-    }
-
-    private void handleMixerResponse(EngineResponseMessage msg) {
-
-        if (msg == null || msg.getHeader() == null) {
-            logger.warn("Null response message");
-            return;
-        }
-
-        if (compareString(msg.getHeader().getCmd(), "create")) {
-
-            if (compareString(msg.getHeader().getResult(), "ok") ||
-                compareString(msg.getHeader().getResult(), "success")) {
-                // Success
-                if (msg.getHeader().getAppId() == null) {
-                    logger.warn("Null appId in response message");
-                    return;
-                }
-
-                String roomId = AppId.getInstance().get(msg.getHeader().getAppId());
-                if (roomId == null) {
-                    logger.warn("No roomId for appId=[{}]", msg.getHeader().getAppId());
-                    return;
-                }
-
-                RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(roomId);
-                if (roomInfo == null) {
-                    logger.warn("Cannot find room for appId=[{}]", msg.getHeader().getAppId());
-                    return;
-                }
-
-                roomInfo.setMixerAvailable(true);
-
-                //
-                // TODO
-                //
-            }
-            else {
-                logger.warn("Undefined result [{}]", msg.getHeader().getResult());
-            }
-        }
-        else {
-            logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
-        }
-
-    }
 }
 

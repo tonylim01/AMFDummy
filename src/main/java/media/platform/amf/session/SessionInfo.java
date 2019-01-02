@@ -18,6 +18,7 @@ public class SessionInfo {
     private long createdTime;
 
     private SessionState serviceState;
+    private SessionState endOfState;
     private long lastSentTime;
     private long t2Time;
     private long t4Time;
@@ -596,5 +597,32 @@ public class SessionInfo {
 
     public void setFailureMedia(MediaFileInfo failureMedia) {
         this.failureMedia = failureMedia;
+    }
+
+    public SessionState getEndOfState() {
+        return endOfState;
+    }
+
+    public void setEndOfState(SessionState endOfState) {
+        this.endOfState = endOfState;
+    }
+
+    private String aiifIp;
+    private int aiifPort;
+
+    public String getAiifIp() {
+        return aiifIp;
+    }
+
+    public void setAiifIp(String aiifIp) {
+        this.aiifIp = aiifIp;
+    }
+
+    public int getAiifPort() {
+        return aiifPort;
+    }
+
+    public void setAiifPort(int aiifPort) {
+        this.aiifPort = aiifPort;
     }
 }

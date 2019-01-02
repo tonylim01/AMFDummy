@@ -22,5 +22,6 @@ public class ReadyStateFunction implements StateFunction {
         // TODO
         //
 
+        sessionInfo.setEndOfState(SessionState.READY);
     }
 }

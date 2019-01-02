@@ -115,6 +115,14 @@ public class RmqConsumer implements Runnable {
                 RmqProcServiceStartReq startServiceReq = new RmqProcServiceStartReq();
                 startServiceReq.handle(msg);
                 break;
+            case RmqMessageType.RMQ_MSG_TYPE_WAKEUP_STATUS_REQ:
+                RmqProcWakeupStatusReq wakeupStatusReq = new RmqProcWakeupStatusReq();
+                wakeupStatusReq.handle(msg);
+                break;
+            case RmqMessageType.RMQ_MSG_TYPE_AI_SERVICE_RES:
+                RmqProcAiServiceRes aiServiceRes = new RmqProcAiServiceRes();
+                aiServiceRes.handle(msg);
+                break;
             case RmqMessageType.RMQ_MSG_TYPE_INBOUND_GET_ANSWER_RES:
             case RmqMessageType.RMQ_MSG_TYPE_INBOUND_SET_OFFER_RES:
             case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_GET_ANSWER_RES:

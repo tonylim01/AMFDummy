@@ -92,6 +92,8 @@ public class PrepareStateFunction implements StateFunction {
 
             sendParAddReq(sessionInfo);
         }
+
+        sessionInfo.setEndOfState(SessionState.PREPARE);
     }
 
 

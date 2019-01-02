@@ -49,6 +49,8 @@ public class IdleStateFunction implements StateFunction {
 
         ServiceManager.getInstance().releaseResource(sessionInfo.getSessionId());
 
+        sessionInfo.setEndOfState(SessionState.IDLE);
+
     }
 
     private void sendAudioDeleteReq(SessionInfo sessionInfo) {

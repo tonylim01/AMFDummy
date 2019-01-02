@@ -70,7 +70,7 @@ public class RmqProcSessionStopReq extends RmqIncomingMessageHandler {
         res.setReasonCode(reasonCode);
         res.setReasonStr(reasonStr);
 
-        if (res.send(queueName) == false) {
+        if (res.send(queueName, false, false) == false) {
             // TODO
         }
 

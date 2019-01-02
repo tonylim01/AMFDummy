@@ -19,10 +19,12 @@ public class ReleaseStateFunction implements StateFunction {
 
         if (sessionInfo.getServiceState() != SessionState.RELEASE) {
             sessionInfo.setServiceState(SessionState.RELEASE);
-            sessionInfo.updateT4Time( SessionManager.TIMER_HANGUP_T4);
+            sessionInfo.updateT4Time(SessionManager.TIMER_HANGUP_T4);
         }
 
         sessionInfo.setLastSentTime();
         sessionInfo.updateT2Time(SessionManager.TIMER_HANGUP_T2);
+
+        sessionInfo.setEndOfState(SessionState.RELEASE);
     }
 }

@@ -92,8 +92,10 @@ public class RmqMessageType {
     public static final String RMQ_MSG_STR_LOGIN_REQ	= "mfmp_login_req";
     public static final String RMQ_MSG_STR_LOGIN_RES	= "mfmp_login_res";
 
-    public static final String RMQ_MSG_STR_SESSION_START_REQ        = "mfmp_session_start_req";
-    public static final String RMQ_MSG_STR_SESSION_START_RES        = "mfmp_session_start_res";
+    public static final String RMQ_MSG_STR_WAKEUP_STATUS_REQ        = "WAKEUP_STATUS_REQ";
+    public static final String RMQ_MSG_STR_WAKEUP_STATUS_RES        = "WAKEUP_STATUS_RES";
+    public static final String RMQ_MSG_STR_AI_SERVICE_REQ           = "AI_SVC_REQ";
+    public static final String RMQ_MSG_STR_AI_SERVICE_RES           = "AI_SVC_RES";
 
     public static final int RMQ_MSG_TYPE_UNDEFINED = 0;
     public static final int RMQ_MSG_TYPE_INBOUND_SET_OFFER_REQ = 0x0001;
@@ -175,8 +177,10 @@ public class RmqMessageType {
     public static final int RMQ_MSG_TYPE_LOGIN_REQ = 0x0099;
     public static final int RMQ_MSG_TYPE_LOGIN_RES = 0x1099;
 
-    public static final int RMQ_MSG_TYPE_SESSION_START_REQ = 0x0041;
-    public static final int RMQ_MSG_TYPE_SESSION_START_RES = 0x1041;
+    public static final int RMQ_MSG_TYPE_WAKEUP_STATUS_REQ = 0x0041;
+    public static final int RMQ_MSG_TYPE_WAKEUP_STATUS_RES = 0x1041;
+    public static final int RMQ_MSG_TYPE_AI_SERVICE_REQ = 0x0042;
+    public static final int RMQ_MSG_TYPE_AI_SERVICE_RES = 0x1042;
 
 
     public static final int RMQ_MSG_COMMON_REASON_CODE_SUCCESS = 0;
@@ -256,8 +260,10 @@ public class RmqMessageType {
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_DTMF_DETECT_RES, RMQ_MSG_TYPE_DTMF_DETECT_RES),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_LOGIN_REQ, RMQ_MSG_TYPE_LOGIN_REQ),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_LOGIN_RES, RMQ_MSG_TYPE_LOGIN_RES),
-                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_SESSION_START_REQ, RMQ_MSG_TYPE_SESSION_START_REQ),
-                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_SESSION_START_RES, RMQ_MSG_TYPE_SESSION_START_RES),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_WAKEUP_STATUS_REQ, RMQ_MSG_TYPE_WAKEUP_STATUS_REQ),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_WAKEUP_STATUS_RES, RMQ_MSG_TYPE_WAKEUP_STATUS_RES),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_AI_SERVICE_REQ, RMQ_MSG_TYPE_AI_SERVICE_REQ),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_AI_SERVICE_RES, RMQ_MSG_TYPE_AI_SERVICE_RES),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_HEARTBEAT, RMQ_MSG_TYPE_HEARTBEAT)
                 ).collect(Collectors.toMap((e) -> e.getKey(), (e) ->e.getValue())));
     }
@@ -331,8 +337,10 @@ public class RmqMessageType {
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_DTMF_DETECT_RES, "DtmfDetRes"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_LOGIN_REQ, "LogInReq"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_LOGIN_RES, "LogInRes"),
-                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_SESSION_START_REQ, "WakeupStatusReq"),
-                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_SESSION_START_RES, "WakeupStatusRes"),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_WAKEUP_STATUS_REQ, "WakeupStatusReq"),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_WAKEUP_STATUS_RES, "WakeupStatusRes"),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_AI_SERVICE_REQ, "AiServiceReq"),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_AI_SERVICE_RES, "AiServiceRes"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_HEARTBEAT, "Heartbeat")
 
         ).collect(Collectors.toMap((e) -> e.getKey(), (e) ->e.getValue())));
