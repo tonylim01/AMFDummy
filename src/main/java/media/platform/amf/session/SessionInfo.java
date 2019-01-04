@@ -625,4 +625,14 @@ public class SessionInfo {
     public void setAiifPort(int aiifPort) {
         this.aiifPort = aiifPort;
     }
+
+    private int mediaDir;
+
+    public int getMediaDir() {
+        return mediaDir;
+    }
+
+    public void setMediaDir(int mediaDir) {
+        this.mediaDir = mediaDir;
+    }
 }

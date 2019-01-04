@@ -13,6 +13,13 @@ import com.google.gson.annotations.SerializedName;
 import media.platform.amf.session.MediaFileInfo;
 
 public class MediaPlayReq {
+    public static final int DIR_CALLER = 1;
+    public static final int DIR_CALLEE = 2;
+    public static final int DIR_BOTH = 3;
+
+    public static final int MEDIA_MENT = 1;
+    public static final int MEDIA_MUSIC = 2;
+
     private int dir;
     @SerializedName("channel_id")
     private int mentOrMusic;

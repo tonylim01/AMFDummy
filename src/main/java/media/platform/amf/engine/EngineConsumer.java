@@ -5,6 +5,7 @@ import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.EngineMessageHandlerAudio;
 import media.platform.amf.engine.handler.EngineMessageHandlerMixer;
 import media.platform.amf.engine.handler.EngineMessageHandlerWakeup;
+import media.platform.amf.engine.handler.base.EngineMessageHandlerFile;
 import media.platform.amf.engine.messages.SysHeartbeatRes;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
@@ -130,7 +131,12 @@ public class EngineConsumer implements Runnable {
                 return;
             }
 
-            if (compareString(msg.getHeader().getType(), "wakeup")) {
+            if (compareString(msg.getHeader().getType(), "file")) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerFile wakeup = new EngineMessageHandlerFile();
+                wakeup.handle(msg);
+            }
+            else if (compareString(msg.getHeader().getType(), "wakeup")) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerWakeup wakeup = new EngineMessageHandlerWakeup();
                 wakeup.handle(msg);

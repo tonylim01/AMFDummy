@@ -123,6 +123,10 @@ public class RmqConsumer implements Runnable {
                 RmqProcAiServiceRes aiServiceRes = new RmqProcAiServiceRes();
                 aiServiceRes.handle(msg);
                 break;
+            case RmqMessageType.RMQ_MSG_TYPE_MEDIA_PLAY_REQ:
+                RmqProcMediaPlayReq mediaPlayReq = new RmqProcMediaPlayReq();
+                mediaPlayReq.handle(msg);
+                break;
             case RmqMessageType.RMQ_MSG_TYPE_INBOUND_GET_ANSWER_RES:
             case RmqMessageType.RMQ_MSG_TYPE_INBOUND_SET_OFFER_RES:
             case RmqMessageType.RMQ_MSG_TYPE_OUTBOUND_GET_ANSWER_RES:

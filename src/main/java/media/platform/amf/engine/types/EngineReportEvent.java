@@ -7,4 +7,5 @@ public class EngineReportEvent {
     public static final String EVENT_STOPPED = "stopped";
     public static final String EVENT_TIMEOUT = "timeout";
     public static final String EVENT_ERROR = "error";
+    public static final String EVENT_DONE = "done";
 }
