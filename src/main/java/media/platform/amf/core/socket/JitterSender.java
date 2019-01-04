@@ -43,6 +43,7 @@ public class JitterSender {
     private int vocoderMode;
     private int payloadType;
     private long engineSeq;
+    private boolean isLastSid;
 
     //private Queue<UdpPacket> buffer;
     private List<UdpPacket> buffer;
@@ -267,6 +268,9 @@ public class JitterSender {
     private void relayPacket(UdpPacket udpPacket) {
 
         //logger.debug("[{}] Relay seq [{}] timestamp [{}]", sessionId, seq, timestamp);
+        boolean isSid = false;
+        boolean isSkip = false;
+
         if (udpPacket != null && udpPacket.getData() != null) {
 
             if (rtpPacket == null || (rtpPacket.getPayloadLength() != udpPacket.getData().length)) {
@@ -279,6 +283,8 @@ public class JitterSender {
 
             rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, udpPacket.getData(), 0, udpPacket.getData().length);
 
+            isSid = SilencePacket.checkSID(vocoder, udpPacket.getData());
+
             udpPacket.clear();
             udpPacket = null;
 
@@ -288,7 +294,7 @@ public class JitterSender {
                 }
             }
         }
-        else {
+        else if (isLastSid == false) {
             byte[] silenceBuf = SilencePacket.get(vocoder, vocoderMode);
             if (silenceBuf != null) {
                 if (rtpPacket == null || (rtpPacket != null && rtpPacket.getPayloadLength() != silenceBuf.length)) {
@@ -300,22 +306,31 @@ public class JitterSender {
                 }
 
                 rtpPacket.wrap(false, payloadType, seq, timestamp, ssrc, silenceBuf, 0, silenceBuf.length);
+
+                isSid = true;
             }
             else {
                 // TODO
                 //logger.error("No rtp packet");
                 rtpPacket.getBuffer().clear();
                 rtpPacket = null;
+
+                isSkip = true;
             }
+        }
+        else {
+            isSkip = true;
         }
 
 
         if (udpClient != null && rtpPacket != null && AppInstance.getInstance().getConfig().isTest() == false) {
-            try {
-                udpClient.send(rtpPacket.getRawData());
+            if (isSkip == false) {
 
-                String json = new JsonMessage(JitterSenderInfo.class).build(new JitterSenderInfo(sessionId, seq, ssrc, timestamp));
-                RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ, json);
+                try {
+                    udpClient.send(rtpPacket.getRawData());
+
+                    String json = new JsonMessage(JitterSenderInfo.class).build(new JitterSenderInfo(sessionId, seq, ssrc, timestamp));
+                    RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_UPDATE_JITTER_SENDER_REQ, json);
 
                 /*
 
@@ -328,12 +343,16 @@ public class JitterSender {
                 }
                 */
 
-            } catch (Exception e) {
-                logger.warn("Exception [{}] [{}]", e.getClass(), e.getMessage());
-                e.printStackTrace();
+                    isLastSid = isSid;
+
+                } catch (Exception e) {
+                    logger.warn("Exception [{}] [{}]", e.getClass(), e.getMessage());
+                    e.printStackTrace();
+                }
+
+                seq++;
             }
 
-            seq++;
             timestamp += Vocoder.getPayloadSize(vocoder);
         }
     }
