@@ -73,7 +73,7 @@ public class RmqOutgoingMessage implements RmqOutgoingMessageInterface {
     }
 
     @Override
-    public void setTrxType(int trxType) {
+    public void setTrxType(boolean trxType) {
         header.setTrxType(trxType);
     }
 

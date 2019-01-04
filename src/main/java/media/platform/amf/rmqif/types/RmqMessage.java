@@ -17,7 +17,7 @@ public class RmqMessage {
     private RmqHeader header;
     private JsonElement body = null;
 
-    public RmqMessage(String type, String sessionId, String transactionId, String msgFrom, int trxType, int reasonCode, String reasonStr) {
+    public RmqMessage(String type, String sessionId, String transactionId, String msgFrom, boolean trxType, int reasonCode, String reasonStr) {
         this.header = new RmqHeader(type, sessionId, transactionId, msgFrom, trxType, reasonCode, reasonStr);
     }
 

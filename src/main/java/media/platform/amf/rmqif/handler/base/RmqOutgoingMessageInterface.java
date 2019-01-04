@@ -20,7 +20,7 @@ public interface RmqOutgoingMessageInterface {
 
     void setMessageFrom(String messageFrom);
 
-    void setTrxType(int trxType);
+    void setTrxType(boolean trxType);
 
     void setReasonCode(int reasonCode);
 
