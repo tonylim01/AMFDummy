@@ -174,10 +174,15 @@ public class RoomInfo {
     }
 
     /**
-     * wakeupStatus : [caller][callee]
+     * wakeupStatus : [caller 2bit][callee 2bit]
      *   0 - N/A
      *   1 - Needs wakeup
      *   2 - Gets wakeup response from engine
+     *
+     *   0 1 . . - Caller needs wakeup
+     *   1 0 . . - Caller is ready to wakeup
+     *   . . 0 1 - Callee needs wakeup
+     *   . . 1 0 - Callee is ready to wakeup
      */
     private int wakeupStatus;
 
@@ -188,12 +193,16 @@ public class RoomInfo {
     public int setWakeupStatus(boolean isCaller, int status) {
 
         if (isCaller) {
-            wakeupStatus = (wakeupStatus & 0x3) & ((status & 0x3) << 2);
+            wakeupStatus = (wakeupStatus & 0x3) | (((status & 0x3) << 2) & 0xc0);
         }
         else {
-            wakeupStatus = (wakeupStatus & 0xc) & (status & 0x3);
+            wakeupStatus = (wakeupStatus & 0xc) | (status & 0x3);
         }
 
+        return wakeupStatus;
+    }
+
+    public int getWakeupStatus() {
         return wakeupStatus;
     }
 

@@ -4,6 +4,7 @@ import media.platform.amf.common.AppId;
 import media.platform.amf.common.AppUtil;
 import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.handler.EngineProcWakeupStartReq;
+import media.platform.amf.engine.handler.EngineProcWakeupStopReq;
 import media.platform.amf.engine.messages.AudioCreateReq;
 import media.platform.amf.rmqif.handler.RmqProcWakeupStatusRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
@@ -61,17 +62,48 @@ public class StartStateFunction implements StateFunction {
             sessionInfo.setServiceState(SessionState.START);
         }
 
-//        logger.info("[{}] openRmqRelayChannel [{}]");
-//        openRmqRelayChannel(sessionInfo);
-
-        if (sessionInfo.isCallerWakeupStatus()) {
-            sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+        int wakeupStatus = 0;
+        if (sessionInfo.getConferenceId() != null) {
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null) {
+                wakeupStatus = roomInfo.getWakeupStatus();
+            }
         }
 
-        if (sessionInfo.isCalleeWakeupStatus()) {
-            SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
-            if (otherSessionInfo != null) {
-                sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+        if (sessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
+            if (sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) == 0)) {
+                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+            }
+            else if (!sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) > 0)) {
+                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+            }
+        }
+        else if (!sessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
+            if (sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) == 0)) {
+                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+            }
+            else if (!sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) > 0)) {
+                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+            }
+        }
+
+        SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
+        if (otherSessionInfo != null) {
+            if (otherSessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
+                if (otherSessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) == 0)) {
+                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                }
+                else if (!sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) > 0)) {
+                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                }
+            }
+            else if (!otherSessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
+                if (otherSessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) == 0)) {
+                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                }
+                else if (!sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) > 0)) {
+                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                }
             }
         }
 
@@ -97,6 +129,27 @@ public class StartStateFunction implements StateFunction {
             }
         }
     }
+
+    private void sendWakeupStopReqToEngine(SessionInfo sessionInfo, int toolId) {
+
+        if (sessionInfo == null) {
+            return;
+        }
+
+        logger.info("[{}] Send WakeupStopReq. toolId [{}]", sessionInfo.getSessionId(), toolId);
+
+        String appId = AppId.newId();
+        EngineProcWakeupStopReq wakeupStopReq = new EngineProcWakeupStopReq(appId);
+        wakeupStopReq.setData(sessionInfo, toolId);
+
+        if (wakeupStopReq.send()) {
+            EngineClient.getInstance().pushSentQueue(appId, AudioCreateReq.class, wakeupStopReq.getData());
+            if (sessionInfo.getSessionId() != null) {
+                AppId.getInstance().push(appId, sessionInfo.getSessionId());
+            }
+        }
+    }
+
 
     private void openRmqRelayChannel(SessionInfo sessionInfo) {
 

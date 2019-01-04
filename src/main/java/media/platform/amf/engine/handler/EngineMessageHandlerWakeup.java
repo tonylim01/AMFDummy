@@ -28,6 +28,9 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
         if (compareString(msg.getHeader().getCmd(), "start")) {
             procWakeupStartRes(msg);
         }
+        else if (compareString(msg.getHeader().getCmd(), "stop")) {
+            procWakeupStopRes(msg);
+        }
         else {
             logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
         }
@@ -76,6 +79,57 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
                 RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
                 if (roomInfo != null) {
                     int wakeupStatus = roomInfo.setWakeupStatus(sessionInfo.isCaller() ? true : false, RoomInfo.WAKEUP_STATUS_READY);
+                    if ((wakeupStatus & 0x5) == 0) {
+                        // Sends a response to AWF
+                        RmqProcWakeupStatusRes res = new RmqProcWakeupStatusRes(sessionId, roomInfo.getLastTransactionId());
+
+                        res.setReasonCode(RmqMessageType.RMQ_MSG_COMMON_REASON_CODE_SUCCESS);
+                        res.setReasonStr(null);
+
+                        if (res.send(roomInfo.getAwfQueueName(),
+                                ((wakeupStatus & 0x8) > 0) ? true : false,
+                                ((wakeupStatus & 0x2) > 0) ? true : false) == false) {
+                            // TODO
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            logger.warn("Undefined result [{}]", msg.getHeader().getResult());
+        }
+
+    }
+
+    private void procWakeupStopRes(EngineResponseMessage msg) {
+        if (msg == null || msg.getHeader() == null) {
+            logger.warn("Null response message");
+            return;
+        }
+
+        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK)) {
+            // Success
+            if (msg.getHeader().getAppId() == null) {
+                logger.warn("Null appId in response message");
+                return;
+            }
+
+            String sessionId = AppId.getInstance().get(msg.getHeader().getAppId());
+            if (sessionId == null) {
+                logger.warn("No sessionId for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
+            if (sessionInfo == null) {
+                logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            if (sessionInfo.getConferenceId() != null) {
+                RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+                if (roomInfo != null) {
+                    int wakeupStatus = roomInfo.setWakeupStatus(sessionInfo.isCaller() ? true : false, RoomInfo.WAKEUP_STATUS_NONE);
                     if ((wakeupStatus & 0x5) == 0) {
                         // Sends a response to AWF
                         RmqProcWakeupStatusRes res = new RmqProcWakeupStatusRes(sessionId, roomInfo.getLastTransactionId());

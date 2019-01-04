@@ -58,9 +58,12 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
         if (sessionInfo.getConferenceId() != null) {
             RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
             if (roomInfo != null) {
-                roomInfo.setWakeupStatus(sessionInfo.isCaller(),
-                        (sessionInfo.isCaller() ? req.getCallerWakeupStatus() : req.getCalleeWakeupStatus())
-                                ? RoomInfo.WAKEUP_STATUS_PREPARE : RoomInfo.WAKEUP_STATUS_NONE);
+                int wakeupStatus = roomInfo.getWakeupStatus();
+
+                if ((sessionInfo.isCaller() && ((req.getCallerWakeupStatus() ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
+                    (!sessionInfo.isCaller() && ((req.getCalleeWakeupStatus() ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
+                    roomInfo.setWakeupStatus(sessionInfo.isCaller(), RoomInfo.WAKEUP_STATUS_PREPARE);
+                }
 
                 SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
                 if (otherSessionInfo != null) {
@@ -68,9 +71,10 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
                     otherSessionInfo.setSuccessMedia((req.getSuccess() != null) ? req.getSuccess().getMediaFileInfo() : null);
                     otherSessionInfo.setFailureMedia((req.getFail() != null) ? req.getFail().getMediaFileInfo() : null);
 
-                    roomInfo.setWakeupStatus(otherSessionInfo.isCaller(),
-                            (otherSessionInfo.isCaller() ? req.getCallerWakeupStatus() : req.getCalleeWakeupStatus())
-                                    ? RoomInfo.WAKEUP_STATUS_PREPARE : RoomInfo.WAKEUP_STATUS_NONE);
+                    if ((otherSessionInfo.isCaller() && ((req.getCallerWakeupStatus() ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
+                            (!otherSessionInfo.isCaller() && ((req.getCalleeWakeupStatus() ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
+                        roomInfo.setWakeupStatus(otherSessionInfo.isCaller(), RoomInfo.WAKEUP_STATUS_PREPARE);
+                    }
                 }
 
                 roomInfo.setLastTransactionId(msg.getHeader().getTransactionId());
