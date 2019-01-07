@@ -127,6 +127,10 @@ public class RmqConsumer implements Runnable {
                 RmqProcMediaPlayReq mediaPlayReq = new RmqProcMediaPlayReq();
                 mediaPlayReq.handle(msg);
                 break;
+            case RmqMessageType.RMQ_MSG_TYPE_MEDIA_PLAY_STOP_REQ:
+                RmqProcMediaStopReq mediaStopReq = new RmqProcMediaStopReq();
+                mediaStopReq.handle(msg);
+                break;
             case RmqMessageType.RMQ_MSG_TYPE_END_DETECT_REQ:
                 RmqProcIncomingEndDetectReq endDetectReq = new RmqProcIncomingEndDetectReq();
                 endDetectReq.handle(msg);

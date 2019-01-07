@@ -99,6 +99,8 @@ public class RmqMessageType {
     public static final String RMQ_MSG_STR_MEDIA_PLAY_REQ           = "MEDIA_PLAY_REQ";
     public static final String RMQ_MSG_STR_MEDIA_PLAY_RES           = "MEDIA_PLAY_RES";
     public static final String RMQ_MSG_STR_MEDIA_PLAY_DONE          = "MEDIA_PLAY_DONE";
+    public static final String RMQ_MSG_STR_MEDIA_PLAY_STOP_REQ      = "MEDIA_PLAY_STOP_REQ";
+    public static final String RMQ_MSG_STR_MEDIA_PLAY_STOP_RES      = "MEDIA_PLAY_STOP_RES";
     public static final String RMQ_MSG_STR_END_DETECT_REQ           = "END_DETECT";
 
     public static final int RMQ_MSG_TYPE_UNDEFINED = 0;
@@ -188,7 +190,9 @@ public class RmqMessageType {
     public static final int RMQ_MSG_TYPE_MEDIA_PLAY_REQ = 0x0043;
     public static final int RMQ_MSG_TYPE_MEDIA_PLAY_RES = 0x1043;
     public static final int RMQ_MSG_TYPE_MEDIA_PLAY_DONE = 0x0044;
-    public static final int RMQ_MSG_TYPE_END_DETECT_REQ = 0x0045;
+    public static final int RMQ_MSG_TYPE_MEDIA_PLAY_STOP_REQ = 0x0045;
+    public static final int RMQ_MSG_TYPE_MEDIA_PLAY_STOP_RES = 0x1045;
+    public static final int RMQ_MSG_TYPE_END_DETECT_REQ = 0x0046;
 
 
     public static final int RMQ_MSG_COMMON_REASON_CODE_SUCCESS = 0;
@@ -275,6 +279,8 @@ public class RmqMessageType {
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_MEDIA_PLAY_REQ, RMQ_MSG_TYPE_MEDIA_PLAY_REQ),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_MEDIA_PLAY_RES, RMQ_MSG_TYPE_MEDIA_PLAY_RES),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_MEDIA_PLAY_DONE, RMQ_MSG_TYPE_MEDIA_PLAY_DONE),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_MEDIA_PLAY_STOP_REQ, RMQ_MSG_TYPE_MEDIA_PLAY_STOP_REQ),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_MEDIA_PLAY_STOP_RES, RMQ_MSG_TYPE_MEDIA_PLAY_STOP_RES),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_END_DETECT_REQ, RMQ_MSG_TYPE_END_DETECT_REQ),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_STR_HEARTBEAT, RMQ_MSG_TYPE_HEARTBEAT)
                 ).collect(Collectors.toMap((e) -> e.getKey(), (e) ->e.getValue())));
@@ -356,6 +362,8 @@ public class RmqMessageType {
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_MEDIA_PLAY_REQ, "MediaPlayReq"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_MEDIA_PLAY_RES, "MediaPlayRes"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_MEDIA_PLAY_DONE, "MediaPlayDone"),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_MEDIA_PLAY_STOP_REQ, "MediaPlayStopReq"),
+                new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_MEDIA_PLAY_STOP_RES, "MediaPlayStopRes"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_END_DETECT_REQ, "EndDetect"),
                 new AbstractMap.SimpleEntry<>(RMQ_MSG_TYPE_HEARTBEAT, "Heartbeat")
 
