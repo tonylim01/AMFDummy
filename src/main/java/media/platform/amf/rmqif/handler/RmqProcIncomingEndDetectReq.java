@@ -2,26 +2,29 @@
 
 /**
  * Acs AMF
- * @file RmqProcAiServiceRes.java
+ * @file RmqProcIncomingHangupReq.java
  * @author Tony Lim
  *
  */
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.AppInstance;
 import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.EngineProcAudioBranchReq;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
-import media.platform.amf.rmqif.messages.AiServiceRes;
-import media.platform.amf.rmqif.module.RmqData;
 import media.platform.amf.rmqif.types.RmqMessage;
 import media.platform.amf.session.SessionInfo;
+import media.platform.amf.session.SessionState;
+import media.platform.amf.session.SessionStateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RmqProcAiServiceRes extends RmqIncomingMessageHandler {
+public class RmqProcIncomingEndDetectReq extends RmqIncomingMessageHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(RmqProcAiServiceRes.class);
+    private static final Logger logger = LoggerFactory.getLogger(RmqProcIncomingEndDetectReq.class);
 
     @Override
     public boolean handle(RmqMessage msg) {
@@ -29,7 +32,7 @@ public class RmqProcAiServiceRes extends RmqIncomingMessageHandler {
             return false;
         }
 
-        logger.info("[{}] AiServiceRes", msg.getSessionId());
+        logger.info("[{}] EndDetectReq", msg.getSessionId());
 
         SessionInfo sessionInfo = validateSessionId(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
         if (sessionInfo == null) {
@@ -37,18 +40,14 @@ public class RmqProcAiServiceRes extends RmqIncomingMessageHandler {
             return false;
         }
 
-        RmqData<AiServiceRes> data = new RmqData<>(AiServiceRes.class);
-        AiServiceRes res = data.parse(msg);
+        if (AppInstance.getInstance().getUserConfig().getRedundantConfig().isActive()) {
+            RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_END_DETECT_REQ, msg.getSessionId());
+        }
 
-        sessionInfo.setAiifIp(res.getIp());
-        sessionInfo.setAiifPort(res.getPort());
-
-        //
-        // TODO
-        //
         EngineProcAudioBranchReq branchReq = new EngineProcAudioBranchReq(AppId.newId());
-        branchReq.setData(sessionInfo, false);
+        branchReq.setData(sessionInfo, true);
         branchReq.send();
+
 
         return false;
     }

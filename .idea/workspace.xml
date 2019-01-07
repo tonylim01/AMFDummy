@@ -2,18 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e940f8ba-2c0f-49f4-9fde-4a6a7a882e14" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/base/EngineMessageHandlerFile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayDoneReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayReq.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayRes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayDoneReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/common/StopCondition.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingEndDetectReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutgoingEndDetectReq.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/EndDetectReq.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerAudio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerAudio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceRes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -95,8 +96,8 @@
       <file leaf-file-name="EngineMessageHandlerWakeup.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerWakeup.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="183" column="50" selection-start-line="183" selection-start-column="50" selection-end-line="183" selection-end-column="50" />
+            <state relative-caret-position="651">
+              <caret line="193" selection-start-line="193" selection-end-line="193" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -104,86 +105,78 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RmqProcAiServiceReq.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceReq.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="18" column="50" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RmqConsumer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RmqConsumer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="127" column="40" selection-start-line="127" selection-start-column="40" selection-end-line="127" selection-end-column="40" />
+            <state relative-caret-position="425">
+              <caret line="130" column="89" selection-start-line="130" selection-start-column="89" selection-end-line="130" selection-end-column="89" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RmqProcMediaPlayReq.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayReq.java">
+      <file leaf-file-name="RmqProcIncomingEndDetectReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingEndDetectReq.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="66" column="30" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
+            <state relative-caret-position="420">
+              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RmqProcOutgoingEndDetectReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutgoingEndDetectReq.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
               <folding>
-                <element signature="e#0#4608#0" expanded="true" />
                 <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RmqMessageType.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java">
+      <file leaf-file-name="EngineProcAudioBranchReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="100" column="86" selection-start-line="100" selection-start-column="86" selection-end-line="100" selection-end-column="86" />
+            <state relative-caret-position="493">
+              <caret line="43" column="46" selection-start-line="43" selection-start-column="46" selection-end-line="43" selection-end-column="46" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EngineConsumer.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="EngineMessageHandlerAudio.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerAudio.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-41">
+              <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EngineConsumer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="548">
-              <caret line="135" column="28" selection-start-line="135" selection-start-column="28" selection-end-line="135" selection-end-column="28" />
+            <state relative-caret-position="120">
+              <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EngineMessageHandlerFile.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/base/EngineMessageHandlerFile.java">
+      <file leaf-file-name="AudioBranchReq.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SessionInfo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="632" column="4" selection-start-line="632" selection-start-column="4" selection-end-line="632" selection-end-column="4" />
+            <state relative-caret-position="375">
+              <caret line="41" column="35" selection-start-line="41" selection-start-column="35" selection-end-line="41" selection-end-column="35" />
               <folding>
-                <element signature="e#10919#10920#0" expanded="true" />
-                <element signature="e#10954#10955#0" expanded="true" />
-                <element signature="e#13684#13685#0" expanded="true" />
-                <element signature="e#13713#13714#0" expanded="true" />
-                <element signature="e#13757#13758#0" expanded="true" />
-                <element signature="e#13793#13794#0" expanded="true" />
-                <element signature="e#13825#13826#0" expanded="true" />
-                <element signature="e#13856#13857#0" expanded="true" />
-                <element signature="e#13901#13902#0" expanded="true" />
-                <element signature="e#13941#13942#0" expanded="true" />
-                <element signature="e#14004#14005#0" expanded="true" />
-                <element signature="e#14080#14081#0" expanded="true" />
-                <element signature="e#14120#14121#0" expanded="true" />
+                <element signature="e#867#868#0" expanded="true" />
+                <element signature="e#914#915#0" expanded="true" />
+                <element signature="e#946#947#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -198,11 +191,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RmqProcMediaPlayDoneReq.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayDoneReq.java">
+      <file leaf-file-name="StopCondition.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/common/StopCondition.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="25" column="24" lean-forward="true" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
+            <state relative-caret-position="60">
+              <caret line="4" column="25" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
+              <folding>
+                <element signature="e#259#260#0" expanded="true" />
+                <element signature="e#297#298#0" expanded="true" />
+                <element signature="e#356#357#0" expanded="true" />
+                <element signature="e#410#411#0" expanded="true" />
+                <element signature="e#441#442#0" expanded="true" />
+                <element signature="e#471#472#0" expanded="true" />
+                <element signature="e#514#515#0" expanded="true" />
+                <element signature="e#552#553#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -263,13 +266,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcWakeupStartReq.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/DefaultEngineMessageHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineResponseResult.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerSys.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerMixer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerAudio.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcSessionStopReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/PrepareStateFunction.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/StateHandler/IdleStateFunction.java" />
@@ -285,10 +281,7 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/AiServiceReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/AiServiceRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceReq.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchRes.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqHeader.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/base/RmqOutgoingMessage.java" />
@@ -304,16 +297,26 @@
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/room/RoomInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayRes.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayDoneReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayDoneRes.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayDoneReq.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayReq.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/base/EngineMessageHandlerFile.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/EndDetectReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcEndDetectReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutgoingEndDetectReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceRes.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingEndDetectReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/common/StopCondition.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerAudio.java" />
+        <option value="$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java" />
       </list>
     </option>
   </component>
@@ -352,7 +355,29 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="mru_netty" type="58d84e3e:PackageViewProjectNode" />
+              <item name="AMF" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="mru_netty" type="58d84e3e:PackageViewProjectNode" />
+              <item name="AMF" type="616d4139:PackageViewModuleNode" />
+              <item name="media.platform.amf" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="mru_netty" type="58d84e3e:PackageViewProjectNode" />
+              <item name="AMF" type="616d4139:PackageViewModuleNode" />
+              <item name="media.platform.amf" type="1f31426a:PackageElementNode" />
+              <item name="engine.messages" type="1f31426a:PackageElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -461,6 +486,17 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="amf" type="462c0819:PsiDirectoryNode" />
               <item name="engine" type="462c0819:PsiDirectoryNode" />
+              <item name="messages" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mru_netty" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mru_netty" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="amf" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
               <item name="types" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -555,29 +591,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="mru_netty" type="58d84e3e:PackageViewProjectNode" />
-              <item name="AMF" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="mru_netty" type="58d84e3e:PackageViewProjectNode" />
-              <item name="AMF" type="616d4139:PackageViewModuleNode" />
-              <item name="media.platform.amf" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="mru_netty" type="58d84e3e:PackageViewProjectNode" />
-              <item name="AMF" type="616d4139:PackageViewModuleNode" />
-              <item name="media.platform.amf" type="1f31426a:PackageElementNode" />
-              <item name="engine.messages" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -590,11 +604,8 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/resources" />
-      <recent name="$PROJECT_DIR$/src/main/java/x3/player" />
-      <recent name="$PROJECT_DIR$/src/main" />
-      <recent name="$PROJECT_DIR$/src/main/java" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/packets" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="media.platform.amf.rmqif.handler" />
@@ -603,8 +614,11 @@
       <recent name="media.platform.amf.engine.messages" />
       <recent name="media.platform.amf.engine.handler" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/media/platform/amf/core/socket/packets" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java/x3/player" />
+      <recent name="$PROJECT_DIR$/src/main" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -735,13 +749,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1531183548243</updated>
-    </task>
-    <task id="LOCAL-00017" summary="패킷 re-ordering 구현">
-      <created>1540884255138</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1540884255138</updated>
     </task>
     <task id="LOCAL-00018" summary="자원 종료 시 room 해제하도록 보완">
       <created>1540884290144</created>
@@ -1079,7 +1086,14 @@
       <option name="project" value="LOCAL" />
       <updated>1546585531883</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="엔진과 file_play_req/res/report 구현&#10;AWF와 media_play_req/res/done 구현">
+      <created>1546588158730</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1546588158730</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1104,15 +1118,15 @@
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.314164" side_tool="true" visible="true" weight="0.22604166" />
-      <window_info anchor="right" id="Maven Projects" order="8" sideWeight="0.49603805" visible="true" weight="0.06176784" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.3146965" side_tool="true" visible="true" weight="0.22604166" />
+      <window_info active="true" anchor="right" id="Maven Projects" order="8" sideWeight="0.49603805" visible="true" weight="0.06176784" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.21666667" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.685836" visible="true" weight="0.22604166" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6853035" visible="true" weight="0.22604166" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32998884" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22151224" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49627262" weight="0.32916668" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22364217" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49574015" weight="0.32916668" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24964234" />
       <window_info id="UI Designer" order="4" />
@@ -1172,7 +1186,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Config 보완&#10; - local ip 를 xxx.xxx.xxx.xxx 로 변경&#10; - pcm 삭제&#10; Config에서 localip가 xxx.xxx~ 일 경우 인터페이스에서 ip를 읽도록 보완" />
     <MESSAGE value="2833 DTMF 수집 기능 구현" />
     <MESSAGE value="mixer_create_req 구현" />
     <MESSAGE value="config 라이브러리 변경 (-&gt; apache.configuration2)" />
@@ -1197,7 +1210,8 @@
     <MESSAGE value="RMQ header의 trxType 의 type 변경 (int -&gt; boolean)" />
     <MESSAGE value="SID 전송 시 timestamp 계산 보완" />
     <MESSAGE value="엔진과 Wakeup_stop_req/res 기능 구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="엔진과 Wakeup_stop_req/res 기능 구현" />
+    <MESSAGE value="엔진과 file_play_req/res/report 구현&#10;AWF와 media_play_req/res/done 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="엔진과 file_play_req/res/report 구현&#10;AWF와 media_play_req/res/done 구현" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1220,58 +1234,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineResponseMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineResponseHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" selection-start-line="14" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportHeader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineResponseTypeAdapter.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/AiServiceReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#312#313#0" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
-            <element signature="e#373#374#0" expanded="true" />
-            <element signature="e#403#404#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/AiServiceRes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="19" column="26" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcCommandStopRes.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -1293,23 +1255,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceRes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="28" column="19" lean-forward="true" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/base/RmqOutgoingMessageInterface.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -1321,12 +1266,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="421">
           <caret line="71" column="23" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
-          <folding>
-            <element signature="e#1585#1586#0" expanded="true" />
-            <element signature="e#1615#1616#0" expanded="true" />
-            <element signature="e#1658#1659#0" expanded="true" />
-            <element signature="e#1696#1697#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1386,16 +1325,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionStateManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
@@ -1414,9 +1343,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1431,16 +1357,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="104" column="84" selection-start-line="104" selection-start-column="84" selection-end-line="104" selection-end-column="84" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcWakeupStatusReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="60" column="50" lean-forward="true" selection-start-line="60" selection-start-column="50" selection-end-line="60" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -1466,10 +1382,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
-          <folding>
-            <element signature="e#789#790#0" expanded="true" />
-            <element signature="e#823#824#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1520,9 +1432,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayDoneRes.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayDoneRes.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/MediaPlayDoneReq.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1537,40 +1447,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="100" column="86" selection-start-line="100" selection-start-column="86" selection-end-line="100" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="548">
-          <caret line="135" column="28" selection-start-line="135" selection-start-column="28" selection-end-line="135" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerWakeup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="183" column="50" selection-start-line="183" selection-start-column="50" selection-end-line="183" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="40" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/session/SessionInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
+        <state relative-caret-position="6510">
           <caret line="632" column="4" selection-start-line="632" selection-start-column="4" selection-end-line="632" selection-end-column="4" />
           <folding>
             <element signature="e#10919#10920#0" expanded="true" />
@@ -1583,19 +1462,16 @@
             <element signature="e#13856#13857#0" expanded="true" />
             <element signature="e#13901#13902#0" expanded="true" />
             <element signature="e#13941#13942#0" expanded="true" />
-            <element signature="e#14004#14005#0" expanded="true" />
-            <element signature="e#14080#14081#0" expanded="true" />
-            <element signature="e#14120#14121#0" expanded="true" />
+            <element signature="e#14000#14001#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcMediaPlayReq.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
+        <state relative-caret-position="675">
           <caret line="66" column="30" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
           <folding>
-            <element signature="e#0#4608#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
         </state>
@@ -1612,16 +1488,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceReq.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="18" column="50" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/base/EngineMessageHandlerFile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1629,10 +1495,155 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/messages/EndDetectReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/types/RmqMessageType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="360" selection-start-line="360" selection-end-line="360" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/redundant/RedundantMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="48" selection-start-line="11" selection-start-column="48" selection-end-line="11" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcWakeupStatusReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="63" column="99" lean-forward="true" selection-start-line="63" selection-start-column="99" selection-end-line="63" selection-end-column="99" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcAiServiceRes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="48" column="58" lean-forward="true" selection-start-line="48" selection-start-column="58" selection-end-line="48" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/common/NetIP4Address.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/common/StopCondition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="25" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
+          <folding>
+            <element signature="e#259#260#0" expanded="true" />
+            <element signature="e#297#298#0" expanded="true" />
+            <element signature="e#356#357#0" expanded="true" />
+            <element signature="e#410#411#0" expanded="true" />
+            <element signature="e#441#442#0" expanded="true" />
+            <element signature="e#471#472#0" expanded="true" />
+            <element signature="e#514#515#0" expanded="true" />
+            <element signature="e#552#553#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerWakeup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="193" selection-start-line="193" selection-end-line="193" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/types/EngineReportEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="40" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/messages/AudioBranchReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="41" column="35" selection-start-line="41" selection-start-column="35" selection-end-line="41" selection-end-column="35" />
+          <folding>
+            <element signature="e#867#868#0" expanded="true" />
+            <element signature="e#914#915#0" expanded="true" />
+            <element signature="e#946#947#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineMessageHandlerAudio.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-41">
+          <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/handler/EngineProcAudioBranchReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="43" column="46" selection-start-line="43" selection-start-column="46" selection-end-line="43" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcIncomingEndDetectReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/module/RmqConsumer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="127" column="40" selection-start-line="127" selection-start-column="40" selection-end-line="127" selection-end-column="40" />
+        <state relative-caret-position="425">
+          <caret line="130" column="89" selection-start-line="130" selection-start-column="89" selection-end-line="130" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/rmqif/handler/RmqProcOutgoingEndDetectReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/media/platform/amf/engine/EngineConsumer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
         </state>
       </provider>
     </entry>

@@ -131,7 +131,12 @@ public class EngineConsumer implements Runnable {
                 return;
             }
 
-            if (compareString(msg.getHeader().getType(), "file")) {
+            if (compareString(msg.getHeader().getType(), "audio")) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerAudio audio = new EngineMessageHandlerAudio();
+                audio.handle(msg);
+            }
+            else if (compareString(msg.getHeader().getType(), "file")) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerFile wakeup = new EngineMessageHandlerFile();
                 wakeup.handle(msg);

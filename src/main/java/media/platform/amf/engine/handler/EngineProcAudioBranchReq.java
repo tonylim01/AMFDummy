@@ -5,6 +5,7 @@ import media.platform.amf.config.AmfConfig;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.AudioBranchReq;
 import media.platform.amf.engine.messages.common.NetIP4Address;
+import media.platform.amf.engine.messages.common.StopCondition;
 import media.platform.amf.session.SessionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ public class EngineProcAudioBranchReq extends EngineOutgoingMessage {
         this.appId = appId;
     }
 
-    public void setData(SessionInfo sessionInfo) {
+    public void setData(SessionInfo sessionInfo, boolean isQuit) {
 
         if (sessionInfo == null) {
             logger.error("Null sessionInfo");
@@ -36,7 +37,15 @@ public class EngineProcAudioBranchReq extends EngineOutgoingMessage {
         data = new AudioBranchReq();
         data.setId(sessionInfo.getEngineToolId());
 
-        data.setRemote(new NetIP4Address(sessionInfo.getAiifIp(), sessionInfo.getAiifPort()));
+        if (isQuit == false) {
+            data.setRemote(new NetIP4Address(sessionInfo.getAiifIp(), sessionInfo.getAiifPort()));
+
+            StopCondition stop = new StopCondition();
+            stop.setSilenceDuration(2000);  // TODO
+            stop.setTimeout(10000);     // TODO
+            data.setStop(stop);
+        }
+
         data.setLocal(sessionInfo.getEnginePort());   // On engine side
 
         setBody(data, AudioBranchReq.class);
