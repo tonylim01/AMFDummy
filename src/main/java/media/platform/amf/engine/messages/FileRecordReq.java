@@ -6,33 +6,40 @@ import media.platform.amf.engine.types.EngineRequestHeader;
 
 public class FileRecordReq {
 
-    public class Data {
-        private int id;
-        private FileInfo file;
-        private RecvVocoderInfo audio;
-        private RecvVocoderInfo video;
+    private int id;
+    private FileInfo file;
+    private RecvVocoderInfo audio;
+    private RecvVocoderInfo video;
+
+    public int getId() {
+        return id;
     }
 
-    private EngineRequestHeader request;
-    private Data data;
-
-    public EngineRequestHeader getRequest() {
-        return request;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setRequest(String type, String cmd, String appId) {
-        this.request = new EngineRequestHeader(type, cmd, appId);
+    public FileInfo getFile() {
+        return file;
     }
 
-    public void setRequest(EngineRequestHeader request) {
-        this.request = request;
+    public void setFile(FileInfo file) {
+        this.file = file;
     }
 
-    public Data getData() {
-        return data;
+    public RecvVocoderInfo getAudio() {
+        return audio;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setAudio(RecvVocoderInfo audio) {
+        this.audio = audio;
+    }
+
+    public RecvVocoderInfo getVideo() {
+        return video;
+    }
+
+    public void setVideo(RecvVocoderInfo video) {
+        this.video = video;
     }
 }

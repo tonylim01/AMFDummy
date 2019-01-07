@@ -13,10 +13,18 @@ public class FileInfos {
     }
 
     public String[] getList() {
-        return list;
+        String[] ret = null;
+        if (list != null) {
+            ret = new String[list.length];
+            System.arraycopy(list, 0, ret, 0, list.length);
+        }
+        return ret;
     }
 
     public void setList(String[] list) {
-        this.list = list;
+        if (list != null) {
+            this.list = new String[list.length];
+            System.arraycopy(list, 0, this.list, 0, list.length);
+        }
     }
 }

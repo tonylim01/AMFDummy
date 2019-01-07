@@ -2,40 +2,70 @@ package media.platform.amf.engine.messages;
 
 import media.platform.amf.engine.messages.common.CodecInfo;
 import media.platform.amf.engine.messages.common.NetIP4Address;
-import media.platform.amf.engine.types.EngineRequestHeader;
 
 public class AudioUpdateReq {
 
-    public class Data {
-        private int id;
-        private int[] dstIds;
-        private NetIP4Address remote;
-        private int local;
-        private CodecInfo decoder;
-        private CodecInfo encoder;
-        private boolean dtmf;
+    private int id;
+    private int[] dstIds;
+    private NetIP4Address remote;
+    private int local;
+    private CodecInfo decoder;
+    private CodecInfo encoder;
+    private boolean dtmf;
+
+    public int getId() {
+        return id;
     }
 
-    private EngineRequestHeader request;
-    private Data data;
-
-    public EngineRequestHeader getRequest() {
-        return request;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setRequest(String type, String cmd, String appId) {
-        this.request = new EngineRequestHeader(type, cmd, appId);
+    public int[] getDstIds() {
+        return dstIds;
     }
 
-    public void setRequest(EngineRequestHeader request) {
-        this.request = request;
+    public void setDstIds(int[] dstIds) {
+        this.dstIds = dstIds;
     }
 
-    public Data getData() {
-        return data;
+    public NetIP4Address getRemote() {
+        return remote;
     }
 
-    public void setData(Data data) {
-        this.data = data;
+    public void setRemote(NetIP4Address remote) {
+        this.remote = remote;
+    }
+
+    public int getLocal() {
+        return local;
+    }
+
+    public void setLocal(int local) {
+        this.local = local;
+    }
+
+    public CodecInfo getDecoder() {
+        return decoder;
+    }
+
+    public void setDecoder(CodecInfo decoder) {
+        this.decoder = decoder;
+    }
+
+    public CodecInfo getEncoder() {
+        return encoder;
+    }
+
+    public void setEncoder(CodecInfo encoder) {
+        this.encoder = encoder;
+    }
+
+    public boolean isDtmf() {
+        return dtmf;
+    }
+
+    public void setDtmf(boolean dtmf) {
+        this.dtmf = dtmf;
     }
 }

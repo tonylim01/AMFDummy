@@ -151,7 +151,7 @@ public class RoomInfo {
         isSyncWait = false;
     }
 
-    public boolean waitReady(int millisec) {
+    public synchronized boolean waitReady(int millisec) {
         boolean result = false;
         isSyncWait = true;
 

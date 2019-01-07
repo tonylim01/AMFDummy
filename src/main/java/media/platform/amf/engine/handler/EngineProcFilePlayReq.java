@@ -2,10 +2,7 @@ package media.platform.amf.engine.handler;
 
 import com.google.common.base.Strings;
 import media.platform.amf.AppInstance;
-import media.platform.amf.config.AmfConfig;
-import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
-import media.platform.amf.engine.messages.AudioCreateReq;
 import media.platform.amf.engine.messages.FilePlayReq;
 import media.platform.amf.engine.messages.common.*;
 import media.platform.amf.session.SessionInfo;
@@ -31,20 +28,6 @@ public class EngineProcFilePlayReq extends EngineOutgoingMessage {
             return;
         }
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
-        if (config == null) {
-            return;
-        }
-
-        /*
-        int toolId = EngineManager.getInstance().getIdleToolId();
-        if (toolId < 0) {
-            // Error
-            logger.error("[{}] No available tools", sessionInfo.getSessionId());
-            return;
-        }
-        */
-
         data = new FilePlayReq();
         data.setId(toolId);
         data.setType(mediaType);
@@ -64,6 +47,8 @@ public class EngineProcFilePlayReq extends EngineOutgoingMessage {
         VolumeInfo volume = new VolumeInfo();
         volume.setDef(defVolume);
         volume.setLow(lowVolume);
+
+        data.setVolume(volume);
 
         setBody(data, FilePlayReq.class);
     }
