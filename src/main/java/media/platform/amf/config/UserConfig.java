@@ -452,4 +452,26 @@ public class UserConfig extends DefaultConfig {
         return engineRemotePort;
     }
 
+    private int audioSilenceDuration;
+    private int audioDetectionTimeout;
+
+    public int getAudioSilenceDuration() {
+        return audioSilenceDuration;
+    }
+
+
+
+    public int getAudioDetectionTimeout() {
+        return audioDetectionTimeout;
+    }
+
+    private void loadAudioConfig() {
+        try {
+            audioSilenceDuration = getIntValue("AUDIO", "SILENCE_DURATION", 0);
+            audioDetectionTimeout = getIntValue("AUDIO", "DETECTION_TIMEOUT", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

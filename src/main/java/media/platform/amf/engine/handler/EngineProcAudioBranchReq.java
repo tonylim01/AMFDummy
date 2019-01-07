@@ -2,6 +2,7 @@ package media.platform.amf.engine.handler;
 
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.AmfConfig;
+import media.platform.amf.config.UserConfig;
 import media.platform.amf.engine.handler.base.EngineOutgoingMessage;
 import media.platform.amf.engine.messages.AudioBranchReq;
 import media.platform.amf.engine.messages.common.NetIP4Address;
@@ -29,7 +30,7 @@ public class EngineProcAudioBranchReq extends EngineOutgoingMessage {
             return;
         }
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
+        UserConfig config = AppInstance.getInstance().getUserConfig();
         if (config == null) {
             return;
         }
@@ -41,8 +42,9 @@ public class EngineProcAudioBranchReq extends EngineOutgoingMessage {
             data.setRemote(new NetIP4Address(sessionInfo.getAiifIp(), sessionInfo.getAiifPort()));
 
             StopCondition stop = new StopCondition();
-            stop.setSilenceDuration(2000);  // TODO
-            stop.setTimeout(10000);     // TODO
+
+            stop.setSilenceDuration(config.getAudioSilenceDuration());
+            stop.setTimeout(config.getAudioDetectionTimeout());
             data.setStop(stop);
         }
 
