@@ -55,7 +55,7 @@ public class SessionManager {
     private Map<String, SessionInfo> sessionInfos;
 
     private ScheduledExecutorService scheduleService;
-    static ScheduledFuture<?> scheduleFuture;
+    private ScheduledFuture<?> scheduleFuture;
     private SessionMonitorRunnable sessionMonitorRunnable;
 
     private SessionStateManager sessionStateManager;

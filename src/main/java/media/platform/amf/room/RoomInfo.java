@@ -134,11 +134,11 @@ public class RoomInfo {
 
     private transient boolean isSyncWait;
 
-    public synchronized boolean isMixerAvailable() {
+    public boolean isMixerAvailable() {
         return mixerAvailable;
     }
 
-    public synchronized void setMixerAvailable(boolean mixerAvailable) {
+    public void setMixerAvailable(boolean mixerAvailable) {
         logger.debug("({}) Set mixer [{}]", roomId, mixerAvailable);
         this.mixerAvailable = mixerAvailable;
 
@@ -151,7 +151,7 @@ public class RoomInfo {
         isSyncWait = false;
     }
 
-    public synchronized boolean waitReady(int millisec) {
+    public boolean waitReady(int millisec) {
         boolean result = false;
         isSyncWait = true;
 

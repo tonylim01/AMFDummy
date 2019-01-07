@@ -487,11 +487,11 @@ public class SessionInfo {
     private transient boolean isSyncWait;
     private boolean audioCreated;
 
-    public synchronized boolean isAudioCreated() {
+    public boolean isAudioCreated() {
         return audioCreated;
     }
 
-    public synchronized void setAudioCreated(boolean audioCreated) {
+    public void setAudioCreated(boolean audioCreated) {
         this.audioCreated = audioCreated;
 
         if (isSyncWait) {

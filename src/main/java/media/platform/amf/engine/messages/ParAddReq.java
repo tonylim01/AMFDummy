@@ -36,7 +36,7 @@ public class ParAddReq {
             ret = new Integer[whisperTo.length];
             System.arraycopy(whisperTo, 0, ret, 0, whisperTo.length);
         }
-        return whisperTo;
+        return ret;
     }
 
     public void setWhisperTo(Integer[] whisperTo) {

@@ -22,11 +22,19 @@ public class AudioUpdateReq {
     }
 
     public int[] getDstIds() {
-        return dstIds;
+        int[] ret = null;
+        if (dstIds != null) {
+            ret = new int[dstIds.length];
+            System.arraycopy(dstIds, 0, ret, 0, dstIds.length);
+        }
+        return ret;
     }
 
     public void setDstIds(int[] dstIds) {
-        this.dstIds = dstIds;
+        if (dstIds != null) {
+            this.dstIds = new int[dstIds.length];
+            System.arraycopy(dstIds, 0, this.dstIds, 0, dstIds.length);
+        }
     }
 
     public NetIP4Address getRemote() {
