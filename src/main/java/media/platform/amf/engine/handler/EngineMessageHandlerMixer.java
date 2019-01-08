@@ -1,8 +1,8 @@
 package media.platform.amf.engine.handler;
 
 import media.platform.amf.common.AppId;
+import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.engine.types.EngineResponseResult;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class EngineMessageHandlerMixer extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "create")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_CREATE)) {
             procMixerCreateRes(msg);
         }
         else {
@@ -33,8 +33,8 @@ public class EngineMessageHandlerMixer extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK) ||
-            compareString(msg.getHeader().getResult(),EngineResponseResult.RESULT_SUCCESS)) {
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+            compareString(msg.getHeader().getResult(),EngineMessageType.MSG_RESULT_SUCCESS)) {
             // Success
             if (msg.getHeader().getAppId() == null) {
                 logger.warn("Null appId in response message");

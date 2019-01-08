@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.messages.SysHeartbeatRes;
+import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.engine.types.EngineResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +25,11 @@ public class EngineMessageHandlerSys extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "connect")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_CREATE)) {
 
             procSysConnectRes(msg);
         }
-        else if (compareString(msg.getHeader().getCmd(), "heartbeat")) {
+        else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_HEARTBEAT)) {
 
             procSysHeartbeatRes(msg);
         }
@@ -42,8 +42,8 @@ public class EngineMessageHandlerSys extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK) ||
-            compareString(msg.getHeader().getResult(),EngineResponseResult.RESULT_SUCCESS)) {
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+            compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_SUCCESS)) {
             // Ok
             engineClient.setConnected(true);
         }

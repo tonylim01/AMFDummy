@@ -7,6 +7,7 @@ import media.platform.amf.engine.handler.EngineMessageHandlerMixer;
 import media.platform.amf.engine.handler.EngineMessageHandlerWakeup;
 import media.platform.amf.engine.handler.base.EngineMessageHandlerFile;
 import media.platform.amf.engine.messages.SysHeartbeatRes;
+import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class EngineConsumer implements Runnable {
 
     @Override
     public void run() {
-        logger.debug("RedundantConsumer startScheduler");
+        logger.debug("EngineConsumer startScheduler");
 
         while (!isQuit) {
             try {
@@ -60,7 +61,7 @@ public class EngineConsumer implements Runnable {
 
         String key = null;
         if (st > 0 && et > 0) {
-            key = json.substring(st + 1, et - 1);
+            key = json.substring(st + 1, et);
         }
 
         return key;
@@ -79,7 +80,7 @@ public class EngineConsumer implements Runnable {
             return;
         }
 
-        if (compareString(typeStr, "response")) {
+        if (compareString(typeStr, EngineMessageType.MSG_TYPE_RESPONSE)) {
 
             EngineResponseMessage msg = gson.fromJson(json, EngineResponseMessage.class);
 
@@ -94,20 +95,20 @@ public class EngineConsumer implements Runnable {
                 return;
             }
 
-            if (compareString(msg.getHeader().getType(), "sys")) {
+            if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_SYS)) {
                 handleSysResponse(msg);
             }
-            else if (compareString(msg.getHeader().getType(), "audio")) {
+            else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_AUDIO)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerAudio mixer = new EngineMessageHandlerAudio();
                 mixer.handle(msg);
             }
-            else if (compareString(msg.getHeader().getType(), "mixer")) {
+            else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_MIXER)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerMixer mixer = new EngineMessageHandlerMixer();
                 mixer.handle(msg);
             }
-            else if (compareString(msg.getHeader().getType(), "wakeup")) {
+            else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_WAKEUP)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerWakeup wakeup = new EngineMessageHandlerWakeup();
                 wakeup.handle(msg);
@@ -116,7 +117,7 @@ public class EngineConsumer implements Runnable {
                 logger.debug("<- Engine: json {}", json);
             }
         }
-        else if (compareString(typeStr, "report")) {
+        else if (compareString(typeStr, EngineMessageType.MSG_TYPE_REPORT)) {
 
             EngineReportMessage msg = gson.fromJson(json, EngineReportMessage.class);
 
@@ -131,17 +132,17 @@ public class EngineConsumer implements Runnable {
                 return;
             }
 
-            if (compareString(msg.getHeader().getType(), "audio")) {
+            if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_AUDIO)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerAudio audio = new EngineMessageHandlerAudio();
                 audio.handle(msg);
             }
-            else if (compareString(msg.getHeader().getType(), "file")) {
+            else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_FILE)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerFile wakeup = new EngineMessageHandlerFile();
                 wakeup.handle(msg);
             }
-            else if (compareString(msg.getHeader().getType(), "wakeup")) {
+            else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_WAKEUP)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerWakeup wakeup = new EngineMessageHandlerWakeup();
                 wakeup.handle(msg);
@@ -150,6 +151,9 @@ public class EngineConsumer implements Runnable {
                 logger.debug("<- Engine: json {}", json);
             }
 
+        }
+        else {
+            logger.warn("<- Engine: Undefined msg type [{}] json [{}]", typeStr, json);
         }
     }
 
@@ -165,10 +169,10 @@ public class EngineConsumer implements Runnable {
 
         EngineClient engineClient = EngineClient.getInstance();
 
-        if (compareString(msg.getHeader().getCmd(), "connect")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_CONNECT)) {
 
-            if (compareString(msg.getHeader().getResult(), "ok") ||
-                compareString(msg.getHeader().getResult(), "success")) {
+            if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+                compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_SUCCESS)) {
                 // Ok
                 engineClient.setConnected(true);
             }
@@ -177,7 +181,7 @@ public class EngineConsumer implements Runnable {
                 engineClient.setConnected(false);
             }
         }
-        else if (compareString(msg.getHeader().getCmd(), "heartbeat")) {
+        else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_HEARTBEAT)) {
 
             engineClient.checkHeartbeat(msg.getHeader().appId);
 

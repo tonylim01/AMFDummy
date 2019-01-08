@@ -1,10 +1,9 @@
 package media.platform.amf.engine.handler;
 
 import media.platform.amf.common.AppId;
-import media.platform.amf.engine.types.EngineReportEvent;
+import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.engine.types.EngineResponseResult;
 import media.platform.amf.rmqif.handler.RmqProcAiServiceReq;
 import media.platform.amf.rmqif.handler.RmqProcWakeupStatusRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
@@ -25,10 +24,10 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "start")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_START)) {
             procWakeupStartRes(msg);
         }
-        else if (compareString(msg.getHeader().getCmd(), "stop")) {
+        else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_STOP)) {
             procWakeupStopRes(msg);
         }
         else {
@@ -42,7 +41,7 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "start")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_START)) {
             procWakeupStartRpt(msg);
         }
         else {
@@ -56,7 +55,7 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK)) {
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK)) {
             // Success
             if (msg.getHeader().getAppId() == null) {
                 logger.warn("Null appId in response message");
@@ -107,7 +106,7 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK)) {
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK)) {
             // Success
             if (msg.getHeader().getAppId() == null) {
                 logger.warn("Null appId in response message");
@@ -158,7 +157,7 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getEvent(), EngineReportEvent.EVENT_DETECTED)) {
+        if (compareString(msg.getHeader().getEvent(), EngineMessageType.MSG_EVENT_DETECTED)) {
             // Success
             if (msg.getHeader().getAppId() == null) {
                 logger.warn("Null appId in response message");

@@ -25,7 +25,7 @@ public class HeartbeatManager {
 
     private String thisSessionId;
     private ScheduledExecutorService scheduleService;
-    static ScheduledFuture<?> scheduleFuture;
+    private ScheduledFuture<?> scheduleFuture;
 
     public HeartbeatManager() {
         thisSessionId = UUID.randomUUID().toString();

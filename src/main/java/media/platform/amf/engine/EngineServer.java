@@ -1,6 +1,5 @@
 package media.platform.amf.engine;
 
-import media.platform.amf.redundant.RedundantConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +27,7 @@ public class EngineServer {
     public EngineServer(int port) {
         try {
             socket = new DatagramSocket(port);
+            logger.info("Engine interface server started. port [{}]", port);
         } catch (Exception e) {
             e.printStackTrace();
         }

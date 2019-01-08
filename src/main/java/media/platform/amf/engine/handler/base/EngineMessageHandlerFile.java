@@ -2,10 +2,9 @@ package media.platform.amf.engine.handler.base;
 
 import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.DefaultEngineMessageHandler;
-import media.platform.amf.engine.types.EngineReportEvent;
+import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.engine.types.EngineResponseResult;
 import media.platform.amf.rmqif.handler.RmqProcAiServiceReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -52,7 +51,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK)) {
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK)) {
         }
         else {
             logger.warn("Undefined result [{}]", msg.getHeader().getResult());
@@ -68,8 +67,8 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
 
         boolean isSuccess = false;
 
-        if (compareString(msg.getHeader().getEvent(), EngineReportEvent.EVENT_DONE) ||
-            compareString(msg.getHeader().getEvent(), EngineReportEvent.EVENT_STOPPED)) {
+        if (compareString(msg.getHeader().getEvent(), EngineMessageType.MSG_EVENT_DONE) ||
+            compareString(msg.getHeader().getEvent(), EngineMessageType.MSG_EVENT_STOPPED)) {
 
             isSuccess = true;
         }

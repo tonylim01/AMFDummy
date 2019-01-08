@@ -1,9 +1,9 @@
 package media.platform.amf.engine.handler;
 
 import media.platform.amf.common.AppId;
+import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.engine.types.EngineResponseResult;
 import media.platform.amf.rmqif.handler.RmqProcOutgoingEndDetectReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -22,7 +22,7 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "create")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_CREATE)) {
             procAudioCreateRes(msg);
         }
         else {
@@ -37,7 +37,7 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "branch")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_BRANCH)) {
             procAudioBranchRpt(msg);
         }
         else {
@@ -52,8 +52,8 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getResult(), EngineResponseResult.RESULT_OK) ||
-            compareString(msg.getHeader().getResult(),EngineResponseResult.RESULT_SUCCESS)) {
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+            compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_SUCCESS)) {
             // Success
             if (msg.getHeader().getAppId() == null) {
                 logger.warn("Null appId in response message");
