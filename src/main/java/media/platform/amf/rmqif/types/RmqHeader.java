@@ -16,7 +16,7 @@ public class RmqHeader {
     private String sessionId;
     private String transactionId;
     private String msgFrom;
-    private boolean trxType;
+    private int trxType;
     private int reasonCode;
     private String reason;
 
@@ -24,7 +24,7 @@ public class RmqHeader {
 
     }
 
-    public RmqHeader(String type, String sessionId, String transactionId, String msgFrom, boolean trxType, int reasonCode, String reason) {
+    public RmqHeader(String type, String sessionId, String transactionId, String msgFrom, int trxType, int reasonCode, String reason) {
         this.type = type;
         this.sessionId = sessionId;
         this.transactionId = transactionId;
@@ -69,11 +69,11 @@ public class RmqHeader {
         this.msgFrom = msgFrom;
     }
 
-    public boolean getTrxType() {
+    public int getTrxType() {
         return trxType;
     }
 
-    public void setTrxType(boolean trxType) {
+    public void setTrxType(int trxType) {
         this.trxType = trxType;
     }
 
