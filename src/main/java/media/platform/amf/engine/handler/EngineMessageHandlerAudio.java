@@ -25,6 +25,9 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
         if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_CREATE)) {
             procAudioCreateRes(msg);
         }
+        else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_DELETE)) {
+            procAudioDeleteRes(msg);
+        }
         else {
             logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
         }
@@ -45,8 +48,45 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
         }
     }
 
-
     private void procAudioCreateRes(EngineResponseMessage msg) {
+        if (msg == null || msg.getHeader() == null) {
+            logger.warn("Null response message");
+            return;
+        }
+
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+                compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_SUCCESS)) {
+            // Success
+            if (msg.getHeader().getAppId() == null) {
+                logger.warn("Null appId in response message");
+                return;
+            }
+
+            String sessionId = AppId.getInstance().get(msg.getHeader().getAppId());
+            if (sessionId == null) {
+                logger.warn("No sessionId for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
+            if (sessionInfo == null) {
+                logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            sessionInfo.setAudioCreated(true);
+
+            //
+            // TODO
+            //
+        }
+        else {
+            logger.warn("Undefined result [{}]", msg.getHeader().getResult());
+        }
+
+    }
+
+    private void procAudioDeleteRes(EngineResponseMessage msg) {
         if (msg == null || msg.getHeader() == null) {
             logger.warn("Null response message");
             return;
@@ -72,11 +112,7 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
                 return;
             }
 
-            sessionInfo.setAudioCreated(true);
-
-            //
-            // TODO
-            //
+            sessionInfo.setAudioCreated(false);
         }
         else {
             logger.warn("Undefined result [{}]", msg.getHeader().getResult());
