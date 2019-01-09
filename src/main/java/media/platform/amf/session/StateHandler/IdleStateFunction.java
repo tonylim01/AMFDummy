@@ -7,6 +7,7 @@ import media.platform.amf.engine.EngineManager;
 import media.platform.amf.engine.handler.EngineProcAudioCreateReq;
 import media.platform.amf.engine.handler.EngineProcAudioDeleteReq;
 import media.platform.amf.engine.handler.EngineProcMixerDeleteReq;
+import media.platform.amf.engine.messages.AudioDeleteReq;
 import media.platform.amf.engine.messages.SysConnectReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class IdleStateFunction implements StateFunction {
         audioDeleteReq.setData(sessionInfo);
 
         if (audioDeleteReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, audioDeleteReq.getData());
+            EngineClient.getInstance().pushSentQueue(appId, AudioDeleteReq.class, audioDeleteReq.getData());
         }
     }
 

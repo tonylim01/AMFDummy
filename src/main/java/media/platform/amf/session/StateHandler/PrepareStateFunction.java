@@ -38,6 +38,7 @@ public class PrepareStateFunction implements StateFunction {
             sessionInfo.setServiceState(SessionState.PREPARE);
         }
 
+        sessionInfo.setRtpReceivedTime(System.currentTimeMillis());
 
         if (sessionInfo.getSdpDeviceInfo() != null) {
             logger.debug("{} SDP payload {}", sessionInfo.getSessionId(), sessionInfo.getSdpDeviceInfo().getPayloadId());

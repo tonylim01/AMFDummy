@@ -21,6 +21,10 @@ public class AmfConfig extends DefaultConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(AmfConfig.class);
 
+    private static final int DEFAULT_TIMER_T2 = 500;
+    private static final int DEFAULT_TIMER_T4 = 2000;
+    private static final int DEFAULT_TIMER_MEDIA_INACTIVITY = 10000;
+
     private int amfId;
 
     private boolean heartbeat;
@@ -65,6 +69,7 @@ public class AmfConfig extends DefaultConfig {
 
         loadCommonConfig();
         loadRmqConfig(instanceSection);
+        loadTimerConfig();
     }
 
     private void loadCommonConfig() {
@@ -82,6 +87,16 @@ public class AmfConfig extends DefaultConfig {
     private void loadRmqConfig(String instanceSection) {
         try {
             rmqBufferCount = getIntValue("RMQ", "RMQ_BUFFER_COUNT", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadTimerConfig() {
+        try {
+            timerSipT2 = getIntValue("TIMER", "TIMER_SIP_T2", DEFAULT_TIMER_T2);
+            timerSipT4 = getIntValue("TIMER", "TIMER_SIP_T4", DEFAULT_TIMER_T4);
+            timerMediaNoActivity = getIntValue("TIMER", "TIMER_MEDIA_NOACTIVITY", DEFAULT_TIMER_MEDIA_INACTIVITY);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,5 +124,21 @@ public class AmfConfig extends DefaultConfig {
 
     public String getMediaConfPath() {
         return mediaConfPath;
+    }
+
+    private int timerSipT4;
+    private int timerSipT2;
+    private int timerMediaNoActivity;
+
+    public int getTimerSipT4() {
+        return timerSipT4;
+    }
+
+    public int getTimerSipT2() {
+        return timerSipT2;
+    }
+
+    public int getTimerMediaNoActivity() {
+        return timerMediaNoActivity;
     }
 }

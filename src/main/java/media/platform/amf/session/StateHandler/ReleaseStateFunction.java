@@ -1,5 +1,7 @@
 package media.platform.amf.session.StateHandler;
 
+import media.platform.amf.AppInstance;
+import media.platform.amf.config.AmfConfig;
 import media.platform.amf.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +19,18 @@ public class ReleaseStateFunction implements StateFunction {
 
         logger.debug("[{}] ReleaseStateFunction", sessionInfo.getSessionId());
 
+        AmfConfig config = AppInstance.getInstance().getConfig();
+        if (config == null) {
+            return;
+        }
+
         if (sessionInfo.getServiceState() != SessionState.RELEASE) {
             sessionInfo.setServiceState(SessionState.RELEASE);
-            sessionInfo.updateT4Time(SessionManager.TIMER_HANGUP_T4);
+            sessionInfo.updateT4Time(config.getTimerSipT4());
         }
 
         sessionInfo.setLastSentTime();
-        sessionInfo.updateT2Time(SessionManager.TIMER_HANGUP_T2);
+        sessionInfo.updateT2Time(config.getTimerSipT2());
 
         sessionInfo.setEndOfState(SessionState.RELEASE);
     }

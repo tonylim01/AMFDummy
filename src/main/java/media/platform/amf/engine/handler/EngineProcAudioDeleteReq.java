@@ -35,10 +35,7 @@ public class EngineProcAudioDeleteReq extends EngineOutgoingMessage {
             return;
         }
 
-        AmfConfig config = AppInstance.getInstance().getConfig();
-        if (config == null) {
-            return;
-        }
+        logger.debug("[{}] AudioDeleteReq. toolId [{}", sessionInfo.getSessionId(), sessionInfo.getEngineToolId());
 
         data = new AudioDeleteReq();
         data.setId(sessionInfo.getEngineToolId());      // tool id

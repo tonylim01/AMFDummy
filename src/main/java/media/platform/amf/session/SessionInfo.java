@@ -635,4 +635,15 @@ public class SessionInfo {
     public void setMediaDir(int mediaDir) {
         this.mediaDir = mediaDir;
     }
+
+    private long rtpReceivedTime;
+
+    public long getRtpReceivedTime() {
+        return this.rtpReceivedTime;
+    }
+
+    public void setRtpReceivedTime(long rtpReceivedTime) {
+        this.rtpReceivedTime = rtpReceivedTime;
+    }
 }
+

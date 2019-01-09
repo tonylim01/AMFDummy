@@ -199,6 +199,8 @@ public class RmqProcInboundSetOfferRes extends RmqOutgoingMessage {
                         continue;
                     }
 
+                    logger.debug("[{}] Media priority idx [{} attr [{}]", sessionInfo.getSessionId(), i, codecAttributes.size());
+
                     for(String desc: codecAttributes) {
                         if (desc == null) {
                             logger.warn("[{}] Null desc in sdp config", sessionInfo.getSessionId());

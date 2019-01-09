@@ -30,13 +30,14 @@ public class SessionManager {
     // T2 : Timer 2 - Retransmission interval
     // T4 : Timer 4 - Maximum interval
 
-    private static final int DEFAULT_T2 = 500;
-    private static final int DEFAULT_T4 = 2000;
-
-    public static final int TIMER_PREPARE_T2 = DEFAULT_T2;
-    public static final int TIMER_PREPARE_T4 = DEFAULT_T4;
-    public static final int TIMER_HANGUP_T2 = DEFAULT_T2;
-    public static final int TIMER_HANGUP_T4 = DEFAULT_T4;
+//    private static final int DEFAULT_T2 = 500;
+//    private static final int DEFAULT_T4 = 2000;
+//    private static final int DEFAULT_MEDIA_INACTIVITY = 10000;
+//
+//    public static final int TIMER_PREPARE_T2 = DEFAULT_T2;
+//    public static final int TIMER_PREPARE_T4 = DEFAULT_T4;
+//    public static final int TIMER_HANGUP_T2 = DEFAULT_T2;
+//    public static final int TIMER_HANGUP_T4 = DEFAULT_T4;
 
     private volatile static SessionManager sessionManager = null;
 
@@ -257,6 +258,11 @@ public class SessionManager {
     public void checkSessionValidity() {
         long current = System.currentTimeMillis();
 
+        AmfConfig config = AppInstance.getInstance().getConfig();
+        if (config == null) {
+            return;
+        }
+
         synchronized (sessionInfos) {
 //            logger.error("Session count: {}", sessionInfos.size());
             if (sessionInfos.size() != lastSessionCount) {
@@ -280,6 +286,15 @@ public class SessionManager {
                     //
                 }
 
+                //
+                // In case of no packet
+                //
+                if (current - sessionInfo.getRtpReceivedTime() >= config.getTimerMediaNoActivity()) {
+                    logger.warn("[{}] No packet. Force release", sessionInfo.getSessionId());
+
+                    sendHangupReq(sessionInfo);
+                    continue;
+                }
 
                 if (sessionInfo.getLastSentTime() > 0) {
                     if (sessionInfo.getServiceState() == SessionState.PREPARE) {
@@ -361,8 +376,7 @@ public class SessionManager {
             logger.warn("[{}] Retransmit {}", sessionInfo.getSessionId(),
                     RmqMessageType.getMessageTypeStr(RmqMessageType.RMQ_MSG_TYPE_HANGUP_REQ));
 
-            RmqProcOutgoingHangupReq hangupReq = new RmqProcOutgoingHangupReq(sessionInfo.getSessionId(), null);
-            hangupReq.sendToMcud();
+            sendHangupReq(sessionInfo);
         }
         else if (lastSentTime >= t4Time) {
             ServiceManager.getInstance().releaseResource(sessionInfo.getSessionId());
@@ -416,6 +430,15 @@ public class SessionManager {
         }
 
         return null;
+    }
+
+    private void sendHangupReq(SessionInfo sessionInfo) {
+        if (sessionInfo == null) {
+            return;
+        }
+
+        RmqProcOutgoingHangupReq hangupReq = new RmqProcOutgoingHangupReq(sessionInfo.getSessionId(), null);
+        hangupReq.sendToMcud();
     }
 
 }
