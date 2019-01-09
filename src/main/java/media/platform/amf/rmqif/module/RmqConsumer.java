@@ -36,7 +36,7 @@ public class RmqConsumer implements Runnable {
         while (!isQuit) {
             try {
                 String msg = queue.take();
-                logger.debug("RmqConsumer msg={}", msg);
+//                logger.debug("RmqConsumer msg={}", msg);
 
                 parseRmqMesage(msg);
 
@@ -59,13 +59,13 @@ public class RmqConsumer implements Runnable {
         try {
             msg = RmqParser.parse(json);
 
-            if (msg.getHeader() != null) {
-                logger.debug("Received message: header {}", msg.getHeader().toString());
-            }
-
-            if (msg.getBody() != null) {
-                logger.debug("Received message: body {}", msg.getBody().toString());
-            }
+//            if (msg.getHeader() != null) {
+//                logger.debug("Received message: header {}", msg.getHeader().toString());
+//            }
+//
+//            if (msg.getBody() != null) {
+//                logger.debug("Received message: body {}", msg.getBody().toString());
+//            }
 
             logger.info("[{}] <- ({}) {}", msg.getSessionId(), msg.getHeader().getMsgFrom(),
                     RmqMessageType.getMessageTypeStr(msg.getMessageType()));

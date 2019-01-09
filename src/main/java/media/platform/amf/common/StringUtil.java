@@ -48,4 +48,16 @@ public class StringUtil {
 
         return 0;
     }
+
+    public static boolean compareString(String a, String b) {
+        if (a == null && b == null) {
+            return true;
+        }
+
+        if (a == null || b == null) {
+            return  false;
+        }
+
+        return (a.equals(b));
+    }
 }

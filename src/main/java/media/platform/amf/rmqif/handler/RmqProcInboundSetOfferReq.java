@@ -132,9 +132,9 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
             logger.error("Exception udp channel [{}] [{}] port [{}]", e.getClass(), e.getMessage(), sessionInfo.getDstLocalPort());
         }
 
-        logger.debug("[{}] Local port: src [{}] dst [{}]", msg.getSessionId(),
+        logger.debug("[{}] Local port: rtp side [{}] udp side [{}]", msg.getSessionId(),
                 sessionInfo.getSrcLocalPort(), sessionInfo.getDstLocalPort());
-        logger.debug("[{}] Participant count {}", msg.getSessionId(), parCount);
+        logger.debug("[{}] Participant count [{}]", msg.getSessionId(), parCount);
         //
         // TODO
         //

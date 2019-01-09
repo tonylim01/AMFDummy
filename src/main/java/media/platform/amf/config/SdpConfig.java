@@ -9,6 +9,8 @@
 
 package media.platform.amf.config;
 
+import media.platform.amf.common.StringUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +72,16 @@ public class SdpConfig {
             attrs = codecAttributes.get(codec);
         }
 
-        attrs.add(attribute);
+        boolean isDupplicated = false;
+        for (String attr: attrs) {
+            if (StringUtil.compareString(attribute, attr)) {
+                isDupplicated = true;
+                break;
+            }
+        }
+
+        if (!isDupplicated) {
+            attrs.add(attribute);
+        }
     }
 }
