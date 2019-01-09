@@ -35,9 +35,8 @@ public class IdleStateFunction implements StateFunction {
 
         if (!AppInstance.getInstance().getConfig().isRelayMode()) {
 
-            sendAudioDeleteReq(sessionInfo);
-
             if (sessionInfo.getEngineToolId() >= 0) {
+                sendAudioDeleteReq(sessionInfo);
                 EngineManager.getInstance().freeTool(sessionInfo.getEngineToolId());
             }
 

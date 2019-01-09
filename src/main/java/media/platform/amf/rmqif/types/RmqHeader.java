@@ -13,7 +13,7 @@ public class RmqHeader {
 
     private String type;
     private String callId;
-    private String sessionId;
+//    private String sessionId;
     private String transactionId;
     private String msgFrom;
     private int trxType;
@@ -26,7 +26,7 @@ public class RmqHeader {
 
     public RmqHeader(String type, String sessionId, String transactionId, String msgFrom, int trxType, int reasonCode, String reason) {
         this.type = type;
-        this.sessionId = sessionId;
+        this.callId = sessionId;
         this.transactionId = transactionId;
         this.msgFrom = msgFrom;
         this.trxType = trxType;
@@ -43,14 +43,14 @@ public class RmqHeader {
     }
 
     public String getSessionId() {
-        if (sessionId == null && callId != null) {
-            sessionId = callId;
-        }
-        return sessionId;
+//        if (sessionId == null && callId != null) {
+//            sessionId = callId;
+//        }
+        return callId;
     }
 
     public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+        this.callId = sessionId;
     }
 
     public String getTransactionId() {
@@ -105,7 +105,7 @@ public class RmqHeader {
     public String toString() {
         return "RmqHeader{" +
                 "types='" + type + '\'' +
-                ", sessionId='" + sessionId + '\'' +
+                ", sessionId='" + callId + '\'' +
                 ", transactionId=" + transactionId +
                 ", msgFrom='" + msgFrom + '\'' +
                 ", trxType=" + trxType +

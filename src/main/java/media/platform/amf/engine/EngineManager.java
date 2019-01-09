@@ -25,7 +25,7 @@ public class EngineManager {
 
     //private Map<Integer, EngineToolInfo> toolInfoMap = null;
     private EngineToolInfo toolInfoRefs[] = null;
-    private int lastToolId = 0;
+    private int lastToolId = 1;     // Starts from 1
 
     public EngineManager() {
         toolInfoRefs = new EngineToolInfo[NUM_OF_TOOLIDS];
@@ -56,7 +56,7 @@ public class EngineManager {
 
         if (toolId < 0) {
 
-            for (i = 0; i < lastToolId; i++) {
+            for (i = 1; i < lastToolId; i++) {
                 if (toolInfoRefs[i].getState() == EngineToolState.TOOL_IDLE) {
                     toolId = i;
                     break;
@@ -64,11 +64,11 @@ public class EngineManager {
             }
         }
 
-        if (toolId >= 0) {
+        if (toolId > 0) {
             lastToolId += 1;
 
             if (lastToolId >= toolInfoRefs.length) {
-                lastToolId = 0;
+                lastToolId = 1;
             }
 
             toolInfoRefs[toolId].setState(EngineToolState.TOOL_ALLOC);
