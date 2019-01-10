@@ -9,6 +9,7 @@
 
 package media.platform.amf.rmqif.module;
 
+import media.platform.amf.common.StringUtil;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.AppInstance;
 import media.platform.amf.config.UserConfig;
@@ -33,7 +34,25 @@ public class RmqClient {
 
         RmqClient client = clients.get(queueName);
         if (client == null) {
-            client = new RmqClient(queueName);
+            UserConfig config = AppInstance.getInstance().getUserConfig();
+            if (config == null) {
+                return null;
+            }
+
+            String host, user, pass;
+
+            if (StringUtil.compareString(queueName, config.getAwfQueue())) {
+                host = config.getAwfRmqHost();
+                user = config.getAwfRmqUser();
+                pass = config.getAwfRmqPass();
+            }
+            else {
+                host = config.getRmqHost();
+                user = config.getRmqUser();
+                pass = config.getRmqPass();
+            }
+
+            client = new RmqClient(queueName, host, user, pass);
             clients.put(queueName, client);
         }
 
@@ -52,18 +71,20 @@ public class RmqClient {
     private boolean isConnected = false;
     private String queueName = null;
 
-    public RmqClient(String queueName) {
+    private String rmqHost, rmqUser, rmqPass;
+
+    public RmqClient(String queueName, String host, String user, String pass) {
 
         this.queueName = queueName;
+        this.rmqHost = host;
+        this.rmqUser = user;
+        this.rmqPass = pass;
+
         this.isConnected = createSender(queueName);
     }
 
     private boolean createSender(String queueName) {
-        UserConfig config = AppInstance.getInstance().getUserConfig();
-        if (config == null) {
-            return false;
-        }
-        sender = new RmqSender(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), queueName);
+        sender = new RmqSender(rmqHost, rmqUser, rmqPass, queueName);
         return sender.connectClient();
    }
 

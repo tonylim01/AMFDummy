@@ -37,8 +37,8 @@ public class RmqProcWakeupStatusRes extends RmqOutgoingMessage {
         //
         // TODO
         //
-        res.setCallerWakeupStatus(callerStatus);
-        res.setCalleeWakeupStatus(calleeStatus);
+        res.setCallerWakeupStatus(callerStatus ? 1 : 0);
+        res.setCalleeWakeupStatus(calleeStatus ? 1 : 0);
 
         setBody(res, WakeupStatusRes.class);
 

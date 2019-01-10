@@ -30,7 +30,13 @@ public class RmqServer {
     private BlockingQueue<String> queue;
     private Thread rmqConsumerThread;
 
-    public RmqServer() {
+    private String rmqHost, rmqUser, rmqPass, rmqLocal;
+
+    public RmqServer(String host, String user, String pass, String localName) {
+        this.rmqHost = host;
+        this.rmqUser = user;
+        this.rmqPass = pass;
+        this.rmqLocal = localName;
     }
 
     public void start() {
@@ -48,10 +54,9 @@ public class RmqServer {
         rmqConsumerThread = new Thread(new RmqConsumer(queue));
         rmqConsumerThread.start();
 
-        logger.info("Rmq host [{}] user [{}] pass [{}] local [{}]", config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
+        logger.info("Rmq host [{}] user [{}] pass [{}] local [{}]", rmqHost, rmqUser, rmqPass, rmqLocal);
 
-        receiver = new RmqReceiver(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
-//        receiver = new RmqReceiver(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), "amf_amfd");
+        receiver = new RmqReceiver(rmqHost, rmqUser, rmqPass, rmqLocal);
         receiver.setCallback(new MessageCallback());
 
         boolean result = receiver.connectServer();

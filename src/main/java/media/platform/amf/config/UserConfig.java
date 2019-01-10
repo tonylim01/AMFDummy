@@ -178,6 +178,8 @@ public class UserConfig extends DefaultConfig {
     private String promptConfPath;
 //    private int instanceId;
 
+    private String awfQueue, awfRmqHost, awfRmqUser, awfRmqPass;
+
     @Override
     public String getStrValue(String session, String key, String defaultValue) {
         String value = super.getStrValue(session, key, defaultValue);
@@ -193,6 +195,7 @@ public class UserConfig extends DefaultConfig {
         loadCommonConfig();
         loadSessionConfig();
         loadRmqConfig(instanceSection);
+        loadAwfConfig(instanceSection);
         loadRedundantConfig();
         loadInstanceConfig(instanceSection);
         loadMediaConfig();
@@ -240,6 +243,18 @@ public class UserConfig extends DefaultConfig {
 //            }
 //
 //            rmqAiifFmt = getStrValue("RMQ", "RMQ_AIIF_FMT", null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadAwfConfig(String instanceSection) {
+        try {
+            awfQueue = getStrValue("AWF", "RMQ_AWF", null);
+            awfRmqHost = getStrValue("AWF", "RMQ_HOST", "localhost");
+            awfRmqUser = getStrValue("AWF", "RMQ_USER", null);
+            awfRmqPass = getStrValue("AWF", "RMQ_PASS", null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -477,4 +492,19 @@ public class UserConfig extends DefaultConfig {
         }
     }
 
+    public String getAwfRmqHost() {
+        return awfRmqHost;
+    }
+
+    public String getAwfRmqUser() {
+        return awfRmqUser;
+    }
+
+    public String getAwfRmqPass() {
+        return awfRmqPass;
+    }
+
+    public String getAwfQueue() {
+        return awfQueue;
+    }
 }

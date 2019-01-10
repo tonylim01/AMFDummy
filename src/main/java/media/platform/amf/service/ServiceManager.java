@@ -36,6 +36,7 @@ public class ServiceManager {
     }
 
     private RmqServer rmqServer;
+    private RmqServer awfServer;
     private SessionManager sessionManager;
     private HeartbeatManager heartbeatManager;
     private RedundantServer redundantServer;
@@ -114,8 +115,15 @@ public class ServiceManager {
 
         UserConfig config = AppInstance.getInstance().getUserConfig();
 
-        rmqServer = new RmqServer();
+        if (config == null) {
+            return false;
+        }
+
+        rmqServer = new RmqServer(config.getRmqHost(), config.getRmqUser(), config.getRmqPass(), config.getLocalName());
         rmqServer.start();
+
+        awfServer = new RmqServer(config.getAwfRmqHost(), config.getAwfRmqUser(), config.getAwfRmqPass(), config.getLocalName());
+        awfServer.start();
 
         sessionManager = SessionManager.getInstance();
         sessionManager.start();
@@ -165,6 +173,10 @@ public class ServiceManager {
 
         if (rmqServer != null) {
             rmqServer.stop();
+        }
+
+        if (awfServer != null) {
+            awfServer.stop();
         }
 
         if (redundantServer != null) {
