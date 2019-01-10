@@ -199,6 +199,7 @@ public class UserConfig extends DefaultConfig {
         loadRedundantConfig();
         loadInstanceConfig(instanceSection);
         loadMediaConfig();
+        loadAudioConfig();
     }
 
     private void loadCommonConfig() {
