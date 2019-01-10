@@ -9,7 +9,9 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.AppInstance;
 import media.platform.amf.common.AppId;
+import media.platform.amf.config.PromptConfig;
 import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.handler.EngineProcFilePlayReq;
 import media.platform.amf.engine.messages.FilePlayReq;
@@ -97,8 +99,23 @@ public class RmqProcMediaPlayReq extends RmqIncomingMessageHandler {
             return false;
         }
 
+        boolean hasContainer = false;
+        String filename = req.getMediaUrl();
+        if (filename != null) {
+            if (!filename.startsWith("/") && !filename.startsWith("http")) {
+                PromptConfig promptConfig = AppInstance.getInstance().getPromptConfig();
+                if (promptConfig != null) {
+                    filename = promptConfig.getPromptDir() + filename;
+                }
+            }
+
+            if (filename.endsWith("wav")) {
+                hasContainer = true;
+            }
+        }
+
         String [] filenames = new String[1];
-        filenames[0] = req.getMediaUrl();
+        filenames[0] = filename;
 
         String appId = AppId.newId();
 
@@ -106,7 +123,7 @@ public class RmqProcMediaPlayReq extends RmqIncomingMessageHandler {
         filePlayReq.setData(sessionInfo,
                 mixerId,
                 (req.getMentOrMusic() == MediaPlayReq.MEDIA_MENT) ? 0 : 1,
-                dstIds, false, filenames, req.getDefVolume(), req.getMinVolume());
+                dstIds, hasContainer, filenames, req.getDefVolume(), req.getMinVolume());
 
         if (filePlayReq.send()) {
             EngineClient.getInstance().pushSentQueue(appId, FilePlayReq.class, filePlayReq.getData());

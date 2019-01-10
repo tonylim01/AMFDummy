@@ -104,4 +104,8 @@ public class PromptConfig extends DefaultConfig {
 
         return prompt;
     }
+
+    public String getPromptDir() {
+        return promptDir;
+    }
 }

@@ -43,7 +43,7 @@ public class RmqProcAiServiceCancelReq extends RmqIncomingMessageHandler {
 
         RmqData<AiServiceCancelReq> data = new RmqData<>(AiServiceCancelReq.class);
         AiServiceCancelReq req = data.parse(msg);
-        
+
         SessionInfo reqSessionInfo = null;
 
         if (req.getDir() == 1) {
