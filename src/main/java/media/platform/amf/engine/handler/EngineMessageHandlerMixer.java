@@ -21,6 +21,9 @@ public class EngineMessageHandlerMixer extends DefaultEngineMessageHandler {
         if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_CREATE)) {
             procMixerCreateRes(msg);
         }
+        else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_DELETE)) {
+            procMixerDeleteRes(msg);
+        }
         else {
             logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
         }
@@ -58,6 +61,41 @@ public class EngineMessageHandlerMixer extends DefaultEngineMessageHandler {
             //
             // TODO
             //
+        }
+        else {
+            logger.warn("Undefined result [{}]", msg.getHeader().getResult());
+        }
+
+    }
+
+    private void procMixerDeleteRes(EngineResponseMessage msg) {
+        if (msg == null || msg.getHeader() == null) {
+            logger.warn("Null response message");
+            return;
+        }
+
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+                compareString(msg.getHeader().getResult(),EngineMessageType.MSG_RESULT_SUCCESS)) {
+            // Success
+            if (msg.getHeader().getAppId() == null) {
+                logger.warn("Null appId in response message");
+                return;
+            }
+
+            String roomId = AppId.getInstance().get(msg.getHeader().getAppId());
+            if (roomId == null) {
+                logger.warn("No roomId for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(roomId);
+            if (roomInfo == null) {
+                logger.warn("Cannot find room for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            roomInfo.setMixerAvailable(false);
+
         }
         else {
             logger.warn("Undefined result [{}]", msg.getHeader().getResult());
