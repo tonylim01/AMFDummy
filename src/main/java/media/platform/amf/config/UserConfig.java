@@ -114,6 +114,8 @@ public class UserConfig extends DefaultConfig {
             return;
         }
 
+        mediaPriorities.clear();
+
         String[] priorities = priorityStr.split("\\s");
         if (priorities != null) {
             for (String priority: priorities) {
