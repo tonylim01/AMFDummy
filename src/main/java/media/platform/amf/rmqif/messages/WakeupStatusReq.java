@@ -13,25 +13,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class WakeupStatusReq {
     @SerializedName("caller_wakeup_status")
-    private Boolean callerWakeupStatus;
+    private Integer callerWakeupStatus;
     @SerializedName("callee_wakeup_status")
-    private Boolean calleeWakeupStatus;
+    private Integer calleeWakeupStatus;
     private MediaPlayReq success;
     private MediaPlayReq fail;
 
-    public boolean getCallerWakeupStatus() {
+    public int getCallerWakeupStatus() {
         return callerWakeupStatus;
     }
 
-    public void setCallerWakeupStatus(boolean callerWakeupStatus) {
+    public void setCallerWakeupStatus(int callerWakeupStatus) {
         this.callerWakeupStatus = callerWakeupStatus;
     }
 
-    public boolean getCalleeWakeupStatus() {
+    public int getCalleeWakeupStatus() {
         return calleeWakeupStatus;
     }
 
-    public void setCalleeWakeupStatus(boolean calleeWakeupStatus) {
+    public void setCalleeWakeupStatus(int calleeWakeupStatus) {
         this.calleeWakeupStatus = calleeWakeupStatus;
     }
 

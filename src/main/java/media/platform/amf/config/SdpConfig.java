@@ -84,4 +84,10 @@ public class SdpConfig {
             attrs.add(attribute);
         }
     }
+
+    public void clearCodecAttribute() {
+        if (codecAttributes != null) {
+            codecAttributes.clear();
+        }
+    }
 }

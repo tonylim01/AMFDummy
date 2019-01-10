@@ -192,8 +192,10 @@ public class RoomInfo {
 
     public int setWakeupStatus(boolean isCaller, int status) {
 
+        logger.debug("setWakeupStatus. isCaller [{}] status [{}]", isCaller, status);
+
         if (isCaller) {
-            wakeupStatus = (wakeupStatus & 0x3) | (((status & 0x3) << 2) & 0xc0);
+            wakeupStatus = (wakeupStatus & 0x3) | (((status & 0x3) << 2) & 0xc);
         }
         else {
             wakeupStatus = (wakeupStatus & 0xc) | (status & 0x3);

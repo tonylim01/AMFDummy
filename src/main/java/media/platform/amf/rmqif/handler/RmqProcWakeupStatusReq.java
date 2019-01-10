@@ -49,8 +49,8 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
             return false;
         }
 
-        sessionInfo.setCallerWakeupStatus(req.getCallerWakeupStatus());
-        sessionInfo.setCalleeWakeupStatus(req.getCalleeWakeupStatus());
+        sessionInfo.setCallerWakeupStatus((req.getCallerWakeupStatus() == 1) ? true : false);
+        sessionInfo.setCalleeWakeupStatus((req.getCalleeWakeupStatus() == 1) ? true : false);
 
         sessionInfo.setSuccessMedia((req.getSuccess() != null) ? req.getSuccess().getMediaFileInfo() : null);
         sessionInfo.setFailureMedia((req.getFail() != null) ? req.getFail().getMediaFileInfo() : null);
@@ -60,8 +60,8 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
             if (roomInfo != null) {
                 int wakeupStatus = roomInfo.getWakeupStatus();
 
-                if ((sessionInfo.isCaller() && ((req.getCallerWakeupStatus() ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
-                    (!sessionInfo.isCaller() && ((req.getCalleeWakeupStatus() ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
+                if ((sessionInfo.isCaller() && (((req.getCallerWakeupStatus() == 1) ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
+                    (!sessionInfo.isCaller() && (((req.getCalleeWakeupStatus() == 1) ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
                     roomInfo.setWakeupStatus(sessionInfo.isCaller(), RoomInfo.WAKEUP_STATUS_PREPARE);
                 }
 
@@ -71,8 +71,8 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
                     otherSessionInfo.setSuccessMedia((req.getSuccess() != null) ? req.getSuccess().getMediaFileInfo() : null);
                     otherSessionInfo.setFailureMedia((req.getFail() != null) ? req.getFail().getMediaFileInfo() : null);
 
-                    if ((otherSessionInfo.isCaller() && ((req.getCallerWakeupStatus() ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
-                            (!otherSessionInfo.isCaller() && ((req.getCalleeWakeupStatus() ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
+                    if ((otherSessionInfo.isCaller() && (((req.getCallerWakeupStatus() == 1) ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
+                            (!otherSessionInfo.isCaller() && (((req.getCalleeWakeupStatus() == 1) ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
                         roomInfo.setWakeupStatus(otherSessionInfo.isCaller(), RoomInfo.WAKEUP_STATUS_PREPARE);
                     }
                 }

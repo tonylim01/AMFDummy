@@ -61,6 +61,7 @@ public class UserConfig extends DefaultConfig {
             String localHost = getStrValue("MEDIA", "SDP_LOCAL_HOST", null);
             String localIp = getStrValue("MEDIA", "SDP_LOCAL_IP", null);
 
+            sdpConfig.clearCodecAttribute();
             sdpConfig.setLocalHost(localHost);
 
             if (localIp == null || localIp.startsWith("xxx")) {

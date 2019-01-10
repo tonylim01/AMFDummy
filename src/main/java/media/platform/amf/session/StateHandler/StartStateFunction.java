@@ -34,6 +34,9 @@ public class StartStateFunction implements StateFunction {
                 AppUtil.trySleep(100);
                 count++;
 
+                logger.warn("[{}] State mismatch. state [{}] endState [{}] audio [{}] try [{}]", sessionInfo.getSessionId(),
+                        sessionInfo.getServiceState(), sessionInfo.getEndOfState(), sessionInfo.isAudioCreated(), count);
+
             } while ((sessionInfo.getEndOfState() != SessionState.PREPARE || sessionInfo.isAudioCreated() == false) && (count < 10));
 
             if(sessionInfo.getEndOfState() != SessionState.PREPARE || sessionInfo.isAudioCreated() == false) {
@@ -58,6 +61,9 @@ public class StartStateFunction implements StateFunction {
             }
         }
 
+        logger.warn("[{}] State mismatch. state [{}] endState [{}] audio [{}]", sessionInfo.getSessionId(),
+                sessionInfo.getServiceState(), sessionInfo.getEndOfState(), sessionInfo.isAudioCreated());
+
         if (sessionInfo.getServiceState() != SessionState.START) {
             sessionInfo.setServiceState(SessionState.START);
         }
@@ -69,6 +75,10 @@ public class StartStateFunction implements StateFunction {
                 wakeupStatus = roomInfo.getWakeupStatus();
             }
         }
+
+        logger.warn("[{}] isCaller [{}] caller [{}] callee [{}] wakeupStatus [{}]", sessionInfo.getSessionId(),
+                sessionInfo.isCallerWakeupStatus(), sessionInfo.isCalleeWakeupStatus(),
+                sessionInfo.isCaller(), wakeupStatus);
 
         if (sessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
             if (sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) == 0)) {
@@ -89,6 +99,10 @@ public class StartStateFunction implements StateFunction {
 
         SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
         if (otherSessionInfo != null) {
+            logger.warn("[{}] isCaller [{}] caller [{}] callee [{}] wakeupStatus [{}]", otherSessionInfo.getSessionId(),
+                    otherSessionInfo.isCallerWakeupStatus(), otherSessionInfo.isCalleeWakeupStatus(),
+                    otherSessionInfo.isCaller(), wakeupStatus);
+
             if (otherSessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
                 if (otherSessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) == 0)) {
                     sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
