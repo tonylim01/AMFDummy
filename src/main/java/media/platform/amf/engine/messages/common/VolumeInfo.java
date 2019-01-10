@@ -3,7 +3,7 @@ package media.platform.amf.engine.messages.common;
 import com.google.gson.annotations.SerializedName;
 
 public class VolumeInfo {
-    @SerializedName("volume")
+    @SerializedName("default")
     private int def;
     private int low;
 

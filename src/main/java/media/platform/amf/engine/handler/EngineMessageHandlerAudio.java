@@ -192,6 +192,10 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
                 RmqProcOutgoingEndDetectReq req = new RmqProcOutgoingEndDetectReq(sessionInfo.getSessionId(), AppId.newId());
                 req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2);
             }
+            else {
+                logger.warn("[{}] Invalid roomInfo. cnfId [{}] awf [{}]", sessionInfo.getSessionId(),
+                        sessionInfo.getConferenceId(), (roomInfo != null) ? roomInfo.getAwfQueueName() : "no room");
+            }
         }
     }
 }

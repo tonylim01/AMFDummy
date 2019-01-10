@@ -6,6 +6,7 @@ import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import media.platform.amf.rmqif.handler.RmqProcAiServiceReq;
+import media.platform.amf.rmqif.handler.RmqProcMediaPlayDoneReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
@@ -23,7 +24,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "play")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_PLAY)) {
             procFilePlayRes(msg);
         }
         else {
@@ -37,7 +38,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
             return;
         }
 
-        if (compareString(msg.getHeader().getCmd(), "play")) {
+        if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_PLAY)) {
             procFilePlayRpt(msg);
         }
         else {
@@ -95,7 +96,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
             RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
             if (roomInfo != null && roomInfo.getAwfQueueName() != null) {
 
-                RmqProcAiServiceReq req = new RmqProcAiServiceReq(sessionInfo.getSessionId(), AppId.newId());
+                RmqProcMediaPlayDoneReq req = new RmqProcMediaPlayDoneReq(sessionInfo.getSessionId(), AppId.newId());
                 if (!isSuccess) {
                     req.setReasonCode(1);
                     req.setReasonStr(msg.getHeader().getValue());

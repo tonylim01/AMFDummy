@@ -19,6 +19,7 @@ public class EngineMessageType {
     public static final String MSG_CMD_UPDATE = "update";
     public static final String MSG_CMD_START = "start";
     public static final String MSG_CMD_STOP = "stop";
+    public static final String MSG_CMD_PLAY = "play";
 
     public static final String MSG_RESULT_OK = "ok";
     public static final String MSG_RESULT_SUCCESS = "success";
