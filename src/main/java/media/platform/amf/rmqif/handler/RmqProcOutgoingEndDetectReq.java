@@ -40,7 +40,7 @@ public class RmqProcOutgoingEndDetectReq extends RmqOutgoingMessage {
         EndDetectReq req = new EndDetectReq();
         req.setDir(dir);
 
-        setBody(req, MediaPlayDoneReq.class);
+        setBody(req, EndDetectReq.class);
 
         return sendTo(queueName);
     }

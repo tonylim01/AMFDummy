@@ -28,6 +28,9 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
         else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_DELETE)) {
             procAudioDeleteRes(msg);
         }
+        else if (compareString(msg.getHeader().getCmd(), EngineMessageType.MSG_CMD_BRANCH)) {
+            procAudioBranchRes(msg);
+        }
         else {
             logger.warn("Unsupported cmd [{}]", msg.getHeader().getCmd());
         }
@@ -113,6 +116,45 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             }
 
             sessionInfo.setAudioCreated(false);
+        }
+        else {
+            logger.warn("Undefined result [{}]", msg.getHeader().getResult());
+        }
+
+    }
+
+    private void procAudioBranchRes(EngineResponseMessage msg) {
+        if (msg == null || msg.getHeader() == null) {
+            logger.warn("Null response message");
+            return;
+        }
+
+        if (compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_OK) ||
+                compareString(msg.getHeader().getResult(), EngineMessageType.MSG_RESULT_SUCCESS)) {
+            // Success
+            if (msg.getHeader().getAppId() == null) {
+                logger.warn("Null appId in response message");
+                return;
+            }
+
+            String sessionId = AppId.getInstance().get(msg.getHeader().getAppId());
+            if (sessionId == null) {
+                logger.warn("No sessionId for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
+            if (sessionInfo == null) {
+                logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
+                return;
+            }
+
+            //
+            // TODO
+            //
+            // Nothing to do:w
+
+
         }
         else {
             logger.warn("Undefined result [{}]", msg.getHeader().getResult());
