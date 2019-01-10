@@ -289,9 +289,10 @@ public class SessionManager {
                 //
                 // In case of no packet
                 //
-                if (current - sessionInfo.getRtpReceivedTime() >= config.getTimerMediaNoActivity()) {
+                if ((sessionInfo.getRtpReceivedTime() > 0) && (current - sessionInfo.getRtpReceivedTime() >= config.getTimerMediaNoActivity())) {
                     logger.warn("[{}] No packet. Force release", sessionInfo.getSessionId());
 
+                    sessionInfo.setRtpReceivedTime(0);
                     sendHangupReq(sessionInfo);
                     continue;
                 }

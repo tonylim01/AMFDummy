@@ -68,6 +68,9 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
                 SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
                 if (otherSessionInfo != null) {
 
+                    otherSessionInfo.setCallerWakeupStatus((req.getCallerWakeupStatus() == 1) ? true : false);
+                    otherSessionInfo.setCalleeWakeupStatus((req.getCalleeWakeupStatus() == 1) ? true : false);
+
                     otherSessionInfo.setSuccessMedia((req.getSuccess() != null) ? req.getSuccess().getMediaFileInfo() : null);
                     otherSessionInfo.setFailureMedia((req.getFail() != null) ? req.getFail().getMediaFileInfo() : null);
 
