@@ -85,6 +85,11 @@ public class  SdpBuilder {
         }
         sb.append(CRLF);
 
+        // RTCP test
+//        sb.append("a=rtcp:");
+//        sb.append(localPort + 1);
+//        sb.append(CRLF);
+
         // Connection
         sb.append("c=IN IP4 ");
         sb.append(localIpAddress);

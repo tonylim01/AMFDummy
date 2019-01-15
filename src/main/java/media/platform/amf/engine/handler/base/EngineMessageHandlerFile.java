@@ -1,11 +1,13 @@
 package media.platform.amf.engine.handler.base;
 
 import media.platform.amf.common.AppId;
+import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.handler.DefaultEngineMessageHandler;
+import media.platform.amf.engine.messages.FilePlayReq;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
-import media.platform.amf.rmqif.handler.RmqProcAiServiceReq;
+import media.platform.amf.engine.types.SentMessageInfo;
 import media.platform.amf.rmqif.handler.RmqProcMediaPlayDoneReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -96,12 +98,23 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
             RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
             if (roomInfo != null && roomInfo.getAwfQueueName() != null) {
 
-                RmqProcMediaPlayDoneReq req = new RmqProcMediaPlayDoneReq(sessionInfo.getSessionId(), AppId.newId());
-                if (!isSuccess) {
-                    req.setReasonCode(1);
-                    req.setReasonStr(msg.getHeader().getValue());
+                SentMessageInfo sentInfo = EngineClient.getInstance().getSentQueue(msg.getHeader().getAppId());
+                if (sentInfo != null) {
+                    int mediaType = ((FilePlayReq)sentInfo.getObj()).getType();
+
+                    RmqProcMediaPlayDoneReq req = new RmqProcMediaPlayDoneReq(sessionInfo.getSessionId(), AppId.newId());
+                    if (!isSuccess) {
+                        req.setReasonCode(1);
+                        req.setReasonStr(msg.getHeader().getValue());
+                    }
+                    req.send(roomInfo.getAwfQueueName(), (mediaType == 0) ? 1 : 2);
+
+                    EngineClient.getInstance().removeSentQueue(msg.getHeader().getAppId());
                 }
-                req.send(roomInfo.getAwfQueueName(), sessionInfo.getMediaDir());
+                else {
+                    logger.warn("[{}] No sentInfo found. appId [{}]", sessionId, msg.getHeader().getAppId());
+                }
+
             }
         }
         else {

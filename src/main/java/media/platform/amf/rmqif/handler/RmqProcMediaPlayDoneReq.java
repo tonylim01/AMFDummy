@@ -30,7 +30,7 @@ public class RmqProcMediaPlayDoneReq extends RmqOutgoingMessage {
      * Makes a response body and sends the message to AWF
      * @return
      */
-    public boolean send(String queueName, int dir) {
+    public boolean send(String queueName, int mentOfMusic) {
 
         SessionInfo sessionInfo = checkAndGetSession(getSessionId());
         if (sessionInfo == null) {
@@ -38,7 +38,7 @@ public class RmqProcMediaPlayDoneReq extends RmqOutgoingMessage {
         }
 
         MediaPlayDoneReq req = new MediaPlayDoneReq();
-        req.setDir(dir);
+        req.setChannelId(mentOfMusic);
 
         setBody(req, MediaPlayDoneReq.class);
 

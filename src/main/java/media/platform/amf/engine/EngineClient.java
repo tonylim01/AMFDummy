@@ -226,4 +226,31 @@ public class EngineClient {
         }
     }
 
+    public synchronized SentMessageInfo getSentQueue(String appId) {
+        if (appId == null) {
+            return null;
+        }
+
+        SentMessageInfo messageInfo = null;
+        if (sentQueue.containsKey(appId)) {
+            messageInfo = sentQueue.get(appId);
+        }
+
+        return messageInfo;
+    }
+
+    public synchronized boolean removeSentQueue(String appId) {
+        if (appId == null) {
+            return false;
+        }
+
+        boolean result = false;
+
+        if (sentQueue.containsKey(appId)) {
+            sentQueue.remove(appId);
+            result = true;
+        }
+
+        return result;
+    }
 }

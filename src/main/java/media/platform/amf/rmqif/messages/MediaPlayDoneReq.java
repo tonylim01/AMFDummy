@@ -9,14 +9,17 @@
 
 package media.platform.amf.rmqif.messages;
 
-public class MediaPlayDoneReq {
-    private int dir;
+import com.google.gson.annotations.SerializedName;
 
-    public int getDir() {
-        return dir;
+public class MediaPlayDoneReq {
+    @SerializedName("channel_id")
+    private int channelId;
+
+    public int getChannelId() {
+        return channelId;
     }
 
-    public void setDir(int dir) {
-        this.dir = dir;
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
     }
 }
