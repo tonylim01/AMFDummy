@@ -9,6 +9,7 @@
 
 package media.platform.amf.core.rabbitmq.transport;
 
+import com.rabbitmq.client.AMQP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,12 @@ public class RmqSender extends RmqTransport {
         try {
             byte[] data = new byte[size];
             System.arraycopy(msg, 0, data, 0, size);
-            getChannel().basicPublish("", getQueueName(), null, data);
+
+            AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
+                    .expiration("5000")
+                    .build();
+
+            getChannel().basicPublish("", getQueueName(), properties, data);
             result = true;
         } catch (Exception e) {
             e.printStackTrace();

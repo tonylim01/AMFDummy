@@ -170,7 +170,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             return;
         }
 
-        //logger.debug("[{}] rtp payload {} size {} ref {}", sessionInfo.getSessionId(), rtpPacket.getPayloadType(), rtpPacket.getLength(), sessionInfo.getPayload2833());
+//        logger.debug("[{}] rtp payload {} size {} ref {}", sessionInfo.getSessionId(), rtpPacket.getPayloadType(), rtpPacket.getLength(), sessionInfo.getPayload2833());
 
         // Detect 2833
         if (sessionInfo.getPayload2833() > 0 && rtpPacket.getPayloadType() == sessionInfo.getPayload2833()) {
@@ -302,7 +302,7 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
         int dtmf = payload[0] & 0xff;
         boolean dtmfEnd = ((payload[1] & 0x80) > 0);
 
-        //logger.info("[{}] 2833 detected. dtmf [{}] end [{}]", sessionInfo.getSessionId(), dtmf, dtmfEnd);
+//        logger.info("[{}] 2833 detected. dtmf [{}] end [{}]", sessionInfo.getSessionId(), dtmf, dtmfEnd);
         boolean newDtmf;
 
         if (dtmf != sessionInfo.getLastDtmf()) {
@@ -332,13 +332,18 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             return;
         }
 
-        RmqProcDtmfDetectReq detectReq = new RmqProcDtmfDetectReq(sessionInfo.getSessionId(), UUID.randomUUID().toString());
-        detectReq.setDtmfInfo(dtmf);
-        detectReq.send(sessionInfo.getRemoteRmqName());
-
+        if (sessionInfo.getConferenceId() != null) {
+            RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
+            if (roomInfo != null && roomInfo.getAwfQueueName() != null) {
+                RmqProcDtmfDetectReq detectReq = new RmqProcDtmfDetectReq(sessionInfo.getSessionId(), UUID.randomUUID().toString());
+                detectReq.setDtmfInfo(sessionInfo.isCaller() ? 1 : 2, dtmf);
+                detectReq.send(roomInfo.getAwfQueueName());
+            }
+        }
         //
         // TEST CODE
         //
+        /*
         if (dtmf == 1) {
             EngineProcFilePlayReq filePlayReq = new EngineProcFilePlayReq(UUID.randomUUID().toString());
 
@@ -395,5 +400,6 @@ public class RtpInboundHandler extends SimpleChannelInboundHandler<DatagramPacke
             filePlayReq.send();
 
         }
+        */
     }
 }

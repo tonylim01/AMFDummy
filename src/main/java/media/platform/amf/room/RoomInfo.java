@@ -192,7 +192,7 @@ public class RoomInfo {
 
     public int setWakeupStatus(boolean isCaller, int status) {
 
-        logger.debug("setWakeupStatus. isCaller [{}] status [{}]", isCaller, status);
+        logger.debug("setWakeupStatus. isCaller [{}] status [{}] status [{}]", isCaller, status, wakeupStatus);
 
         if (isCaller) {
             wakeupStatus = (wakeupStatus & 0x3) | (((status & 0x3) << 2) & 0xc);
@@ -200,6 +200,8 @@ public class RoomInfo {
         else {
             wakeupStatus = (wakeupStatus & 0xc) | (status & 0x3);
         }
+
+        logger.debug("setWakeupStatus. new status [{}]", wakeupStatus);
 
         return wakeupStatus;
     }

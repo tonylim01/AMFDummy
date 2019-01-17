@@ -645,5 +645,15 @@ public class SessionInfo {
     public void setRtpReceivedTime(long rtpReceivedTime) {
         this.rtpReceivedTime = rtpReceivedTime;
     }
+
+    private String stopAppId;
+
+    public String getStopAppId() {
+        return stopAppId;
+    }
+
+    public void setStopAppId(String stopAppId) {
+        this.stopAppId = stopAppId;
+    }
 }
 

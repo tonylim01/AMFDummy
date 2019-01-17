@@ -97,22 +97,22 @@ public class RmqProcMediaStopReq extends RmqIncomingMessageHandler {
             return false;
         }
 
-        String appId = AppId.newId();
+//        String appId = AppId.newId();
 
-        EngineProcFileStopReq fileStopReq = new EngineProcFileStopReq(appId);
+        EngineProcFileStopReq fileStopReq = new EngineProcFileStopReq(msg.getHeader().getTransactionId());
         fileStopReq.setData(sessionInfo,
                 mixerId,
                 (req.getMentOrMusic() == MediaPlayReq.MEDIA_MENT) ? 0 : 1,
                 dstIds);
 
         if (fileStopReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, FileStopReq.class, fileStopReq.getData());
+            EngineClient.getInstance().pushSentQueue(msg.getHeader().getTransactionId(), FileStopReq.class, fileStopReq.getData());
             if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getSessionId());
+                AppId.getInstance().push(msg.getHeader().getTransactionId(), sessionInfo.getSessionId());
             }
         }
 
-        sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
+//        sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
         return false;
     }

@@ -108,6 +108,11 @@ public class EngineConsumer implements Runnable {
                 EngineMessageHandlerMixer mixer = new EngineMessageHandlerMixer();
                 mixer.handle(msg);
             }
+            else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_FILE)) {
+                logger.debug("<- Engine: json {}", json);
+                EngineMessageHandlerFile wakeup = new EngineMessageHandlerFile();
+                wakeup.handle(msg);
+            }
             else if (compareString(msg.getHeader().getType(), EngineMessageType.HDR_TYPE_WAKEUP)) {
                 logger.debug("<- Engine: json {}", json);
                 EngineMessageHandlerWakeup wakeup = new EngineMessageHandlerWakeup();

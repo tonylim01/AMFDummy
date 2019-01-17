@@ -24,13 +24,14 @@ public class RmqProcDtmfDetectReq extends RmqOutgoingMessage {
         setType(RmqMessageType.RMQ_MSG_STR_DTMF_DETECT_REQ);
     }
 
-    public void setDtmfInfo(int digit) {
+    public void setDtmfInfo(int dir, int digit) {
         SessionInfo sessionInfo = checkAndGetSession(getSessionId());
         if (sessionInfo == null) {
             return;
         }
 
         DtmfDetectReq req = new DtmfDetectReq();
+        req.setDir(dir);
         req.setDtmf(digit);
 
         setBody(req, DtmfDetectReq.class);

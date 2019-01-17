@@ -136,7 +136,7 @@ public class RmqConsumer implements Runnable {
                 endDetectReq.handle(msg);
                 break;
             case RmqMessageType.RMQ_MSG_TYPE_AI_SERVICE_CANCEL_REQ:
-                RmqProcAiServiceCancelReq aiServiceCancelReq = new RmqProcAiServiceCancelReq();
+                RmqProcIncomingAiServiceCancelReq aiServiceCancelReq = new RmqProcIncomingAiServiceCancelReq();
                 aiServiceCancelReq.handle(msg);
                 break;
             case RmqMessageType.RMQ_MSG_TYPE_INBOUND_GET_ANSWER_RES:

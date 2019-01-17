@@ -175,8 +175,17 @@ public class EngineClient {
     }
 
     public synchronized void pushSentQueue(String appId, Class clss, Object obj) {
+        boolean isImmediate = false;
+        if (sentQueue.size() == 0) {
+            isImmediate = true;
+        }
+
         SentMessageInfo msgInfo = new SentMessageInfo(System.currentTimeMillis(), clss, obj);
         sentQueue.put(appId, msgInfo);
+
+        if (isImmediate) {
+
+        }
     }
 
     public synchronized void setConnected(boolean connected) {
