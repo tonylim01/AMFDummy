@@ -4,6 +4,7 @@ import media.platform.amf.common.AppId;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
+import media.platform.amf.rmqif.handler.RmqProcOutgoingAiServiceCancelReq;
 import media.platform.amf.rmqif.handler.RmqProcOutgoingEndDetectReq;
 import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
@@ -189,8 +190,14 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             RoomInfo roomInfo = RoomManager.getInstance().getRoomInfo(sessionInfo.getConferenceId());
             if (roomInfo != null && roomInfo.getAwfQueueName() != null) {
 
-                RmqProcOutgoingEndDetectReq req = new RmqProcOutgoingEndDetectReq(sessionInfo.getSessionId(), AppId.newId());
-                req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2);
+                if (compareString(msg.getHeader().event, EngineMessageType.MSG_EVENT_TIMEOUT)) {
+
+                    RmqProcOutgoingAiServiceCancelReq req = new RmqProcOutgoingAiServiceCancelReq(sessionInfo.getSessionId(), AppId.newId());
+                    req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2);
+                }
+                else {
+                    // Nothing to do
+                }
             }
             else {
                 logger.warn("[{}] Invalid roomInfo. cnfId [{}] awf [{}]", sessionInfo.getSessionId(),

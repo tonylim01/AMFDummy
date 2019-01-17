@@ -13,19 +13,16 @@ import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.EngineProcAudioBranchReq;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.AiServiceCancelReq;
-import media.platform.amf.rmqif.messages.AiServiceRes;
 import media.platform.amf.rmqif.module.RmqData;
 import media.platform.amf.rmqif.types.RmqMessage;
-import media.platform.amf.room.RoomInfo;
-import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RmqProcAiServiceCancelReq extends RmqIncomingMessageHandler {
+public class RmqProcIncomingAiServiceCancelReq extends RmqIncomingMessageHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(RmqProcAiServiceCancelReq.class);
+    private static final Logger logger = LoggerFactory.getLogger(RmqProcIncomingAiServiceCancelReq.class);
 
     @Override
     public boolean handle(RmqMessage msg) {
