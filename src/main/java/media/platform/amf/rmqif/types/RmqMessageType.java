@@ -202,6 +202,9 @@ public class RmqMessageType {
     public static final int RMQ_COMMON_REASON_CODE_TIMEOUT = -2;
     public static final int RMQ_MSG_COMMON_REASON_CODE_WRONG_PARAM = -3;
     public static final int RMQ_MSG_COMMON_REASON_CODE_ALREADY_EXIST = -4;
+    public static final int RMQ_MSG_COMMON_REASON_CODE_FILE_ERROR = 3001;
+    public static final int RMQ_MSG_COMMON_REASON_CODE_PLAY_STOPPED = 3002;
+
 
     private static Map<String, Integer> typeMap() {
         return Collections.unmodifiableMap(Stream.of(

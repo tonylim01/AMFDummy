@@ -5,6 +5,7 @@ import media.platform.amf.common.NetUtil;
 import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.UserConfig;
 import media.platform.amf.engine.EngineServer;
+import media.platform.amf.engine.EngineServiceManager;
 import media.platform.amf.redundant.RedundantServer;
 import media.platform.amf.rmqif.handler.RmqProcLogInReq;
 import media.platform.amf.rmqif.module.RmqClient;
@@ -41,6 +42,7 @@ public class ServiceManager {
     private HeartbeatManager heartbeatManager;
     private RedundantServer redundantServer;
     private EngineServer engineServer;
+    private EngineServiceManager engineServiceManager;
 
     private boolean isQuit = false;
 
@@ -163,6 +165,9 @@ public class ServiceManager {
             e.printStackTrace();
         }
 
+        engineServiceManager = EngineServiceManager.getInstance();
+        engineServiceManager.start();
+
         return true;
     }
 
@@ -181,6 +186,10 @@ public class ServiceManager {
 
         if (redundantServer != null) {
             redundantServer.stop();
+        }
+
+        if (engineServiceManager != null) {
+            engineServiceManager.stop();
         }
 
         if (engineServer != null) {

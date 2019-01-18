@@ -3,9 +3,12 @@ package media.platform.amf.session.StateHandler;
 import media.platform.amf.common.AppId;
 import media.platform.amf.common.AppUtil;
 import media.platform.amf.engine.EngineClient;
+import media.platform.amf.engine.EngineServiceManager;
 import media.platform.amf.engine.handler.EngineProcWakeupStartReq;
 import media.platform.amf.engine.handler.EngineProcWakeupStopReq;
 import media.platform.amf.engine.messages.AudioCreateReq;
+import media.platform.amf.engine.messages.WakeupStartReq;
+import media.platform.amf.engine.messages.WakeupStopReq;
 import media.platform.amf.rmqif.handler.RmqProcWakeupStatusRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
 import media.platform.amf.room.RoomInfo;
@@ -25,11 +28,18 @@ public class StartStateFunction implements StateFunction {
             return;
         }
 
+        boolean isPush = false;
+
         int count = 0;
         if ((sessionInfo.getEndOfState() != SessionState.PREPARE && sessionInfo.getEndOfState() != SessionState.START) ||
                 sessionInfo.isAudioCreated() == false) {
             logger.warn("[{}] State mismatch. state [{}] endState [{}] audio [{}]", sessionInfo.getSessionId(),
                     sessionInfo.getServiceState(), sessionInfo.getEndOfState(), sessionInfo.isAudioCreated());
+
+            isPush = true;
+        }
+
+        /*
 
             do {
                 AppUtil.trySleep(100);
@@ -63,6 +73,7 @@ public class StartStateFunction implements StateFunction {
                 return;
             }
         }
+        */
 
         logger.warn("[{}] State [{}] endState [{}] audio [{}]", sessionInfo.getSessionId(),
                 sessionInfo.getServiceState(), sessionInfo.getEndOfState(), sessionInfo.isAudioCreated());
@@ -86,38 +97,20 @@ public class StartStateFunction implements StateFunction {
 
         if (sessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
             if (sessionInfo.isCallerWakeupStatus()) {
-                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
             }
             else if (!sessionInfo.isCallerWakeupStatus()) {
-                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
             }
         }
         else if (!sessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
             if (sessionInfo.isCalleeWakeupStatus()) {
-                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
             }
             else if (!sessionInfo.isCalleeWakeupStatus()) {
-                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
             }
         }
-        /*
-        if (sessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
-            if (sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) == 0)) {
-                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
-            }
-            else if (!sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) > 0)) {
-                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
-            }
-        }
-        else if (!sessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
-            if (sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) == 0)) {
-                sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
-            }
-            else if (!sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) > 0)) {
-                sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
-            }
-        }
-        */
 
         SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
         if (otherSessionInfo != null) {
@@ -128,44 +121,26 @@ public class StartStateFunction implements StateFunction {
 
             if (otherSessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
                 if (otherSessionInfo.isCallerWakeupStatus()) {
-                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
                 }
                 else if (!sessionInfo.isCallerWakeupStatus()) {
-                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
                 }
             }
             else if (!otherSessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
                 if (otherSessionInfo.isCalleeWakeupStatus()) {
-                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
                 }
                 else if (!sessionInfo.isCalleeWakeupStatus()) {
-                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
                 }
             }
-            /*
-            if (otherSessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
-                if (otherSessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) == 0)) {
-                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
-                }
-                else if (!sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x8) > 0)) {
-                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
-                }
-            }
-            else if (!otherSessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
-                if (otherSessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) == 0)) {
-                    sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
-                }
-                else if (!sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x2) > 0)) {
-                    sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
-                }
-            }
-            */
         }
 
         sessionInfo.setEndOfState(SessionState.START);
     }
 
-    private void sendWakeupStartReqToEngine(SessionInfo sessionInfo, int toolId) {
+    private void sendWakeupStartReqToEngine(SessionInfo sessionInfo, int toolId, boolean push) {
 
         if (sessionInfo == null) {
             return;
@@ -177,15 +152,15 @@ public class StartStateFunction implements StateFunction {
         EngineProcWakeupStartReq wakeupStartReq = new EngineProcWakeupStartReq(appId);
         wakeupStartReq.setData(sessionInfo, toolId, EngineProcWakeupStartReq.DEFAULT_TIMEOUT_MSEC);
 
-        if (wakeupStartReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, AudioCreateReq.class, wakeupStartReq.getData());
+        if (wakeupStartReq.send(push)) {
+            EngineClient.getInstance().pushSentQueue(appId, WakeupStartReq.class, wakeupStartReq.getData());
             if (sessionInfo.getSessionId() != null) {
                 AppId.getInstance().push(appId, sessionInfo.getSessionId());
             }
         }
     }
 
-    private void sendWakeupStopReqToEngine(SessionInfo sessionInfo, int toolId) {
+    private void sendWakeupStopReqToEngine(SessionInfo sessionInfo, int toolId, boolean push) {
 
         if (sessionInfo == null) {
             return;
@@ -197,8 +172,8 @@ public class StartStateFunction implements StateFunction {
         EngineProcWakeupStopReq wakeupStopReq = new EngineProcWakeupStopReq(appId);
         wakeupStopReq.setData(sessionInfo, toolId);
 
-        if (wakeupStopReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, AudioCreateReq.class, wakeupStopReq.getData());
+        if (wakeupStopReq.send(push)) {
+            EngineClient.getInstance().pushSentQueue(appId, WakeupStopReq.class, wakeupStopReq.getData());
             if (sessionInfo.getSessionId() != null) {
                 AppId.getInstance().push(appId, sessionInfo.getSessionId());
             }

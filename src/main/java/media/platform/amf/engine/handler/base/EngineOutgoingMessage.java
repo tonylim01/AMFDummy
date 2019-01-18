@@ -12,18 +12,10 @@ package media.platform.amf.engine.handler.base;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import media.platform.amf.AppInstance;
-import media.platform.amf.config.AmfConfig;
 import media.platform.amf.engine.EngineClient;
+import media.platform.amf.engine.EngineServiceManager;
 import media.platform.amf.engine.types.EngineRequestHeader;
 import media.platform.amf.engine.types.EngineRequestMessage;
-import media.platform.amf.rmqif.module.RmqBuilder;
-import media.platform.amf.rmqif.module.RmqClient;
-import media.platform.amf.rmqif.types.RmqHeader;
-import media.platform.amf.rmqif.types.RmqMessage;
-import media.platform.amf.rmqif.types.RmqMessageType;
-import media.platform.amf.session.SessionInfo;
-import media.platform.amf.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +42,7 @@ public class EngineOutgoingMessage implements EngineOutgoingMessageInterface {
     }
 
     @Override
-    public boolean sendTo() {
+    public boolean sendTo(boolean push) {
         boolean result = false;
 
         EngineRequestMessage msg = new EngineRequestMessage(header);
@@ -63,9 +55,14 @@ public class EngineOutgoingMessage implements EngineOutgoingMessageInterface {
             String json = gson.toJson(msg);
 
             if (json != null) {
-                EngineClient client = EngineClient.getInstance();
-                if (client != null) {
-                    result = client.sendMessage(json, msg.getHeader().getCmd().equals("heartbeat") ? false : true);
+                if (!push) {
+                    EngineClient client = EngineClient.getInstance();
+                    if (client != null) {
+                        result = client.sendMessage(json, msg.getHeader().getCmd().equals("heartbeat") ? false : true);
+                    }
+                }
+                else {
+                    EngineServiceManager.getInstance().pushMessage(msg.getHeader().getAppId(), msg.getHeader().getCmd(), msg.getHeader().getType(), json);
                 }
             }
             else {

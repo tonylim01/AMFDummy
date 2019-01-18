@@ -5,5 +5,5 @@ import java.lang.reflect.Type;
 public interface EngineOutgoingMessageInterface {
 
     void setBody(Object obj, Type objType);
-    boolean sendTo();
+    boolean sendTo(boolean push);
 }

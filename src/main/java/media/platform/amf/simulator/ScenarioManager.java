@@ -37,7 +37,7 @@ public class ScenarioManager {
                 else if (line.equals("END")) {
                     if (sb != null) {
                         String msg = sb.toString();
-                        sendMessage(msg);
+                        pushMessage(msg);
                         sb = null;
                     }
                 }

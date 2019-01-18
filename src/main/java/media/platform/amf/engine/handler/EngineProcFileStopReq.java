@@ -46,6 +46,6 @@ public class EngineProcFileStopReq extends EngineOutgoingMessage {
 
     public boolean send() {
 
-        return sendTo();
+        return sendTo(false);
     }
 }

@@ -1,6 +1,7 @@
 package media.platform.amf.engine.handler;
 
 import media.platform.amf.common.AppId;
+import media.platform.amf.engine.EngineServiceManager;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
@@ -10,6 +11,7 @@ import media.platform.amf.room.RoomInfo;
 import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
 import media.platform.amf.session.SessionManager;
+import media.platform.amf.session.SessionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +85,16 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             //
             // TODO
             //
+            SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
+            if (otherSessionInfo != null) {
+                if (otherSessionInfo.isAudioCreated()) {
+                    EngineServiceManager.getInstance().popAndSendMessage();
+                }
+                else {
+                    logger.debug("[{}] Other session audio not created", otherSessionInfo.getSessionId());
+                }
+            }
+
         }
         else {
             logger.warn("Undefined result [{}]", msg.getHeader().getResult());

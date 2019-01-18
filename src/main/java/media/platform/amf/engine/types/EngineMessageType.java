@@ -23,6 +23,7 @@ public class EngineMessageType {
 
     public static final String MSG_RESULT_OK = "ok";
     public static final String MSG_RESULT_SUCCESS = "success";
+    public static final String MSG_RESULT_FAIL = "fail";
     public static final String MSG_RESULT_ERROR = "error";
     public static final String MSG_RESULT_TIIMEOUT = "timeout";
 

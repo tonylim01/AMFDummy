@@ -41,6 +41,6 @@ public class EngineProcSysConnectReq extends EngineOutgoingMessage {
 
     public boolean send() {
 
-        return sendTo();
+        return sendTo(false);
     }
 }

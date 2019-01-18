@@ -35,8 +35,8 @@ public class EngineProcWakeupStopReq extends EngineOutgoingMessage {
         return data;
     }
 
-    public boolean send() {
+    public boolean send(boolean push) {
 
-        return sendTo();
+        return sendTo(push);
     }
 }
