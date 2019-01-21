@@ -22,6 +22,8 @@ public class EngineClient {
 
     private static final Logger logger = LoggerFactory.getLogger(EngineClient.class);
 
+    private static final int MAX_RETRANSMISSION_COUNT = 3;
+
     private UdpClient udpClient;
     private String ip;
     private int port;
@@ -136,11 +138,18 @@ public class EngineClient {
         public void run() {
 
             logger.info("EngineClient startScheduler");
+            AmfConfig config = AppInstance.getInstance().getConfig();
+
+            if (config == null) {
+                return;
+            }
+
+            int retryCount = 0;
 
             while (!isQuit) {
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(config.getTimerEngineTE());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -158,16 +167,23 @@ public class EngineClient {
                     }
                 }
                 else if (checkHeartbeat()) {
+                    if (retryCount > 0) {
+                        retryCount = 0;
+                    }
+
                     EngineProcSysHeartbeatReq sysHeartbeatReq = new EngineProcSysHeartbeatReq(appId);
                     if (sysHeartbeatReq.send()) {
                         pushSentQueue(appId, SysHeartbeatReq.class, sysHeartbeatReq.getData());
                     }
                 }
                 else {
-                    setConnected(false);
+                    retryCount++;
+
+                    if (retryCount >= MAX_RETRANSMISSION_COUNT) {
+                        setConnected(false);
+                        retryCount = 0;
+                    }
                 }
-
-
             }
 
             logger.info("EngineClient end");
@@ -219,6 +235,12 @@ public class EngineClient {
             return;
         }
 
+        AmfConfig config = AppInstance.getInstance().getConfig();
+
+        if (config == null) {
+            return;
+        }
+
         for (Map.Entry<String, SentMessageInfo> entry: sentQueue.entrySet()) {
             String id = entry.getKey();
             SentMessageInfo msgInfo = entry.getValue();
@@ -228,8 +250,16 @@ public class EngineClient {
             }
 
             if (msgInfo.getClss() == SysHeartbeatReq.class && appId.equals(id)) {
-//                logger.info("Heartbeat ok [{}]", entry.getKey());
-                sentQueue.remove(entry.getKey());
+
+                long currentTimestamp = System.currentTimeMillis();
+
+                if (currentTimestamp - msgInfo.getTimestamp() > config.getTimerEngineTH()) {
+                    logger.warn("Heartbeat response timeout [{}]ms", currentTimestamp - msgInfo.getTimestamp());
+                }
+                else {
+                    sentQueue.remove(entry.getKey());
+                }
+
                 break;
             }
         }

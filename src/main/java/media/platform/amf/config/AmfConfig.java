@@ -23,6 +23,9 @@ public class AmfConfig extends DefaultConfig {
 
     private static final int DEFAULT_TIMER_T2 = 500;
     private static final int DEFAULT_TIMER_T4 = 2000;
+    private static final int DEFAULT_TIMER_TE = 1000;    // Retransmission timer
+    private static final int DEFAULT_TIMER_TH = 500;     // Wait time for response
+
     private static final int DEFAULT_TIMER_MEDIA_INACTIVITY = 10000;
 
     private int amfId;
@@ -97,6 +100,8 @@ public class AmfConfig extends DefaultConfig {
             timerSipT2 = getIntValue("TIMER", "TIMER_SIP_T2", DEFAULT_TIMER_T2);
             timerSipT4 = getIntValue("TIMER", "TIMER_SIP_T4", DEFAULT_TIMER_T4);
             timerMediaNoActivity = getIntValue("TIMER", "TIMER_MEDIA_NOACTIVITY", DEFAULT_TIMER_MEDIA_INACTIVITY);
+            timerEngineTE = getIntValue("TIMER", "TIMER_ENGINE_TE", DEFAULT_TIMER_TE);
+            timerEngineTH = getIntValue("TIMER", "TIMER_ENGINE_TH", DEFAULT_TIMER_TH);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,6 +135,9 @@ public class AmfConfig extends DefaultConfig {
     private int timerSipT2;
     private int timerMediaNoActivity;
 
+    private int timerEngineTE;      // Delay in millisec to send a next request msg
+    private int timerEngineTH;      // Delay in millisec to wait a response msg
+
     public int getTimerSipT4() {
         return timerSipT4;
     }
@@ -140,5 +148,13 @@ public class AmfConfig extends DefaultConfig {
 
     public int getTimerMediaNoActivity() {
         return timerMediaNoActivity;
+    }
+
+    public int getTimerEngineTE() {
+        return timerEngineTE;
+    }
+
+    public int getTimerEngineTH() {
+        return timerEngineTH;
     }
 }

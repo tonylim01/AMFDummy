@@ -181,6 +181,7 @@ public class UserConfig extends DefaultConfig {
 
     private String processName;
 
+
     @Override
     public String getStrValue(String session, String key, String defaultValue) {
         String value = super.getStrValue(session, key, defaultValue);
