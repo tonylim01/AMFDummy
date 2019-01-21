@@ -254,7 +254,7 @@ public class EngineClient {
                 long currentTimestamp = System.currentTimeMillis();
 
                 if (currentTimestamp - msgInfo.getTimestamp() > config.getTimerEngineTH()) {
-                    logger.warn("Heartbeat response timeout [{}]ms", currentTimestamp - msgInfo.getTimestamp());
+                    logger.warn("Heartbeat response timeout [{}]ms appId [{}]", currentTimestamp - msgInfo.getTimestamp(), id);
                 }
                 else {
                     sentQueue.remove(entry.getKey());
