@@ -6,6 +6,7 @@ import media.platform.amf.config.AmfConfig;
 import media.platform.amf.config.UserConfig;
 import media.platform.amf.engine.EngineServer;
 import media.platform.amf.engine.EngineServiceManager;
+import media.platform.amf.oam.UaOamManager;
 import media.platform.amf.redundant.RedundantServer;
 import media.platform.amf.rmqif.handler.RmqProcLogInReq;
 import media.platform.amf.rmqif.module.RmqClient;
@@ -45,6 +46,8 @@ public class ServiceManager {
     private EngineServiceManager engineServiceManager;
 
     private boolean isQuit = false;
+
+    private UaOamManager oamManager;
 
 
     /**
@@ -141,7 +144,7 @@ public class ServiceManager {
         }
 
         if(AppInstance.getInstance().getConfig().getHeartbeat() == true) {
-            heartbeatManager = heartbeatManager.getInstance();
+            heartbeatManager = HeartbeatManager.getInstance();
             heartbeatManager.start();
         }
 
@@ -168,6 +171,9 @@ public class ServiceManager {
         engineServiceManager = EngineServiceManager.getInstance();
         engineServiceManager.start();
 
+        oamManager = UaOamManager.getInstance();
+        oamManager.start();
+
         return true;
     }
 
@@ -175,6 +181,10 @@ public class ServiceManager {
      * Finalizes all the resources
      */
     private void stopService() {
+
+        if (oamManager != null) {
+            oamManager.stop();
+        }
 
         if (rmqServer != null) {
             rmqServer.stop();

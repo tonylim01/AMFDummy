@@ -89,6 +89,24 @@
             <version>1.9.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.uangel.svc</groupId>
+            <artifactId>javaoam</artifactId>
+            <version>2019-01</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.uangel</groupId>
+            <artifactId>jnauaoam</artifactId>
+            <version>2018-12</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

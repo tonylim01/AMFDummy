@@ -10,7 +10,6 @@
 
 package media.platform.amf.config;
 
-import media.platform.amf.AppInstance;
 import media.platform.amf.common.NetUtil;
 import media.platform.amf.common.StringUtil;
 import media.platform.amf.core.config.ConfigChangedListener;
@@ -180,6 +179,8 @@ public class UserConfig extends DefaultConfig {
 
     private String awfQueue, awfRmqHost, awfRmqUser, awfRmqPass;
 
+    private String processName;
+
     @Override
     public String getStrValue(String session, String key, String defaultValue) {
         String value = super.getStrValue(session, key, defaultValue);
@@ -200,6 +201,7 @@ public class UserConfig extends DefaultConfig {
         loadInstanceConfig(instanceSection);
         loadMediaConfig();
         loadAudioConfig();
+        loadOamConfig();
     }
 
     private void loadCommonConfig() {
@@ -220,6 +222,15 @@ public class UserConfig extends DefaultConfig {
             e.printStackTrace();
         }
     }
+
+    private void loadOamConfig() {
+        try {
+            processName = getStrValue("OAM", "PROMPT_CONF_PATH", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void loadRmqConfig(String instanceSection) {
         try {
@@ -507,5 +518,9 @@ public class UserConfig extends DefaultConfig {
 
     public String getAwfQueue() {
         return awfQueue;
+    }
+
+    public String getProcessName() {
+        return processName;
     }
 }
