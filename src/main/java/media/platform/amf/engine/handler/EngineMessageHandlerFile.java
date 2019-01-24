@@ -91,7 +91,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
                     req.setReasonCode(RmqMessageType.RMQ_MSG_COMMON_REASON_CODE_FILE_ERROR);
                     req.setReasonStr(msg.getHeader().getReason());
 
-                    req.send(roomInfo.getAwfQueueName(), (mediaType == 0) ? 1 : 2);
+                    req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2, (mediaType == 0) ? 1 : 2);
                 }
             }
         }
@@ -186,7 +186,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
                             req.setReasonCode(1);
                             req.setReasonStr(msg.getHeader().getValue());
                         }
-                        req.send(roomInfo.getAwfQueueName(), (mediaType == 0) ? 1 : 2);
+                        req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2, (mediaType == 0) ? 1 : 2);
                     }
                     else if (sessionInfo.getStopAppId() != null) {
 
