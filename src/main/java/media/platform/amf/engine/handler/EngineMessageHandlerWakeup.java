@@ -4,6 +4,7 @@ import media.platform.amf.common.AppId;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.RmqProcAiServiceReq;
 import media.platform.amf.rmqif.handler.RmqProcWakeupStatusRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
@@ -92,6 +93,13 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
                         }
                     }
                 }
+            }
+
+            if (sessionInfo.isCaller()) {
+                StatManager.getInstance().incCount(StatManager.SVC_CG_WAKEUP_OK);
+            }
+            else {
+                StatManager.getInstance().incCount(StatManager.SVC_CD_WAKEUP_OK);
             }
         }
         else {
@@ -182,6 +190,8 @@ public class EngineMessageHandlerWakeup extends DefaultEngineMessageHandler {
 
                     RmqProcAiServiceReq req = new RmqProcAiServiceReq(sessionInfo.getSessionId(), AppId.newId());
                     req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2);
+
+                    StatManager.getInstance().incCount(StatManager.SVC_AI_REQ);
                 }
             }
         }

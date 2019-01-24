@@ -11,6 +11,7 @@ package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.EngineProcAudioBranchReq;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.AiServiceRes;
 import media.platform.amf.rmqif.module.RmqData;
@@ -43,9 +44,8 @@ public class RmqProcAiServiceRes extends RmqIncomingMessageHandler {
         sessionInfo.setAiifIp(res.getIp());
         sessionInfo.setAiifPort(res.getPort());
 
-        //
-        // TODO
-        //
+        StatManager.getInstance().incCount(StatManager.SVC_AI_RES);
+
         EngineProcAudioBranchReq branchReq = new EngineProcAudioBranchReq(AppId.newId());
         branchReq.setData(sessionInfo, false);
         branchReq.send();

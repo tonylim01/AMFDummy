@@ -5,6 +5,7 @@ import media.platform.amf.engine.EngineServiceManager;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.RmqProcOutgoingAiServiceCancelReq;
 import media.platform.amf.rmqif.handler.RmqProcOutgoingEndDetectReq;
 import media.platform.amf.room.RoomInfo;
@@ -206,6 +207,8 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
 
                     RmqProcOutgoingAiServiceCancelReq req = new RmqProcOutgoingAiServiceCancelReq(sessionInfo.getSessionId(), AppId.newId());
                     req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2);
+
+                    StatManager.getInstance().incCount(StatManager.SVC_OUT_AI_CANCEL);
                 }
                 else {
                     // Nothing to do

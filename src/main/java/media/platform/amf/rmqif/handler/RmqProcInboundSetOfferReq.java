@@ -15,6 +15,7 @@ import media.platform.amf.common.JsonMessage;
 import media.platform.amf.config.SdpConfig;
 import media.platform.amf.core.sdp.SdpInfo;
 import media.platform.amf.core.sdp.SdpParser;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.redundant.RedundantClient;
 import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
@@ -149,6 +150,8 @@ public class RmqProcInboundSetOfferReq extends RmqIncomingMessageHandler {
 
             RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_INBOUND_SET_OFFER_REQ, json);
         }
+
+        StatManager.getInstance().incCount(sessionInfo.isCaller() ? StatManager.SVC_IN_CALL : StatManager.SVC_OUT_CALL);
 
         return true;
     }

@@ -9,6 +9,7 @@
 
 package media.platform.amf.rmqif.handler;
 
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.WakeupStatusReq;
 import media.platform.amf.rmqif.module.RmqData;
@@ -86,6 +87,13 @@ public class RmqProcWakeupStatusReq extends RmqIncomingMessageHandler {
         }
 
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.START);
+
+        if (req.getCallerWakeupStatus() == 1) {
+            StatManager.getInstance().incCount(StatManager.SVC_CG_WAKEUP_REQ);
+        }
+        if (req.getCalleeWakeupStatus() == 1) {
+            StatManager.getInstance().incCount(StatManager.SVC_CD_WAKEUP_REQ);
+        }
 
         //sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 

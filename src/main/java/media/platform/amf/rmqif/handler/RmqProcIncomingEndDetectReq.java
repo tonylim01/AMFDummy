@@ -12,6 +12,7 @@ package media.platform.amf.rmqif.handler;
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.EngineProcAudioBranchReq;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.redundant.RedundantClient;
 import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
@@ -48,6 +49,7 @@ public class RmqProcIncomingEndDetectReq extends RmqIncomingMessageHandler {
         branchReq.setData(sessionInfo, true);
         branchReq.send();
 
+        StatManager.getInstance().incCount(StatManager.SVC_END_DETECT);
 
         return false;
     }

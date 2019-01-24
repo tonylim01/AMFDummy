@@ -226,7 +226,7 @@ public class UserConfig extends DefaultConfig {
 
     private void loadOamConfig() {
         try {
-            processName = getStrValue("OAM", "PROMPT_CONF_PATH", null);
+            processName = getStrValue("OAM", "PROCESS_NAME", null);
         } catch (Exception e) {
             e.printStackTrace();
         }

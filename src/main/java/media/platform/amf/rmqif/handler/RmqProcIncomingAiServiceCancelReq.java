@@ -11,6 +11,7 @@ package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.common.AppId;
 import media.platform.amf.engine.handler.EngineProcAudioBranchReq;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.AiServiceCancelReq;
 import media.platform.amf.rmqif.module.RmqData;
@@ -72,6 +73,8 @@ public class RmqProcIncomingAiServiceCancelReq extends RmqIncomingMessageHandler
             branchReq.setData(reqSessionInfo, true);
             branchReq.send();
         }
+
+        StatManager.getInstance().incCount(StatManager.SVC_IN_AI_CANCEL);
 
         return false;
     }

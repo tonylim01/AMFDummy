@@ -15,6 +15,7 @@ import media.platform.amf.config.PromptConfig;
 import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.handler.EngineProcFilePlayReq;
 import media.platform.amf.engine.messages.FilePlayReq;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.MediaPlayReq;
 import media.platform.amf.rmqif.module.RmqData;
@@ -133,6 +134,8 @@ public class RmqProcMediaPlayReq extends RmqIncomingMessageHandler {
         }
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
+
+        StatManager.getInstance().incCount(StatManager.SVC_PLAY_REQ);
 
         return false;
     }
