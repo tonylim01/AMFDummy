@@ -7,6 +7,7 @@ import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import media.platform.amf.engine.types.SentMessageInfo;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.RmqProcMediaPlayDoneReq;
 import media.platform.amf.rmqif.handler.RmqProcMediaStopRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
@@ -92,6 +93,8 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
                     req.setReasonStr(msg.getHeader().getReason());
 
                     req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2, (mediaType == 0) ? 1 : 2);
+
+                    StatManager.getInstance().incCount(StatManager.SVC_PLAY_ERROR);
                 }
             }
         }
@@ -177,18 +180,7 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
                 SentMessageInfo sentInfo = EngineClient.getInstance().getSentQueue(msg.getHeader().getAppId());
                 if (sentInfo != null) {
 
-                    if (!isStopped) {
-
-                        int mediaType = ((FilePlayReq)sentInfo.getObj()).getType();
-
-                        RmqProcMediaPlayDoneReq req = new RmqProcMediaPlayDoneReq(sessionInfo.getSessionId(), AppId.newId());
-                        if (!isSuccess) {
-                            req.setReasonCode(1);
-                            req.setReasonStr(msg.getHeader().getValue());
-                        }
-                        req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2, (mediaType == 0) ? 1 : 2);
-                    }
-                    else if (sessionInfo.getStopAppId() != null) {
+                    if (sessionInfo.getStopAppId() != null) {
 
                         RmqProcMediaStopRes res = new RmqProcMediaStopRes(sessionId, sessionInfo.getStopAppId());
 
@@ -200,10 +192,23 @@ public class EngineMessageHandlerFile extends DefaultEngineMessageHandler {
                         if (res.send(roomInfo.getAwfQueueName()) == false) {
                             // TODO
                         }
+
+                        StatManager.getInstance().incCount(StatManager.SVC_PLAY_STOP_RES);
                     }
                     else {
                         logger.warn("[{}] Invalid state. success [{}] stop [{}]", sessionId, isSuccess, isStopped);
                     }
+
+                    int mediaType = ((FilePlayReq)sentInfo.getObj()).getType();
+
+                    RmqProcMediaPlayDoneReq req = new RmqProcMediaPlayDoneReq(sessionInfo.getSessionId(), AppId.newId());
+                    if (!isSuccess) {
+                        req.setReasonCode(1);
+                        req.setReasonStr(msg.getHeader().getValue());
+                    }
+                    req.send(roomInfo.getAwfQueueName(), sessionInfo.isCaller() ? 1 : 2, (mediaType == 0) ? 1 : 2);
+
+                    StatManager.getInstance().incCount(StatManager.SVC_PLAY_OK);
 
                     EngineClient.getInstance().removeSentQueue(msg.getHeader().getAppId());
                 }

@@ -152,5 +152,7 @@ public class RmqProcMediaPlayReq extends RmqIncomingMessageHandler {
             // TODO
         }
 
+        StatManager.getInstance().incCount(StatManager.SVC_PLAY_RES);
+
     }
 }

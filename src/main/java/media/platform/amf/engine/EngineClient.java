@@ -219,7 +219,7 @@ public class EngineClient {
             }
 
             if (msgInfo.getClss() == SysHeartbeatReq.class) {
-                logger.info("Heartbeat found in queue [{}]", entry.getKey());
+//                logger.info("Heartbeat found in queue [{}]", entry.getKey());
                 sentQueue.remove(entry.getKey());
                 result = false;
                 break;

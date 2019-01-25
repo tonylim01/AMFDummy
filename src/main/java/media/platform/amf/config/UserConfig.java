@@ -180,6 +180,7 @@ public class UserConfig extends DefaultConfig {
     private String awfQueue, awfRmqHost, awfRmqUser, awfRmqPass;
 
     private String processName;
+    private String instanceName;
 
 
     @Override
@@ -278,6 +279,8 @@ public class UserConfig extends DefaultConfig {
     private void loadInstanceConfig(String instanceSection) {
 
         try {
+            instanceName = getStrValue(instanceSection, "INSTANCE_NAME", null);
+
             localUdpPortMin = getIntValue(instanceSection, "LOCAL_UDP_PORT_MIN", 0);
             localUdpPortMax = getIntValue(instanceSection, "LOCAL_UDP_PORT_MAX", 0);
 
@@ -523,5 +526,9 @@ public class UserConfig extends DefaultConfig {
 
     public String getProcessName() {
         return processName;
+    }
+
+    public String getInstanceName() {
+        return instanceName;
     }
 }

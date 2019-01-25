@@ -15,6 +15,7 @@ import media.platform.amf.engine.handler.EngineProcFilePlayReq;
 import media.platform.amf.engine.handler.EngineProcFileStopReq;
 import media.platform.amf.engine.messages.FilePlayReq;
 import media.platform.amf.engine.messages.FileStopReq;
+import media.platform.amf.oam.StatManager;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.messages.MediaPlayReq;
 import media.platform.amf.rmqif.messages.MediaStopReq;
@@ -114,6 +115,8 @@ public class RmqProcMediaStopReq extends RmqIncomingMessageHandler {
 
 //        sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());
 
+        StatManager.getInstance().incCount(StatManager.SVC_PLAY_STOP_REQ);
+
         return false;
     }
 
@@ -128,6 +131,8 @@ public class RmqProcMediaStopReq extends RmqIncomingMessageHandler {
         if (res.send(queueName) == false) {
             // TODO
         }
+
+        StatManager.getInstance().incCount(StatManager.SVC_PLAY_STOP_RES);
 
     }
 }
