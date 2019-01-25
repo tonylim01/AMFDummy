@@ -95,6 +95,18 @@ public class StartStateFunction implements StateFunction {
                 sessionInfo.isCallerWakeupStatus(), sessionInfo.isCalleeWakeupStatus(),
                 wakeupStatus);
 
+        if (sessionInfo.getEngineToolId() == 0) {
+            count = 0;
+            do {
+                AppUtil.trySleep(100);
+                count++;
+            } while ((sessionInfo.getEngineToolId() == 0) && (count < 10));
+
+            if (sessionInfo.getEngineToolId() > 0) {
+                isPush = false;
+            }
+        }
+
         if (sessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
             if (sessionInfo.isCallerWakeupStatus()) {
                 sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
@@ -103,7 +115,7 @@ public class StartStateFunction implements StateFunction {
                 sendWakeupStopReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
             }
         }
-        else if (!sessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
+        else if (!sessionInfo.isCaller() && ((wakeupStatus & 0x1) > 0)) {
             if (sessionInfo.isCalleeWakeupStatus()) {
                 sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId(), isPush);
             }
@@ -119,6 +131,18 @@ public class StartStateFunction implements StateFunction {
                     otherSessionInfo.isCallerWakeupStatus(), otherSessionInfo.isCalleeWakeupStatus(),
                     wakeupStatus);
 
+            if (otherSessionInfo.getEngineToolId() == 0) {
+                count = 0;
+                do {
+                    AppUtil.trySleep(100);
+                    count++;
+                } while ((otherSessionInfo.getEngineToolId() == 0) && (count < 10));
+
+                if (otherSessionInfo.getEngineToolId() > 0) {
+                    isPush = false;
+                }
+            }
+
             if (otherSessionInfo.isCaller() && ((wakeupStatus & 0x4) > 0)) {
                 if (otherSessionInfo.isCallerWakeupStatus()) {
                     sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
@@ -127,7 +151,7 @@ public class StartStateFunction implements StateFunction {
                     sendWakeupStopReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
                 }
             }
-            else if (!otherSessionInfo.isCaller() & ((wakeupStatus & 0x1) > 0)) {
+            else if (!otherSessionInfo.isCaller() && ((wakeupStatus & 0x1) > 0)) {
                 if (otherSessionInfo.isCalleeWakeupStatus()) {
                     sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId(), isPush);
                 }
@@ -136,6 +160,8 @@ public class StartStateFunction implements StateFunction {
                 }
             }
         }
+
+        logger.debug("[{}] End of start", sessionInfo.getSessionId());
 
         sessionInfo.setEndOfState(SessionState.START);
     }
@@ -152,11 +178,15 @@ public class StartStateFunction implements StateFunction {
         EngineProcWakeupStartReq wakeupStartReq = new EngineProcWakeupStartReq(appId);
         wakeupStartReq.setData(sessionInfo, toolId, EngineProcWakeupStartReq.DEFAULT_TIMEOUT_MSEC);
 
-        if (wakeupStartReq.send(push)) {
-            EngineClient.getInstance().pushSentQueue(appId, WakeupStartReq.class, wakeupStartReq.getData());
-            if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getSessionId());
-            }
+        EngineClient.getInstance().pushSentQueue(appId, WakeupStartReq.class, wakeupStartReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+
+        if (!wakeupStartReq.send(push)) {
+           // ERROR
+//            AppId.getInstance().remove(appId);
+//            EngineClient.getInstance().removeSentQueue(appId);
         }
     }
 
@@ -172,11 +202,13 @@ public class StartStateFunction implements StateFunction {
         EngineProcWakeupStopReq wakeupStopReq = new EngineProcWakeupStopReq(appId);
         wakeupStopReq.setData(sessionInfo, toolId);
 
-        if (wakeupStopReq.send(push)) {
-            EngineClient.getInstance().pushSentQueue(appId, WakeupStopReq.class, wakeupStopReq.getData());
-            if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getSessionId());
-            }
+        EngineClient.getInstance().pushSentQueue(appId, WakeupStopReq.class, wakeupStopReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+
+        if (!wakeupStopReq.send(push)) {
+            // ERROR
         }
     }
 

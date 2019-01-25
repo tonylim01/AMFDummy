@@ -126,11 +126,14 @@ public class RmqProcMediaPlayReq extends RmqIncomingMessageHandler {
                 (req.getMentOrMusic() == MediaPlayReq.MEDIA_MENT) ? 0 : 1,
                 dstIds, hasContainer, filenames, req.getDefVolume(), req.getMinVolume());
 
-        if (filePlayReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, FilePlayReq.class, filePlayReq.getData());
-            if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getSessionId());
-            }
+        EngineClient.getInstance().pushSentQueue(appId, FilePlayReq.class, filePlayReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+
+        if (!filePlayReq.send()) {
+            // ERROR
+//            EngineClient.getInstance().removeSentQueue(appId);
         }
 
         sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());

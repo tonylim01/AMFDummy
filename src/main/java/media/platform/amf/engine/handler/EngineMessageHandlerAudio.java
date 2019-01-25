@@ -1,7 +1,10 @@
 package media.platform.amf.engine.handler;
 
 import media.platform.amf.common.AppId;
+import media.platform.amf.common.AppUtil;
+import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.EngineServiceManager;
+import media.platform.amf.engine.messages.WakeupStartReq;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
@@ -82,18 +85,26 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             }
 
             sessionInfo.setAudioCreated(true);
+            logger.debug("[{}] Audio created", sessionId);
 
             //
             // TODO
             //
             SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
             if (otherSessionInfo != null) {
+                logger.debug("[{}] Other session found", sessionId);
+
                 if (otherSessionInfo.isAudioCreated()) {
-                    EngineServiceManager.getInstance().popAndSendMessage();
+                    //
+                    // TODO
+                    //
+//                    EngineServiceManager.getInstance().popAndSendMessage();
                 }
                 else {
                     logger.debug("[{}] Other session audio not created", otherSessionInfo.getSessionId());
                 }
+
+                logger.debug("[{}] Other session audio created [{}]", sessionId, otherSessionInfo.getSessionId());
             }
 
         }
@@ -213,6 +224,44 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
                 else {
                     // Nothing to do
                 }
+
+
+                // Restart wakeup
+                int wakeupStatus = roomInfo.getWakeupStatus();
+
+                if ((sessionInfo.isCaller() && ((sessionInfo.isCallerWakeupStatus() ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
+                        (!sessionInfo.isCaller() && ((sessionInfo.isCalleeWakeupStatus() ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
+                    roomInfo.setWakeupStatus(sessionInfo.isCaller(), RoomInfo.WAKEUP_STATUS_PREPARE);
+                }
+
+                if (sessionInfo.isCaller() && sessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x4) > 0)) {
+                    sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+                }
+                else if (!sessionInfo.isCaller() && sessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x1) > 0)) {
+                    sendWakeupStartReqToEngine(sessionInfo, sessionInfo.getEngineToolId());
+                }
+
+                SessionInfo otherSessionInfo = SessionManager.findOtherSession(sessionInfo);
+                if (otherSessionInfo != null) {
+
+                    if ((otherSessionInfo.isCaller() && ((otherSessionInfo.isCallerWakeupStatus() ? 0x8 : 0x0) != (wakeupStatus & 0xc))) ||
+                            (!otherSessionInfo.isCaller() && ((otherSessionInfo.isCalleeWakeupStatus() ? 0x2 : 0x0) != (wakeupStatus & 0x3)))) {
+                        roomInfo.setWakeupStatus(otherSessionInfo.isCaller(), RoomInfo.WAKEUP_STATUS_PREPARE);
+                    }
+
+                    logger.warn("[{}] isCaller [{}] caller [{}] callee [{}] wakeupStatus [{}]", otherSessionInfo.getSessionId(),
+                            otherSessionInfo.isCaller(),
+                            otherSessionInfo.isCallerWakeupStatus(), otherSessionInfo.isCalleeWakeupStatus(),
+                            wakeupStatus);
+
+                    if (otherSessionInfo.isCaller() && otherSessionInfo.isCallerWakeupStatus() && ((wakeupStatus & 0x4) > 0)) {
+                        sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                    }
+                    else if (!otherSessionInfo.isCaller() && otherSessionInfo.isCalleeWakeupStatus() && ((wakeupStatus & 0x1) > 0)) {
+                        sendWakeupStartReqToEngine(otherSessionInfo, otherSessionInfo.getEngineToolId());
+                    }
+                }
+
             }
             else {
                 logger.warn("[{}] Invalid roomInfo. cnfId [{}] awf [{}]", sessionInfo.getSessionId(),
@@ -220,4 +269,29 @@ public class EngineMessageHandlerAudio extends DefaultEngineMessageHandler {
             }
         }
     }
+
+    private void sendWakeupStartReqToEngine(SessionInfo sessionInfo, int toolId) {
+
+        if (sessionInfo == null) {
+            return;
+        }
+
+        logger.info("[{}] Send WakeupStartReq. toolId [{}]", sessionInfo.getSessionId(), toolId);
+
+        String appId = AppId.newId();
+        EngineProcWakeupStartReq wakeupStartReq = new EngineProcWakeupStartReq(appId);
+        wakeupStartReq.setData(sessionInfo, toolId, EngineProcWakeupStartReq.DEFAULT_TIMEOUT_MSEC);
+
+        EngineClient.getInstance().pushSentQueue(appId, WakeupStartReq.class, wakeupStartReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+
+        if (!wakeupStartReq.send(false)) {
+            // ERROR
+//            AppId.getInstance().remove(appId);
+//            EngineClient.getInstance().removeSentQueue(appId);
+        }
+    }
+
 }

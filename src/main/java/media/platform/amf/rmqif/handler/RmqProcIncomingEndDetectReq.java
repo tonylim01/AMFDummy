@@ -11,13 +11,18 @@ package media.platform.amf.rmqif.handler;
 
 import media.platform.amf.AppInstance;
 import media.platform.amf.common.AppId;
+import media.platform.amf.engine.EngineClient;
 import media.platform.amf.engine.handler.EngineProcAudioBranchReq;
+import media.platform.amf.engine.messages.AudioBranchReq;
 import media.platform.amf.oam.StatManager;
 import media.platform.amf.redundant.RedundantClient;
 import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.base.RmqIncomingMessageHandler;
 import media.platform.amf.rmqif.types.RmqMessage;
+import media.platform.amf.room.RoomInfo;
+import media.platform.amf.room.RoomManager;
 import media.platform.amf.session.SessionInfo;
+import media.platform.amf.session.SessionManager;
 import media.platform.amf.session.SessionState;
 import media.platform.amf.session.SessionStateManager;
 import org.slf4j.Logger;
@@ -45,9 +50,21 @@ public class RmqProcIncomingEndDetectReq extends RmqIncomingMessageHandler {
             RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_END_DETECT_REQ, msg.getSessionId());
         }
 
-        EngineProcAudioBranchReq branchReq = new EngineProcAudioBranchReq(AppId.newId());
+
+        String appId = AppId.newId();
+
+        EngineProcAudioBranchReq branchReq = new EngineProcAudioBranchReq(appId);
         branchReq.setData(sessionInfo, true);
-        branchReq.send();
+
+        EngineClient.getInstance().pushSentQueue(appId, AudioBranchReq.class, branchReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+
+        if (!branchReq.send()) {
+            // ERROR
+//            EngineClient.getInstance().removeSentQueue(appId);
+        }
 
         StatManager.getInstance().incCount(StatManager.SVC_END_DETECT);
 

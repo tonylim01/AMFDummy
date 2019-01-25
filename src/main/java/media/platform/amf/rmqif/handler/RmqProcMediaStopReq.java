@@ -106,11 +106,18 @@ public class RmqProcMediaStopReq extends RmqIncomingMessageHandler {
                 (req.getMentOrMusic() == MediaPlayReq.MEDIA_MENT) ? 0 : 1,
                 dstIds);
 
-        if (fileStopReq.send()) {
-            EngineClient.getInstance().pushSentQueue(msg.getHeader().getTransactionId(), FileStopReq.class, fileStopReq.getData());
-            if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(msg.getHeader().getTransactionId(), sessionInfo.getSessionId());
-            }
+        /*
+        EngineClient.getInstance().pushSentQueue(msg.getHeader().getTransactionId(), FileStopReq.class, fileStopReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(msg.getHeader().getTransactionId(), sessionInfo.getSessionId());
+        }
+        */
+
+        if (!fileStopReq.send()) {
+            // ERROR
+            //
+            // TODO
+            //
         }
 
 //        sendResponse(msg.getSessionId(), msg.getHeader().getTransactionId(), msg.getHeader().getMsgFrom());

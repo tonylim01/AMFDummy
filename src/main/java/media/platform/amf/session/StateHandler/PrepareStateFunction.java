@@ -94,6 +94,8 @@ public class PrepareStateFunction implements StateFunction {
             sendParAddReq(sessionInfo);
         }
 
+        logger.debug("[{}] End of Prepare", sessionInfo.getSessionId());
+
         sessionInfo.setEndOfState(SessionState.PREPARE);
     }
 
@@ -360,11 +362,14 @@ public class PrepareStateFunction implements StateFunction {
         EngineProcAudioCreateReq audioCreateReq = new EngineProcAudioCreateReq(appId);
         audioCreateReq.setData(sessionInfo);
 
-        if (audioCreateReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, AudioCreateReq.class, audioCreateReq.getData());
-            if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getSessionId());
-            }
+        EngineClient.getInstance().pushSentQueue(appId, AudioCreateReq.class, audioCreateReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+
+        if (!audioCreateReq.send()) {
+            // ERROR
+//            EngineClient.getInstance().removeSentQueue(appId);
         }
     }
 
@@ -373,11 +378,13 @@ public class PrepareStateFunction implements StateFunction {
         EngineProcParAddReq parAddReq = new EngineProcParAddReq(appId);
         parAddReq.setData(sessionInfo);
 
-        if (parAddReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, ParAddReq.class, parAddReq.getData());
-            if (sessionInfo.getSessionId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getSessionId());
-            }
+        EngineClient.getInstance().pushSentQueue(appId, ParAddReq.class, parAddReq.getData());
+        if (sessionInfo.getSessionId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getSessionId());
+        }
+        if (!parAddReq.send()) {
+            // ERROR
+//            EngineClient.getInstance().removeSentQueue(appId);
         }
     }
 
@@ -404,11 +411,14 @@ public class PrepareStateFunction implements StateFunction {
         EngineProcMixerCreateReq mixerCreateReq = new EngineProcMixerCreateReq(appId);
         mixerCreateReq.setData(sessionInfo, mixerId, 2);
 
-        if (mixerCreateReq.send()) {
-            EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, mixerCreateReq.getData());
-            if (sessionInfo.getConferenceId() != null) {
-                AppId.getInstance().push(appId, sessionInfo.getConferenceId());
-            }
+        EngineClient.getInstance().pushSentQueue(appId, SysConnectReq.class, mixerCreateReq.getData());
+        if (sessionInfo.getConferenceId() != null) {
+            AppId.getInstance().push(appId, sessionInfo.getConferenceId());
+        }
+
+        if (!mixerCreateReq.send()) {
+            // ERROR
+//            EngineClient.getInstance().removeSentQueue(appId);
         }
     }
  }
